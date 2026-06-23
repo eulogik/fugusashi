@@ -1,0 +1,69 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 400" fill="none">
+  <defs>
+    <linearGradient id="g1" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#ef4444"/>
+      <stop offset="100%" style="stop-color:#f97316"/>
+    </linearGradient>
+    <linearGradient id="g2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6366f1"/>
+      <stop offset="100%" style="stop-color:#8b5cf6"/>
+    </linearGradient>
+    <filter id="shadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="4" stdDeviation="8" flood-opacity="0.3"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="800" height="400" rx="16" fill="#12121a"/>
+
+  <!-- Title -->
+  <text x="400" y="40" text-anchor="middle" fill="#e0e0e8" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="18" font-weight="700">Fugusashi Architecture</text>
+
+  <!-- User/App -->
+  <rect x="320" y="70" width="160" height="44" rx="10" fill="#1a1a24" stroke="#2a2a3a" stroke-width="1.5"/>
+  <text x="400" y="97" text-anchor="middle" fill="#9090a0" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="13">Your Application</text>
+
+  <!-- Arrow -->
+  <line x1="400" y1="118" x2="400" y2="140" stroke="#ef4444" stroke-width="2" stroke-dasharray="4,3"/>
+  <polygon points="395,138 400,148 405,138" fill="#ef4444"/>
+
+  <!-- Router Box -->
+  <rect x="240" y="150" width="320" height="80" rx="12" fill="#1a1a24" stroke="url(#g1)" stroke-width="2" filter="url(#shadow)"/>
+  <text x="400" y="175" text-anchor="middle" fill="#ef4444" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="14" font-weight="700">Tier 1: Intelligent Router</text>
+  <text x="400" y="195" text-anchor="middle" fill="#9090a0" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11">SimilarityRouter → CostRouter → FallbackRouter</text>
+  <text x="400" y="218" text-anchor="middle" fill="#4ade80" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11">⚡ &lt;20ms overhead</text>
+
+  <!-- Arrows to models -->
+  <line x1="320" y1="234" x2="200" y2="270" stroke="#2a2a3a" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="400" y1="234" x2="400" y2="270" stroke="#2a2a3a" stroke-width="1.5" stroke-dasharray="3,3"/>
+  <line x1="480" y1="234" x2="600" y2="270" stroke="#2a2a3a" stroke-width="1.5" stroke-dasharray="3,3"/>
+
+  <!-- Model boxes -->
+  <rect x="120" y="274" width="160" height="50" rx="8" fill="#1a1a24" stroke="#2a2a3a" stroke-width="1.5"/>
+  <text x="200" y="297" text-anchor="middle" fill="#e0e0e8" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="12" font-weight="600">Local Model</text>
+  <text x="200" y="315" text-anchor="middle" fill="#4ade80" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10">Free · Ollama</text>
+
+  <rect x="320" y="274" width="160" height="50" rx="8" fill="#1a1a24" stroke="#2a2a3a" stroke-width="1.5"/>
+  <text x="400" y="297" text-anchor="middle" fill="#e0e0e8" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="12" font-weight="600">Cloud Model</text>
+  <text x="400" y="315" text-anchor="middle" fill="#fbbf24" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10">GPT-4o · Claude</text>
+
+  <rect x="520" y="274" width="160" height="50" rx="8" fill="#1a1a24" stroke="#2a2a3a" stroke-width="1.5"/>
+  <text x="600" y="297" text-anchor="middle" fill="#e0e0e8" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="12" font-weight="600">Specialist Model</text>
+  <text x="600" y="315" text-anchor="middle" fill="#8b5cf6" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10">Code · Reasoning</text>
+
+  <!-- Feedback loop arrow -->
+  <path d="M 680 300 Q 720 200 600 150" stroke="#4ade80" stroke-width="1.5" fill="none" stroke-dasharray="4,3" marker-end="url(#arrowGreen)"/>
+  <text x="700" y="220" fill="#4ade80" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10">feedback</text>
+
+  <!-- Tier 2 label -->
+  <rect x="560" y="345" width="180" height="32" rx="6" fill="#1a1a24" stroke="#2a2a3a" stroke-width="1" stroke-dasharray="4,4"/>
+  <text x="650" y="366" text-anchor="middle" fill="#6b6b80" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="11">Tier 2: Orchestrator (Phase 2)</text>
+
+  <!-- Legend -->
+  <circle cx="30" cy="370" r="5" fill="#ef4444"/>
+  <text x="42" y="374" fill="#6b6b80" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10">Router</text>
+  <circle cx="100" cy="370" r="5" fill="#2a2a3a"/>
+  <text x="112" y="374" fill="#6b6b80" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10">Models</text>
+  <circle cx="180" cy="370" r="5" fill="#4ade80"/>
+  <text x="192" y="374" fill="#6b6b80" font-family="-apple-system,BlinkMacSystemFont,sans-serif" font-size="10">Feedback</text>
+</svg>

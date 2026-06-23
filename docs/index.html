@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fugusashi — Open-Source Alternative to Sakana AI Fugu</title>
-<meta name="description" content="Fugusashi is an open-source intelligent model router and multi-agent orchestrator. Self-hosting, transparent, and learns from every request.">
+<title>Fugusashi — Like Sakana Fugu. But Free. And Yours.</title>
+<meta name="description" content="Fugusashi is the open-source alternative to Sakana AI's Fugu. Intelligent model router, multi-agent orchestrator, self-hosting, transparent, and free.">
 <meta name="keywords" content="fugusashi, model router, LLM router, AI orchestrator, open source, Sakana AI, Fugu alternative, multi-agent, self-hosting, local AI, Ollama, LiteLLM">
 <meta name="author" content="eulogik">
 <meta name="robots" content="index, follow">
@@ -109,8 +109,8 @@ a:hover{text-decoration:underline}
 </nav>
 <section class="hero">
 <div class="hero-badge">⚡ Open Source · MIT · By <a href="https://eulogik.com">eulogik</a></div>
-<h1>One Router.<br><span class="gradient">Every Model.</span></h1>
-<p>Fugusashi is the open-source model router that learns from every request, runs on your infrastructure, and puts every AI model at your fingertips — for free.</p>
+<h1>Like Sakana Fugu.<br><span class="gradient">But Free. And Yours.</span></h1>
+<p>The open-source model router that learns from every request, runs on your infrastructure, and puts every AI model at your fingertips — zero vendor lock-in, zero monthly fees.</p>
 <div class="hero-buttons">
 <a href="https://github.com/eulogik/fugusashi" class="btn btn-primary">⭐ Star on GitHub</a>
 <a href="#quickstart" class="btn btn-secondary">Get Started →</a>
@@ -132,6 +132,8 @@ a:hover{text-decoration:underline}
 <section class="section" id="comparison">
 <h2>Fugusashi vs Sakana AI Fugu</h2>
 <p class="subtitle">See why developers are switching to open source.</p>
+<img src="https://raw.githubusercontent.com/eulogik/fugusashi/main/assets/compare.svg" alt="Fugusashi vs Sakana AI Fugu Comparison" style="width:100%;max-width:600px;margin:0 auto 32px;display:block;border-radius:12px;"/>
+<div style="overflow-x:auto;">
 <table class="comparison">
 <thead><tr><th>Feature</th><th>Sakana Fugu</th><th>Fugusashi</th></tr></thead>
 <tbody>
@@ -146,6 +148,7 @@ a:hover{text-decoration:underline}
 <tr><td>License</td><td class="fugu-val">Proprietary</td><td class="fugusashi-val">✓ MIT</td></tr>
 </tbody>
 </table>
+</div>
 </section>
 <section class="section" id="quickstart">
 <h2>Quickstart</h2>
@@ -167,22 +170,7 @@ a:hover{text-decoration:underline}
 <section class="section" id="architecture">
 <h2>Architecture</h2>
 <p class="subtitle">Two tiers. One fast router. One deep orchestrator.</p>
-<div class="arch-diagram">
-<span class="keyword">Application</span> <span class="comment">(OpenAI-compatible API)</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">▼</span><br>
-<span class="keyword">Tier 1: Router</span> <span class="comment">(CPU, &lt;20ms)</span><br>
-&nbsp;&nbsp;├─ <span class="string">SimilarityRouter</span> <span class="comment">— learns from history</span><br>
-&nbsp;&nbsp;├─ <span class="string">CostRouter</span> <span class="comment">— capability + price</span><br>
-&nbsp;&nbsp;└─ <span class="string">EnsembleRouter</span> <span class="comment">— priority chain</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-&nbsp;&nbsp;&nbsp;&nbsp;├──→ <span class="string">Single Model Call</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;│<br>
-&nbsp;&nbsp;&nbsp;&nbsp;└──→ <span class="keyword">Tier 2: Orchestrator</span> <span class="comment">(Phase 2)</span><br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Planner model<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Specialist models<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ Synthesizer
-</div>
+<img src="https://raw.githubusercontent.com/eulogik/fugusashi/main/assets/arch.svg" alt="Fugusashi Architecture Diagram" style="width:100%;max-width:800px;margin:0 auto;display:block;border-radius:12px;"/>
 </section>
 <section class="section" id="feedback">
 <h2>Feedback Loop</h2>

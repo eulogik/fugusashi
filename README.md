@@ -119,29 +119,7 @@ Every response includes a `routing_decision` showing which model was picked, why
 
 ## Architecture
 
-```
-┌─────────────────────────────────────────┐
-│  Your Application (OpenAI-compatible)    │
-└─────────────────┬───────────────────────┘
-                  │
-┌─────────────────▼───────────────────────┐
-│  TIER 1: ROUTER (CPU, <20ms)            │
-│  - SimilarityRouter (learns over time)  │
-│  - CostRouter (capability + price)      │
-│  - EnsembleRouter (priority chain)      │
-│  - Routes to single model OR            │
-│    escalates to Tier 2                  │
-└─────────────────┬───────────────────────┘
-                  │
-    ┌─────────────┴─────────────┐
-    │                           │
-    ▼                           ▼
-┌─────────┐              ┌──────────────┐
-│ Single  │              │ TIER 2:      │
-│ Model   │              │ ORCHESTRATOR │
-│ Call    │              │ (Phase 2)    │
-└─────────┘              └──────────────┘
-```
+![Fugusashi Architecture](https://raw.githubusercontent.com/eulogik/fugusashi/main/assets/arch.svg)
 
 ### Tier 1 — Intelligent Model Router
 
