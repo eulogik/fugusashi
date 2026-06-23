@@ -217,6 +217,9 @@ def create_router(deps) -> APIRouter:
                         cost=0.0,
                         latency_ms=latency,
                         error=False,
+                        auto_retrain=True,
+                        retrain_interval=10,
+                        router=router_engine,
                     )
 
                 tracker.finish_trace(request_id)
@@ -238,6 +241,9 @@ def create_router(deps) -> APIRouter:
                         confidence=routing_result.confidence,
                         strategy=routing_result.strategy,
                         error=True,
+                        auto_retrain=True,
+                        retrain_interval=10,
+                        router=router_engine,
                     )
                 continue
 

@@ -99,6 +99,9 @@ class FeedbackLoop:
         cost: float,
         latency_ms: float,
         error: bool = False,
+        auto_retrain: bool = True,
+        retrain_interval: int = 10,
+        router: Any = None,
     ) -> OutcomeRecord:
         from datetime import datetime
         outcome = OutcomeRecord(
@@ -122,6 +125,9 @@ class FeedbackLoop:
         else:
             ms.wins += 1
         ms.total_cost += cost
+
+        if auto_retrain and router and len(self.outcomes) % retrain_interval == 0:
+            self.build_similarity_index(router)
 
         return outcome
 

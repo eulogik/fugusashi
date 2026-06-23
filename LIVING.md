@@ -277,17 +277,21 @@ Custom routing strategies. The interface is already defined (`BaseRouter`). Next
 
 ## Changelog
 
-### v0.2.0 — Feedback Loop
+### v0.2.0 — Feedback Loop + Auto-Retraining
 
 - Added `FeedbackLoop` class that records every routing outcome
+- Added auto-retraining: similarity index rebuilds every N requests (default 10)
 - Added `/v1/feedback/rate` — User ratings (1-5)
-- Added `/v1/feedback/retrain` — Rebuild similarity index from feedback
+- Added `/v1/feedback/retrain` — Manual retrain trigger
 - Added `/v1/feedback/stats` — Outcome statistics
 - Added `/v1/feedback/rankings` — Per-model win rates
 - Outcomes persisted to `.fugusashi_data/outcomes.jsonl`
 - Feedback recording integrated into chat completion flow
+- API routes pass router reference for auto-retrain
 - Fixed SimilarityRouter scoring: use max instead of mean, filter by min similarity
 - Accuracy improved: 70% → 85% with training data
+- Dashboard added at `/dashboard`
+- Benchmark CLI added (`fugusashi benchmark`)
 
 ### v0.1.0 — Initial Release
 
