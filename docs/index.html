@@ -1,395 +1,239 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Fugusashi — Open-Source Alternative to Sakana AI Fugu | Intelligent Model Router</title>
-<meta name="description" content="Fugusashi is an open-source intelligent model router and multi-agent orchestrator. Self-hosting, transparent, and learns from every request. The open alternative to Sakana AI's Fugu.">
+<title>Fugusashi — Open-Source Alternative to Sakana AI Fugu</title>
+<meta name="description" content="Fugusashi is an open-source intelligent model router and multi-agent orchestrator. Self-hosting, transparent, and learns from every request.">
 <meta name="keywords" content="fugusashi, model router, LLM router, AI orchestrator, open source, Sakana AI, Fugu alternative, multi-agent, self-hosting, local AI, Ollama, LiteLLM">
 <meta name="author" content="eulogik">
 <meta name="robots" content="index, follow">
 <link rel="canonical" href="https://eulogik.github.io/fugusashi/">
-
-<!-- Open Graph -->
 <meta property="og:title" content="Fugusashi — Open-Source Alternative to Sakana AI Fugu">
 <meta property="og:description" content="Intelligent model router and multi-agent orchestrator. Self-hosting, transparent, and learns from every request.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://eulogik.github.io/fugusashi/">
-<meta property="og:image" content="https://eulogik.github.io/fugusashi/og-image.png">
 <meta property="og:site_name" content="Fugusashi">
-
-<!-- Twitter Card -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Fugusashi — Open-Source Alternative to Sakana AI Fugu">
-<meta name="twitter:description" content="Intelligent model router and multi-agent orchestrator. Self-hosting, transparent, and learns from every request.">
-<meta name="twitter:image" content="https://eulogik.github.io/fugusashi/og-image.png">
-<meta name="twitter:creator" content="@eulogik">
-
-<!-- Structured Data -->
+<meta name="twitter:description" content="Intelligent model router. Self-hosting, transparent, learning.">
 <script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "SoftwareApplication",
-  "name": "Fugusashi",
-  "applicationCategory": "DeveloperApplication",
-  "operatingSystem": "Any",
-  "description": "Open-source intelligent model router and multi-agent orchestrator. Self-hosting, transparent, and learns from every request.",
-  "offers": {
-    "@type": "Offer",
-    "price": "0",
-    "priceCurrency": "USD"
-  },
-  "author": {
-    "@type": "Organization",
-    "name": "eulogik",
-    "url": "https://eulogik.com"
-  },
-  "sameAs": [
-    "https://github.com/eulogik/fugusashi",
-    "https://pypi.org/project/fugusashi/"
-  ]
-}
+{"@context":"https://schema.org","@type":"SoftwareApplication","name":"Fugusashi","applicationCategory":"DeveloperApplication","operatingSystem":"Any","description":"Open-source intelligent model router and multi-agent orchestrator.","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"author":{"@type":"Organization","name":"eulogik","url":"https://eulogik.com"},"sameAs":["https://github.com/eulogik/fugusashi","https://pypi.org/project/fugusashi/"]}
 </script>
-
 <style>
-:root {
-  --bg: #0a0a0f;
-  --surface: #12121a;
-  --surface2: #1a1a24;
-  --border: #2a2a3a;
-  --text: #e0e0e8;
-  --text2: #9090a0;
-  --accent: #6366f1;
-  --accent2: #8b5cf6;
-  --green: #4ade80;
-  --yellow: #fbbf24;
-  --red: #f87171;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-a { color: var(--accent); text-decoration: none; }
-a:hover { text-decoration: underline; }
-
-.nav { background: var(--surface); border-bottom: 1px solid var(--border); padding: 16px 0; position: sticky; top: 0; z-index: 100; }
-.nav-inner { max-width: 1100px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; justify-content: space-between; }
-.nav-logo { font-size: 20px; font-weight: 700; color: #fff; }
-.nav-logo span { color: var(--accent); }
-.nav-links { display: flex; gap: 24px; align-items: center; }
-.nav-links a { color: var(--text2); font-size: 14px; font-weight: 500; }
-.nav-links a:hover { color: #fff; text-decoration: none; }
-.nav-cta { background: var(--accent); color: #fff !important; padding: 8px 16px; border-radius: 8px; }
-.nav-cta:hover { background: var(--accent2); text-decoration: none; }
-
-.hero { max-width: 1100px; margin: 0 auto; padding: 80px 24px; text-align: center; }
-.hero-badge { display: inline-block; background: var(--surface2); border: 1px solid var(--border); padding: 6px 16px; border-radius: 20px; font-size: 13px; color: var(--text2); margin-bottom: 24px; }
-.hero h1 { font-size: 48px; font-weight: 800; line-height: 1.1; margin-bottom: 16px; color: #fff; }
-.hero h1 .gradient { background: linear-gradient(135deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
-.hero p { font-size: 18px; color: var(--text2); max-width: 600px; margin: 0 auto 32px; }
-.hero-buttons { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
-.btn { display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 10px; font-size: 15px; font-weight: 600; transition: all 0.2s; }
-.btn-primary { background: var(--accent); color: #fff; }
-.btn-primary:hover { background: var(--accent2); text-decoration: none; transform: translateY(-1px); }
-.btn-secondary { background: var(--surface2); color: #fff; border: 1px solid var(--border); }
-.btn-secondary:hover { background: var(--border); text-decoration: none; }
-
-.section { max-width: 1100px; margin: 0 auto; padding: 60px 24px; }
-.section h2 { font-size: 28px; font-weight: 700; margin-bottom: 12px; color: #fff; }
-.section .subtitle { color: var(--text2); font-size: 16px; margin-bottom: 40px; }
-
-.comparison { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 12px; overflow: hidden; border: 1px solid var(--border); }
-.comparison th { background: var(--surface2); padding: 14px 20px; text-align: left; font-size: 13px; text-transform: uppercase; letter-spacing: 0.5px; color: var(--text2); border-bottom: 1px solid var(--border); }
-.comparison td { padding: 14px 20px; border-bottom: 1px solid var(--border); font-size: 14px; }
-.comparison tr:last-child td { border-bottom: none; }
-.comparison tr:hover { background: var(--surface2); }
-.check { color: var(--green); font-weight: 600; }
-.cross { color: var(--red); }
-.product-label { font-weight: 600; color: #fff; }
-.product-sub { font-size: 12px; color: var(--text2); }
-
-.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-.card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; }
-.card h3 { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: #fff; }
-.card p { color: var(--text2); font-size: 14px; }
-.card-icon { font-size: 24px; margin-bottom: 12px; }
-
-.architecture { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 32px; font-family: 'SF Mono', Monaco, monospace; font-size: 13px; line-height: 1.8; overflow-x: auto; }
-.architecture .comment { color: var(--text2); }
-.architecture .keyword { color: var(--accent2); }
-.architecture .string { color: var(--green); }
-
-.stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; }
-.stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; text-align: center; }
-.stat-value { font-size: 32px; font-weight: 800; color: #fff; }
-.stat-label { font-size: 13px; color: var(--text2); margin-top: 4px; }
-
-.code-block { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 24px; font-family: 'SF Mono', Monaco, monospace; font-size: 13px; line-height: 1.8; overflow-x: auto; margin: 24px 0; }
-.code-block .prompt { color: var(--text2); }
-.code-block .cmd { color: var(--green); }
-.code-block .flag { color: var(--yellow); }
-.code-block .output { color: var(--accent2); }
-
-.feedback-loop { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; justify-content: center; margin: 32px 0; }
-.step { background: var(--surface); border: 1px solid var(--border); border-radius: 12px; padding: 16px 20px; text-align: center; min-width: 120px; }
-.step-num { font-size: 24px; margin-bottom: 4px; }
-.step-label { font-size: 12px; color: var(--text2); }
-.arrow { color: var(--border); font-size: 20px; }
-
-.footer { background: var(--surface); border-top: 1px solid var(--border); padding: 40px 24px; margin-top: 80px; }
-.footer-inner { max-width: 1100px; margin: 0 auto; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px; }
-.footer-brand { font-size: 14px; color: var(--text2); }
-.footer-links { display: flex; gap: 24px; }
-.footer-links a { color: var(--text2); font-size: 14px; }
-.footer-links a:hover { color: #fff; }
-
-@media (max-width: 768px) {
-  .hero h1 { font-size: 32px; }
-  .nav-links { display: none; }
-  .comparison { font-size: 12px; }
-  .comparison th, .comparison td { padding: 10px 12px; }
-}
+:root{--bg:#0a0a0f;--surface:#12121a;--surface2:#1a1a24;--border:#2a2a3a;--text:#e0e0e8;--text2:#9090a0;--accent:#ef4444;--accent2:#f87171;--accent-dim:rgba(239,68,68,0.15);--green:#4ade80;--yellow:#fbbf24;--red:#ef4444}
+[data-theme="light"]{--bg:#fafafa;--surface:#ffffff;--surface2:#f4f4f6;--border:#e0e0e6;--text:#1a1a24;--text2:#6b6b80;--accent-dim:rgba(239,68,68,0.08)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;transition:background 0.3s,color 0.3s}
+a{color:var(--accent);text-decoration:none}
+a:hover{text-decoration:underline}
+.nav{background:var(--surface);border-bottom:1px solid var(--border);padding:16px 0;position:sticky;top:0;z-index:100;backdrop-filter:blur(12px)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between}
+.nav-logo{font-size:20px;font-weight:700;color:var(--text)}
+.nav-logo span{color:var(--accent)}
+.nav-links{display:flex;gap:24px;align-items:center}
+.nav-links a{color:var(--text2);font-size:14px;font-weight:500}
+.nav-links a:hover{color:var(--text);text-decoration:none}
+.theme-toggle{background:var(--surface2);border:1px solid var(--border);color:var(--text);width:36px;height:36px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all 0.2s}
+.theme-toggle:hover{background:var(--accent-dim);border-color:var(--accent)}
+.nav-cta{background:var(--accent);color:#fff!important;padding:8px 16px;border-radius:8px}
+.nav-cta:hover{background:#dc2626;text-decoration:none}
+.hero{max-width:1100px;margin:0 auto;padding:80px 24px;text-align:center}
+.hero-badge{display:inline-block;background:var(--accent-dim);border:1px solid var(--accent);padding:6px 16px;border-radius:20px;font-size:13px;color:var(--accent);margin-bottom:24px;font-weight:600}
+.hero h1{font-size:48px;font-weight:800;line-height:1.1;margin-bottom:16px;color:var(--text)}
+.hero h1 .gradient{background:linear-gradient(135deg,var(--accent),#f97316);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:18px;color:var(--text2);max-width:600px;margin:0 auto 32px}
+.hero-buttons{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;border-radius:10px;font-size:15px;font-weight:600;transition:all 0.2s}
+.btn-primary{background:var(--accent);color:#fff}
+.btn-primary:hover{background:#dc2626;text-decoration:none;transform:translateY(-1px)}
+.btn-secondary{background:var(--surface2);color:var(--text);border:1px solid var(--border)}
+.btn-secondary:hover{background:var(--border);text-decoration:none}
+.section{max-width:1100px;margin:0 auto;padding:60px 24px}
+.section h2{font-size:28px;font-weight:700;margin-bottom:12px;color:var(--text)}
+.section .subtitle{color:var(--text2);font-size:16px;margin-bottom:40px}
+.comparison{width:100%;border-collapse:collapse;background:var(--surface);border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.comparison th{background:var(--surface2);padding:14px 20px;text-align:left;font-size:13px;text-transform:uppercase;letter-spacing:0.5px;color:var(--text2);border-bottom:1px solid var(--border)}
+.comparison td{padding:14px 20px;border-bottom:1px solid var(--border);font-size:14px}
+.comparison tr:last-child td{border-bottom:none}
+.comparison tr:hover{background:var(--surface2)}
+.check{color:var(--green);font-weight:600}
+.cross{color:var(--text2)}
+.fugu-val{color:var(--text2)}
+.fugusashi-val{color:var(--accent);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+.card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px}
+.card h3{font-size:16px;font-weight:600;margin-bottom:8px;color:var(--text)}
+.card p{color:var(--text2);font-size:14px}
+.card-icon{font-size:24px;margin-bottom:12px}
+.arch-diagram{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:32px;font-family:'SF Mono',Monaco,monospace;font-size:13px;line-height:2;overflow-x:auto}
+.arch-diagram .comment{color:var(--text2)}
+.arch-diagram .keyword{color:var(--accent2)}
+.arch-diagram .string{color:var(--green)}
+.arch-diagram .arrow{color:var(--accent)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:16px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;text-align:center}
+.stat-value{font-size:32px;font-weight:800;color:var(--text)}
+.stat-label{font-size:13px;color:var(--text2);margin-top:4px}
+.code-block{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:24px;font-family:'SF Mono',Monaco,monospace;font-size:13px;line-height:1.8;overflow-x:auto;margin:24px 0}
+.code-block .prompt{color:var(--text2)}
+.code-block .cmd{color:var(--green)}
+.code-block .flag{color:var(--yellow)}
+.feedback-loop{display:flex;align-items:center;gap:12px;flex-wrap:wrap;justify-content:center;margin:32px 0}
+.step{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 20px;text-align:center;min-width:120px}
+.step-num{font-size:24px;margin-bottom:4px}
+.step-label{font-size:12px;color:var(--text2)}
+.arrow{color:var(--border);font-size:20px}
+.footer{background:var(--surface);border-top:1px solid var(--border);padding:40px 24px;margin-top:80px}
+.footer-inner{max-width:1100px;margin:0 auto;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px}
+.footer-brand{font-size:14px;color:var(--text2)}
+.footer-links{display:flex;gap:24px}
+.footer-links a{color:var(--text2);font-size:14px}
+.footer-links a:hover{color:var(--text)}
+@media(max-width:768px){.hero h1{font-size:32px}.nav-links a:not(.nav-cta){display:none}.comparison{font-size:12px}.comparison th,.comparison td{padding:10px 12px}}
 </style>
 </head>
 <body>
-
 <nav class="nav">
-  <div class="nav-inner">
-    <a href="/" class="nav-logo">fugu<span>shashi</span></a>
-    <div class="nav-links">
-      <a href="#features">Features</a>
-      <a href="#comparison">vs Fugu</a>
-      <a href="#quickstart">Quickstart</a>
-      <a href="#feedback">Feedback Loop</a>
-      <a href="https://github.com/eulogik/fugusashi" class="nav-cta">⭐ GitHub</a>
-    </div>
-  </div>
+<div class="nav-inner">
+<a href="https://eulogik.github.io/fugusashi/" class="nav-logo">fugu<span>shashi</span></a>
+<div class="nav-links">
+<a href="#features">Features</a>
+<a href="#comparison">vs Fugu</a>
+<a href="#quickstart">Quickstart</a>
+<a href="#feedback">Feedback</a>
+<a href="https://github.com/eulogik/fugusashi" class="nav-cta">⭐ GitHub</a>
+<button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
+</div>
+</div>
 </nav>
-
 <section class="hero">
-  <div class="hero-badge">Open Source · MIT Licensed · By <a href="https://eulogik.com">eulogik</a></div>
-  <h1>The Open-Source Alternative to<br><span class="gradient">Sakana AI's Fugu</span></h1>
-  <p>Fugusashi is an intelligent model router and multi-agent orchestrator. It automatically picks the best AI model for each prompt, learns from every request, and runs entirely on your infrastructure.</p>
-  <div class="hero-buttons">
-    <a href="https://github.com/eulogik/fugusashi" class="btn btn-primary">⭐ Star on GitHub</a>
-    <a href="#quickstart" class="btn btn-secondary">Get Started →</a>
-    <a href="https://pypi.org/project/fugusashi/" class="btn btn-secondary">📦 PyPI</a>
-  </div>
+<div class="hero-badge">⚡ Open Source · MIT · By <a href="https://eulogik.com">eulogik</a></div>
+<h1>Better Than<br><span class="gradient">Sakana AI Fugu</span></h1>
+<p>Fugusashi is an intelligent model router and multi-agent orchestrator. It automatically picks the best AI model for each prompt, learns from every request, runs entirely on your infrastructure — and it's free.</p>
+<div class="hero-buttons">
+<a href="https://github.com/eulogik/fugusashi" class="btn btn-primary">⭐ Star on GitHub</a>
+<a href="#quickstart" class="btn btn-secondary">Get Started →</a>
+<a href="https://pypi.org/project/fugusashi/" class="btn btn-secondary">📦 PyPI</a>
+</div>
 </section>
-
 <section class="section" id="features">
-  <h2>Features</h2>
-  <p class="subtitle">Everything Fugu does, plus what it can't.</p>
-  <div class="grid">
-    <div class="card">
-      <div class="card-icon">🧠</div>
-      <h3>Intelligent Routing</h3>
-      <p>Three strategies — similarity, cost, and fallback — pick the best model for every prompt in under 20ms.</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔄</div>
-      <h3>Feedback Loop</h3>
-      <p>Learns from every request. Auto-retrains after every 10 requests. Gets smarter over time.</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔍</div>
-      <h3>Fully Transparent</h3>
-      <p>Every routing decision is visible. No black box. See which model was picked and why.</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">🏠</div>
-      <h3>Self-Hosting</h3>
-      <p>Run entirely on-premise with local models via Ollama. Air-gapped capable. No cloud dependency.</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">📊</div>
-      <h3>Live Dashboard</h3>
-      <p>Real-time web dashboard showing routing decisions, model usage, costs, and latency.</p>
-    </div>
-    <div class="card">
-      <div class="card-icon">🔌</div>
-      <h3>OpenAI-Compatible</h3>
-      <p>Drop-in replacement for OpenAI API. Works with any OpenAI SDK. 100+ providers via LiteLLM.</p>
-    </div>
-  </div>
+<h2>Features</h2>
+<p class="subtitle">Everything Fugu does, plus what it can't.</p>
+<div class="grid">
+<div class="card"><div class="card-icon">🧠</div><h3>Intelligent Routing</h3><p>Three strategies — similarity, cost, and fallback — pick the best model for every prompt in under 20ms.</p></div>
+<div class="card"><div class="card-icon">🔄</div><h3>Feedback Loop</h3><p>Learns from every request. Auto-retrains after every 10 requests. Gets smarter over time.</p></div>
+<div class="card"><div class="card-icon">🔍</div><h3>Fully Transparent</h3><p>Every routing decision is visible. No black box. See which model was picked and why.</p></div>
+<div class="card"><div class="card-icon">🏠</div><h3>Self-Hosting</h3><p>Run entirely on-premise with local models via Ollama. Air-gapped capable. No cloud dependency.</p></div>
+<div class="card"><div class="card-icon">📊</div><h3>Live Dashboard</h3><p>Real-time web dashboard showing routing decisions, model usage, costs, and latency.</p></div>
+<div class="card"><div class="card-icon">🔌</div><h3>OpenAI-Compatible</h3><p>Drop-in replacement for OpenAI API. Works with any OpenAI SDK. 100+ providers via LiteLLM.</p></div>
+</div>
 </section>
-
 <section class="section" id="comparison">
-  <h2>Fugusashi vs Sakana AI Fugu</h2>
-  <p class="subtitle">See why developers are switching to open source.</p>
-  <table class="comparison">
-    <thead>
-      <tr>
-        <th>Feature</th>
-        <th class="product-label">Sakana Fugu</th>
-        <th class="product-label">Fugusashi</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td>Model Routing</td>
-        <td><span class="check">✓</span> Proprietary</td>
-        <td><span class="check">✓</span> Open & transparent</td>
-      </tr>
-      <tr>
-        <td>Multi-Agent Orchestration</td>
-        <td><span class="check">✓</span> Fugu Ultra</td>
-        <td><span class="check">✓</span> Phase 2</td>
-      </tr>
-      <tr>
-        <td>Self-Hosting</td>
-        <td class="cross">❌ Cloud-only</td>
-        <td><span class="check">✓</span> Local-first</td>
-      </tr>
-      <tr>
-        <td>Cost</td>
-        <td>$5-30/M tokens</td>
-        <td><span class="check">✓</span> Free (pay only for APIs)</td>
-      </tr>
-      <tr>
-        <td>Transparency</td>
-        <td class="cross">❌ Black box</td>
-        <td><span class="check">✓</span> Every decision visible</td>
-      </tr>
-      <tr>
-        <td>Feedback Loop</td>
-        <td class="cross">❌ Static</td>
-        <td><span class="check">✓</span> Learns from every request</td>
-      </tr>
-      <tr>
-        <td>Model Pool</td>
-        <td class="cross">❌ Fixed by Sakana</td>
-        <td><span class="check">✓</span> You control</td>
-      </tr>
-      <tr>
-        <td>Training Data</td>
-        <td class="cross">❌ Proprietary</td>
-        <td><span class="check">✓</span> Community + your traffic</td>
-      </tr>
-      <tr>
-        <td>License</td>
-        <td>Proprietary</td>
-        <td><span class="check">✓</span> MIT</td>
-      </tr>
-    </tbody>
-  </table>
+<h2>Fugusashi vs Sakana AI Fugu</h2>
+<p class="subtitle">See why developers are switching to open source.</p>
+<table class="comparison">
+<thead><tr><th>Feature</th><th>Sakana Fugu</th><th>Fugusashi</th></tr></thead>
+<tbody>
+<tr><td>Model Routing</td><td class="fugu-val">✓ Proprietary</td><td class="fugusashi-val">✓ Open & transparent</td></tr>
+<tr><td>Multi-Agent Orchestration</td><td class="fugu-val">✓ Fugu Ultra</td><td class="fugusashi-val">✓ Phase 2</td></tr>
+<tr><td>Self-Hosting</td><td class="cross">❌ Cloud-only</td><td class="fugusashi-val">✓ Local-first</td></tr>
+<tr><td>Cost</td><td class="fugu-val">$5-30/M tokens</td><td class="fugusashi-val">✓ Free</td></tr>
+<tr><td>Transparency</td><td class="cross">❌ Black box</td><td class="fugusashi-val">✓ Every decision visible</td></tr>
+<tr><td>Feedback Loop</td><td class="cross">❌ Static</td><td class="fugusashi-val">✓ Learns from every request</td></tr>
+<tr><td>Model Pool</td><td class="cross">❌ Fixed by Sakana</td><td class="fugusashi-val">✓ You control</td></tr>
+<tr><td>Training Data</td><td class="cross">❌ Proprietary</td><td class="fugusashi-val">✓ Community + your traffic</td></tr>
+<tr><td>License</td><td class="fugu-val">Proprietary</td><td class="fugusashi-val">✓ MIT</td></tr>
+</tbody>
+</table>
 </section>
-
 <section class="section" id="quickstart">
-  <h2>Quickstart</h2>
-  <p class="subtitle">Up and running in 5 minutes.</p>
-  <div class="code-block">
-    <span class="prompt"># Install</span><br>
-    <span class="cmd">pip install fugusashi</span><br>
-    <br>
-    <span class="prompt"># Or from source</span><br>
-    <span class="cmd">git clone</span> <span class="string">https://github.com/eulogik/fugusashi.git</span><br>
-    <span class="cmd">cd</span> <span class="string">fugusashi</span><br>
-    <span class="cmd">pip install</span> <span class="flag">-e .</span><br>
-    <br>
-    <span class="prompt"># Run</span><br>
-    <span class="cmd">fugusashi serve</span> <span class="flag">--config config.yaml</span><br>
-    <br>
-    <span class="prompt"># Use</span><br>
-    <span class="cmd">curl</span> <span class="string">http://localhost:6060/v1/chat/completions</span> \<br>
-    &nbsp;&nbsp;<span class="flag">-H</span> <span class="string">"Content-Type: application/json"</span> \<br>
-    &nbsp;&nbsp;<span class="flag">-d</span> <span class="string">'{"model":"auto","messages":[{"role":"user","content":"Say hello"}]}'</span><br>
-    <br>
-    <span class="prompt"># Open dashboard</span><br>
-    <span class="cmd">open</span> <span class="string">http://localhost:6060/dashboard</span>
-  </div>
+<h2>Quickstart</h2>
+<p class="subtitle">Up and running in 5 minutes.</p>
+<div class="code-block">
+<span class="prompt"># Install from PyPI</span><br>
+<span class="cmd">pip install fugusashi</span><br><br>
+<span class="prompt"># Or from source</span><br>
+<span class="cmd">git clone</span> <span class="flag">https://github.com/eulogik/fugusashi.git</span><br>
+<span class="cmd">cd</span> <span class="flag">fugusashi && pip install -e .</span><br><br>
+<span class="prompt"># Run</span><br>
+<span class="cmd">fugusashi serve --config config.yaml</span><br><br>
+<span class="prompt"># Use</span><br>
+<span class="cmd">curl</span> <span class="flag">http://localhost:6060/v1/chat/completions</span> <span class="flag">-H</span> <span class="flag">"Content-Type: application/json"</span> <span class="flag">-d</span> <span class="flag">'{"model":"auto","messages":[{"role":"user","content":"Say hello"}]}'</span><br><br>
+<span class="prompt"># Open dashboard</span><br>
+<span class="cmd">open</span> <span class="flag">http://localhost:6060/dashboard</span>
+</div>
 </section>
-
 <section class="section" id="architecture">
-  <h2>Architecture</h2>
-  <p class="subtitle">Two tiers. One fast router. One deep orchestrator.</p>
-  <div class="architecture">
-    <span class="keyword">Application</span> (OpenAI-compatible API)<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;│<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;▼<br>
-    <span class="keyword">Tier 1: Router</span> (CPU, &lt;20ms)<br>
-    &nbsp;&nbsp;├─ <span class="string">SimilarityRouter</span> — learns from history<br>
-    &nbsp;&nbsp;├─ <span class="string">CostRouter</span> — capability + price<br>
-    &nbsp;&nbsp;└─ <span class="string">EnsembleRouter</span> — priority chain<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;│<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;├──→ <span class="string">Single Model Call</span><br>
-    &nbsp;&nbsp;&nbsp;&nbsp;│<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;└──→ <span class="keyword">Tier 2: Orchestrator</span> (Phase 2)<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Planner model<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Specialist models<br>
-    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ Synthesizer
-  </div>
+<h2>Architecture</h2>
+<p class="subtitle">Two tiers. One fast router. One deep orchestrator.</p>
+<div class="arch-diagram">
+<span class="keyword">Application</span> <span class="comment">(OpenAI-compatible API)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+&nbsp;&nbsp;&nbsp;&nbsp;<span class="arrow">▼</span><br>
+<span class="keyword">Tier 1: Router</span> <span class="comment">(CPU, &lt;20ms)</span><br>
+&nbsp;&nbsp;├─ <span class="string">SimilarityRouter</span> <span class="comment">— learns from history</span><br>
+&nbsp;&nbsp;├─ <span class="string">CostRouter</span> <span class="comment">— capability + price</span><br>
+&nbsp;&nbsp;└─ <span class="string">EnsembleRouter</span> <span class="comment">— priority chain</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├──→ <span class="string">Single Model Call</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;│<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└──→ <span class="keyword">Tier 2: Orchestrator</span> <span class="comment">(Phase 2)</span><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Planner model<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;├─ Specialist models<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;└─ Synthesizer
+</div>
 </section>
-
 <section class="section" id="feedback">
-  <h2>Feedback Loop</h2>
-  <p class="subtitle">The killer feature Fugu doesn't have. Fugusashi learns from every request.</p>
-  <div class="feedback-loop">
-    <div class="step"><div class="step-num">🧠</div><div class="step-label">Route</div></div>
-    <div class="arrow">→</div>
-    <div class="step"><div class="step-num">⚡</div><div class="step-label">Execute</div></div>
-    <div class="arrow">→</div>
-    <div class="step"><div class="step-num">📊</div><div class="step-label">Evaluate</div></div>
-    <div class="arrow">→</div>
-    <div class="step"><div class="step-num">📚</div><div class="step-label">Learn</div></div>
-    <div class="arrow">↺</div>
-  </div>
-  <p style="text-align:center;color:var(--text2);max-width:600px;margin:0 auto;">Outcomes are recorded automatically. After every 10 requests, the similarity router retrains. Over time it learns which prompts work best with which models — without any manual intervention.</p>
+<h2>Feedback Loop</h2>
+<p class="subtitle">The killer feature Fugu doesn't have.</p>
+<div class="feedback-loop">
+<div class="step"><div class="step-num">🧠</div><div class="step-label">Route</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">⚡</div><div class="step-label">Execute</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">📊</div><div class="step-label">Evaluate</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">📚</div><div class="step-label">Learn</div></div>
+<div class="arrow">↺</div>
+</div>
+<p style="text-align:center;color:var(--text2);max-width:600px;margin:0 auto;">Outcomes are recorded automatically. After every 10 requests, the similarity router retrains. Over time it learns which prompts work best with which models — without any manual intervention.</p>
 </section>
-
 <section class="section">
-  <h2>Benchmarks</h2>
-  <p class="subtitle">Measured on 20 diverse prompts across 5 categories.</p>
-  <div class="stats">
-    <div class="stat-card">
-      <div class="stat-value">85%</div>
-      <div class="stat-label">Routing Accuracy (with training)</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">90%</div>
-      <div class="stat-label">Code Task Accuracy</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">&lt;20ms</div>
-      <div class="stat-label">Routing Latency</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-value">100+</div>
-      <div class="stat-label">Supported Providers</div>
-    </div>
-  </div>
+<h2>Benchmarks</h2>
+<div class="stats">
+<div class="stat-card"><div class="stat-value">85%</div><div class="stat-label">Routing Accuracy</div></div>
+<div class="stat-card"><div class="stat-value">90%</div><div class="stat-label">Code Task Accuracy</div></div>
+<div class="stat-card"><div class="stat-value">&lt;20ms</div><div class="stat-label">Routing Latency</div></div>
+<div class="stat-card"><div class="stat-value">100+</div><div class="stat-label">Supported Providers</div></div>
+</div>
 </section>
-
 <section class="section">
-  <h2>Links</h2>
-  <div class="grid">
-    <div class="card">
-      <h3>🌐 Website</h3>
-      <p><a href="https://eulogik.com">eulogik.com</a> — building AI infrastructure for everyone.</p>
-    </div>
-    <div class="card">
-      <h3>💻 GitHub</h3>
-      <p><a href="https://github.com/eulogik/fugusashi">github.com/eulogik/fugusashi</a> — source code, issues, discussions.</p>
-    </div>
-    <div class="card">
-      <h3>📦 PyPI</h3>
-      <p><a href="https://pypi.org/project/fugusashi/">pypi.org/project/fugusashi</a> — install with pip.</p>
-    </div>
-    <div class="card">
-      <h3>📖 Docs</h3>
-      <p><a href="https://eulogik.github.io/fugusashi/">eulogik.github.io/fugusashi</a> — this site.</p>
-    </div>
-  </div>
+<h2>Links</h2>
+<div class="grid">
+<div class="card"><h3>🌐 Website</h3><p><a href="https://eulogik.com">eulogik.com</a></p></div>
+<div class="card"><h3>💻 GitHub</h3><p><a href="https://github.com/eulogik/fugusashi">github.com/eulogik/fugusashi</a></p></div>
+<div class="card"><h3>📦 PyPI</h3><p><a href="https://pypi.org/project/fugusashi/">pypi.org/project/fugusashi</a></p></div>
+<div class="card"><h3>📖 This Site</h3><p><a href="https://eulogik.github.io/fugusashi/">eulogik.github.io/fugusashi</a></p></div>
+</div>
 </section>
-
 <footer class="footer">
-  <div class="footer-inner">
-    <div class="footer-brand">© 2026 <a href="https://eulogik.com" style="color:#fff;font-weight:600;">eulogik</a>. All rights reserved.</div>
-    <div class="footer-links">
-      <a href="https://github.com/eulogik/fugusashi">GitHub</a>
-      <a href="https://pypi.org/project/fugusashi/">PyPI</a>
-      <a href="https://eulogik.com">eulogik.com</a>
-    </div>
-  </div>
+<div class="footer-inner">
+<div class="footer-brand">© 2026 <a href="https://eulogik.com" style="color:var(--accent);font-weight:600;">eulogik</a>. MIT License.</div>
+<div class="footer-links">
+<a href="https://github.com/eulogik/fugusashi">GitHub</a>
+<a href="https://pypi.org/project/fugusashi/">PyPI</a>
+<a href="https://eulogik.com">eulogik.com</a>
+</div>
+</div>
 </footer>
-
+<script>
+function toggleTheme(){
+  const html=document.documentElement;
+  const btn=document.querySelector('.theme-toggle');
+  if(html.getAttribute('data-theme')==='dark'){html.setAttribute('data-theme','light');btn.textContent='☀️'}
+  else{html.setAttribute('data-theme','dark');btn.textContent='🌙'}
+}
+</script>
 </body>
 </html>
