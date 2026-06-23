@@ -204,6 +204,21 @@ def create_router(deps) -> APIRouter:
                     latency_ms=latency,
                     status="success" if fallback_idx == 0 else "fallback_success",
                 )
+
+                feedback = deps.get("feedback")
+                if feedback:
+                    feedback.record_routing(
+                        prompt=prompt,
+                        routed_to=model_to_try,
+                        confidence=routing_result.confidence,
+                        strategy=routing_result.strategy,
+                        prompt_tokens=prompt_tokens,
+                        completion_tokens=completion_tokens,
+                        cost=0.0,
+                        latency_ms=latency,
+                        error=False,
+                    )
+
                 tracker.finish_trace(request_id)
                 break
             except Exception as e:
@@ -215,6 +230,15 @@ def create_router(deps) -> APIRouter:
                     status="error" if fallback_idx == 0 else "fallback_error",
                     error=str(e),
                 )
+                feedback = deps.get("feedback")
+                if feedback:
+                    feedback.record_routing(
+                        prompt=prompt,
+                        routed_to=model_to_try,
+                        confidence=routing_result.confidence,
+                        strategy=routing_result.strategy,
+                        error=True,
+                    )
                 continue
 
         if response is None:
@@ -285,5 +309,44 @@ def create_router(deps) -> APIRouter:
         ]
         router_engine.similarity_router.build_index(history)
         return {"status": "ok", "indexed": len(history)}
+
+    @router.post("/v1/feedback/rate")
+    async def rate_outcome(request: Request):
+        body = await request.json()
+        request_id = body.get("request_id", "")
+        rating = int(body.get("rating", 3))
+        feedback: Any = deps.get("feedback")
+        if not feedback:
+            return {"status": "error", "message": "feedback not enabled"}
+        trace = feedback.outcomes
+        for outcome in reversed(trace):
+            if outcome.timestamp and outcome.timestamp.endswith(request_id[-6:]):
+                feedback.record_user_rating(outcome, rating)
+                return {"status": "ok", "rating": rating}
+        return {"status": "not_found", "request_id": request_id}
+
+    @router.post("/v1/feedback/retrain")
+    async def retrain():
+        feedback: Any = deps.get("feedback")
+        router_engine = deps["router"]
+        if not feedback:
+            return {"status": "error", "message": "feedback not enabled"}
+        feedback.build_similarity_index(router_engine.similarity_router)
+        data = feedback.get_retraining_data()
+        return {"status": "ok", "retrained_on": len(data)}
+
+    @router.get("/v1/feedback/stats")
+    async def feedback_stats():
+        feedback: Any = deps.get("feedback")
+        if not feedback:
+            return {"status": "error", "message": "feedback not enabled"}
+        return feedback.get_stats()
+
+    @router.get("/v1/feedback/rankings")
+    async def model_rankings():
+        feedback: Any = deps.get("feedback")
+        if not feedback:
+            return {"status": "error", "message": "feedback not enabled"}
+        return feedback.get_model_rankings()
 
     return router

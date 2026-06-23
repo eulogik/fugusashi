@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse
 
 from .api.routes import create_router
 from .config import AppConfig
+from .feedback import FeedbackLoop
 from .providers import ModelClient
 from .router import EnsembleRouter
 from .tracker import TransparencyTracker
@@ -39,11 +40,14 @@ def create_app(config: AppConfig) -> FastAPI:
         prefer_local=config.tier1.router.prefer_local,
     )
 
+    feedback = FeedbackLoop()
+
     deps: Dict[str, Any] = {
         "config": config,
         "model_client": model_client,
         "tracker": tracker,
         "router": router_engine,
+        "feedback": feedback,
     }
 
     api_router = create_router(deps)
