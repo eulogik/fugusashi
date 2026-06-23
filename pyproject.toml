@@ -1,0 +1,28 @@
+[project]
+name = "fugusashi"
+version = "0.1.0"
+description = "Intelligent model router and orchestrator"
+requires-python = ">=3.12"
+dependencies = [
+    "litellm>=1.60,<2.0",
+    "fastapi>=0.115,<1.0",
+    "uvicorn[standard]>=0.34,<1.0",
+    "pydantic>=2.10,<3.0",
+    "pydantic-settings>=2.7,<3.0",
+    "sentence-transformers>=3.4,<4.0",
+    "numpy>=1.26,<2.0",
+    "pyyaml>=6.0,<7.0",
+    "click>=8.1,<9.0",
+    "httpx>=0.28,<1.0",
+    "rich>=13.9,<14.0",
+]
+
+[project.scripts]
+fugusashi = "fugusashi.__main__:cli"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"

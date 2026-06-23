@@ -1,0 +1,53 @@
+host: "0.0.0.0"
+port: 6060
+
+default_model: "llama3.2-local"
+
+models:
+  - name: "llama3.2-local"
+    provider: "ollama"
+    model: "llama3.2:1b"
+    api_base: "http://localhost:11434"
+    cost_per_input_token: 0.0
+    cost_per_output_token: 0.0
+    capabilities: ["chat", "reasoning"]
+    max_tokens: 8192
+    description: "Llama 3.2 1B (local, free)"
+
+  - name: "gpt-4o-mini"
+    provider: "openai"
+    model: "gpt-4o-mini"
+    cost_per_input_token: 0.00000015
+    cost_per_output_token: 0.0000006
+    capabilities: ["chat", "reasoning", "code", "creative"]
+    max_tokens: 16384
+    description: "OpenAI GPT-4o-mini (cheap, capable)"
+
+  - name: "gpt-4o"
+    provider: "openai"
+    model: "gpt-4o"
+    cost_per_input_token: 0.0000025
+    cost_per_output_token: 0.00001
+    capabilities: ["chat", "reasoning", "code", "creative"]
+    max_tokens: 16384
+    description: "OpenAI GPT-4o (best quality)"
+
+tier1:
+  enabled: true
+  overhead_ms_max: 20
+  router:
+    name: "ensemble"
+    confidence_threshold: 0.4
+    fallback_model: "llama3.2-local"
+    embedding_model: "all-MiniLM-L6-v2"
+    similarity_top_k: 5
+    prefer_local: true
+
+tier2:
+  enabled: false
+
+observability:
+  log_routing_decisions: true
+  log_model_calls: true
+  expose_transparency_endpoint: true
+  log_level: "INFO"
