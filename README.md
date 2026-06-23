@@ -1,12 +1,11 @@
 <div align="center">
 
-<!-- SHIELD.IO BADGES -->
-[![PyPI version](https://img.shields.io/pypi/v/fugusashi?color=6366f1&label=pypi&logo=pypi&logoColor=white)](https://pypi.org/project/fugusashi/)
+[![PyPI version](https://img.shields.io/pypi/v/fugusashi?color=ef4444&label=pypi&logo=pypi&logoColor=white)](https://pypi.org/project/fugusashi/)
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg?logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/eulogik/fugusashi?style=social)](https://github.com/eulogik/fugusashi/stargazers)
-[![Docs](https://img.shields.io/badge/docs-eulogik.github.io-fugusashi-blue.svg)](https://eulogik.github.io/fugusashi/)
-[![Website](https://img.shields.io/badge/website-eulogik.com-6366f1.svg)](https://eulogik.com)
+[![Docs](https://img.shields.io/badge/docs-eulogik.github.io-red.svg)](https://eulogik.github.io/fugusashi/)
+[![Website](https://img.shields.io/badge/website-eulogik.com-ef4444.svg)](https://eulogik.com)
 
 **By [eulogik](https://eulogik.com) — building AI infrastructure for everyone.**
 
@@ -26,7 +25,7 @@
 
 ## Why Fugusashi?
 
-Sakana AI's [Fugu](https://sakana.ai/fugu) is a proprietary model router. It works — but you can't see inside it, you can't train it on your own data, you can't self-host it, and you pay $5-30 per million tokens.
+[Sakana AI's Fugu](https://sakana.ai/fugu) is a proprietary model router. It works — but you can't see inside it, you can't train it on your own data, you can't self-host it, and you pay $5-30 per million tokens.
 
 **Fugusashi does everything Fugu does, but open, transparent, and self-hosting.** It also adds a feedback loop that Fugu doesn't have — the router learns from every request and gets smarter over time.
 
@@ -57,7 +56,7 @@ Sakana AI's [Fugu](https://sakana.ai/fugu) is a proprietary model router. It wor
 pip install fugusashi
 ```
 
-### Or install from source
+### Or from source
 
 ```bash
 git clone https://github.com/eulogik/fugusashi.git
@@ -220,37 +219,7 @@ Open `http://localhost:6060/dashboard` for a live view:
 - **Strategy Distribution**: cost vs similarity routing breakdown
 - **Recent Decisions**: live table of every routing decision
 
-Auto-refreshes every 3 seconds.
-
----
-
-## Benchmarking
-
-```bash
-# Install
-pip install fugusashi
-
-# Run default benchmark (20 samples)
-fugusashi benchmark
-
-# With training data
-fugusashi benchmark --train --verbose
-
-# JSON output
-fugusashi benchmark --train --json
-
-# Custom dataset
-fugusashi benchmark -d my_data.jsonl
-```
-
-**Results:**
-
-| Metric | Without Training | With Training |
-|---|---|---|
-| Accuracy | 70% | **85%** |
-| Code accuracy | 60% | **90%** |
-| Strategy | 100% cost | 60% cost / 40% similarity |
-| Routing latency | <1ms | ~18ms |
+Auto-refreshes every 3 seconds. Light and dark themes.
 
 ---
 
@@ -269,6 +238,33 @@ Route → Execute → Evaluate → Learn → (repeat)
 5. **Auto-Retrain**: Every 10 requests, the similarity index rebuilds automatically
 
 Outcomes are stored in `.fugusashi_data/outcomes.jsonl` — inspectable, shareable, yours.
+
+---
+
+## Benchmarking
+
+```bash
+pip install fugusashi
+fugusashi benchmark                      # Default 20-sample dataset
+fugusashi benchmark --train --verbose    # With training data
+fugusashi benchmark --train --json       # JSON output
+fugusashi benchmark -d my_data.jsonl     # Custom dataset
+```
+
+**Results:**
+
+| Metric | Without Training | With Training |
+|---|---|---|
+| Accuracy | 70% | **85%** |
+| Code accuracy | 60% | **90%** |
+| Strategy | 100% cost | 60% cost / 40% similarity |
+| Routing latency | <1ms | ~18ms |
+
+Custom dataset format (JSONL):
+```jsonl
+{"prompt":"How do I center a div?","expected_model":"gpt-4o-mini","category":"code"}
+{"prompt":"What is 2+2?","expected_model":"llama3.2-local","category":"factual"}
+```
 
 ---
 
@@ -317,32 +313,6 @@ fugusashi/
 
 ---
 
-## Roadmap
-
-- [x] Tier 1: Intelligent model router (cost + similarity)
-- [x] OpenAI-compatible API
-- [x] Transparent routing decisions
-- [x] Web dashboard
-- [x] Benchmarking tool
-- [x] Feedback loop with auto-retraining
-- [ ] Tier 2: Multi-agent orchestrator with GRPO
-- [ ] Community preference dataset sharing
-- [ ] Plugin system for custom routers
-- [ ] CLI improvements (interactive mode, model management)
-
----
-
-## Contributing
-
-We welcome contributions! See [LIVING.md](LIVING.md) for the full development story.
-
-1. Fork the repo
-2. Create a feature branch
-3. Add tests
-4. Submit a pull request
-
----
-
 ## Links
 
 - **Website**: [eulogik.com](https://eulogik.com)
@@ -363,6 +333,6 @@ MIT — use it however you want.
 
 **Built with ❤️ by [eulogik](https://eulogik.com)**
 
-**[⭐ Star on GitHub](https://github.com/eulogik/fugusashi) · [🐦 Follow on Twitter](https://twitter.com/eulogik) · [💬 Discussions](https://github.com/eulogik/fugusashi/discussions)**
+**[⭐ Star on GitHub](https://github.com/eulogik/fugusashi) · [🐦 Twitter](https://twitter.com/eulogik) · [💬 Discussions](https://github.com/eulogik/fugusashi/discussions)**
 
 </div>
