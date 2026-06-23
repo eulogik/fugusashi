@@ -1,0 +1,1 @@
+{"prompt": "hi", "routed_to": "llama3.2-local", "confidence": 0.5, "strategy": "ensemble(cost)", "prompt_tokens": 30, "completion_tokens": 5, "cost": 0.0, "latency_ms": 1908.652542042546, "error": false, "timestamp": "2026-06-23T08:47:58.922423"}
