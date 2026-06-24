@@ -56,6 +56,12 @@
 pip install fugusashi
 ```
 
+### Or run with Docker
+
+```bash
+docker run -p 6060:6060 ghcr.io/eulogik/fugusashi:latest
+```
+
 ### Or from source
 
 ```bash

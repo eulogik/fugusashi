@@ -1,6 +1,6 @@
 [project]
 name = "fugusashi"
-version = "1.0.0"
+version = "1.1.0"
 description = "Open-source intelligent model router and multi-agent orchestrator. The open alternative to Sakana AI's Fugu."
 readme = "README.md"
 license = {text = "MIT"}
@@ -40,6 +40,12 @@ Repository = "https://github.com/eulogik/fugusashi"
 Issues = "https://github.com/eulogik/fugusashi/issues"
 Changelog = "https://github.com/eulogik/fugusashi/blob/main/LIVING.md"
 
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+]
+
 [project.scripts]
 fugusashi = "fugusashi.__main__:cli"
 
@@ -51,4 +57,4 @@ requires = ["setuptools>=75"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.package-data]
-fugusashi = ["static/*"]
+"*" = ["static/*"]
