@@ -277,7 +277,22 @@ Custom routing strategies. The interface is already defined (`BaseRouter`). Next
 
 ## Changelog
 
-### v0.2.0 — Feedback Loop + Auto-Retraining
+### v1.1.0 — CMA-ES Evolution, Docker, Community Dataset
+
+- CMA-ES coordinator now supports real API validation with rate limiting
+- RateLimiter class prevents 429 errors (20 RPM default)
+- Model failure tracking auto-deprioritizes rate-limited models
+- Two-phase evolution: fast embedding-based + API validation on top candidates
+- Full evolution completes in ~27 seconds
+- Docker image: `docker run -p 6060:6060 ghcr.io/eulogik/fugusashi:latest`
+- GitHub Actions CI/CD pipeline (test, lint, publish, Docker build)
+- Community preference dataset module with 20 seeded examples
+- PreferenceDataset supports import/export, stats, training data generation
+- Website updated with Docker section, Fugu Sashi tagline
+- README updated with Docker instructions
+- Published to PyPI as v1.1.0
+
+### v1.0.0 — Initial Release
 
 - Added `FeedbackLoop` class that records every routing outcome
 - Added auto-retraining: similarity index rebuilds every N requests (default 10)
