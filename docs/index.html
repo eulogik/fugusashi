@@ -98,9 +98,10 @@ a:hover{text-decoration:underline}
 <div class="nav-inner">
 <a href="https://eulogik.github.io/fugusashi/" class="nav-logo">Fugu<span>sashi</span></a>
 <div class="nav-links">
-<a href="#features">Features</a>
-<a href="#comparison">vs Fugu</a>
-<a href="#quickstart">Quickstart</a>
+    <a href="#features">Features</a>
+    <a href="#comparison">vs Fugu</a>
+    <a href="#coordinator">Coordinator</a>
+    <a href="#quickstart">Quickstart</a>
 <a href="#feedback">Feedback</a>
 <a href="https://github.com/eulogik/fugusashi" class="nav-cta">⭐ GitHub</a>
 <button class="theme-toggle" onclick="toggleTheme()" title="Toggle theme">🌙</button>
@@ -172,9 +173,26 @@ a:hover{text-decoration:underline}
 <p class="subtitle">Two tiers. One fast router. One deep orchestrator.</p>
 <img src="https://raw.githubusercontent.com/eulogik/fugusashi/main/assets/arch.svg" alt="Fugusashi Architecture Diagram" style="width:100%;max-width:800px;margin:0 auto;display:block;border-radius:12px;"/>
 </section>
+<section class="section" id="coordinator">
+<h2>CMA-ES Coordinator</h2>
+<p class="subtitle">The learning brain. Evolves to pick the best model for every prompt.</p>
+<div class="feedback-loop">
+<div class="step"><div class="step-num">📝</div><div class="step-label">Prompt</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">🧠</div><div class="step-label">Embed</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">⚡</div><div class="step-label">Route</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">📊</div><div class="step-label">Evaluate</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">🧬</div><div class="step-label">Evolve</div></div>
+<div class="arrow">↺</div>
+</div>
+<p style="text-align:center;color:var(--text2);max-width:600px;margin:0 auto;">Inspired by Sakana AI's TRINITY paper. Uses CMA-ES (Covariance Matrix Adaptation Evolution Strategy) to evolve routing weights. Runs locally in under 1ms per decision. Gets smarter from every request.</p>
+</section>
 <section class="section" id="feedback">
 <h2>Feedback Loop</h2>
-<p class="subtitle">The killer feature Fugu doesn't have.</p>
+<p class="subtitle">Learns from every request. Gets smarter over time.</p>
 <div class="feedback-loop">
 <div class="step"><div class="step-num">🧠</div><div class="step-label">Route</div></div>
 <div class="arrow">→</div>

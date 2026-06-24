@@ -9,6 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, Request
 from pydantic import BaseModel, Field
 
 from ..tracker import RoutingDecision
+from ..coordinator import Task
 
 
 class ChatMessage(BaseModel):
@@ -86,7 +87,40 @@ def create_router(deps) -> APIRouter:
         prompt = body.messages[-1].content if body.messages else ""
         prompt_preview = prompt[:200]
 
-        if body.model and body.model != "auto":
+        if body.model == "coordinator":
+            coordinator = deps.get("coordinator")
+            if coordinator:
+                coord_result = coordinator.route(prompt)
+                selected_model = coord_result.model
+                routing_result = RoutingDecision(
+                    request_id=request_id,
+                    timestamp=datetime.utcnow().isoformat(),
+                    prompt_hash=str(hash(prompt)),
+                    prompt_preview=prompt_preview,
+                    routed_to=selected_model,
+                    confidence=coord_result.confidence,
+                    strategy=coord_result.strategy,
+                    model_scores=coord_result.scores,
+                    latency_ms=coord_result.latency_ms,
+                    explanation=f"CMA-ES coordinator routing (conf={coord_result.confidence:.2f})",
+                    needs_escalation=coord_result.confidence < 0.3,
+                )
+            else:
+                selected_model = config.default_model
+                routing_result = RoutingDecision(
+                    request_id=request_id,
+                    timestamp=datetime.utcnow().isoformat(),
+                    prompt_hash=str(hash(prompt)),
+                    prompt_preview=prompt_preview,
+                    routed_to=selected_model,
+                    confidence=0.5,
+                    strategy="fallback",
+                    model_scores={},
+                    latency_ms=0.0,
+                    explanation="Coordinator not available, using default",
+                    needs_escalation=False,
+                )
+        elif body.model and body.model != "auto":
             selected_model = body.model
             routing_result = RoutingDecision(
                 request_id=request_id,
@@ -354,5 +388,40 @@ def create_router(deps) -> APIRouter:
         if not feedback:
             return {"status": "error", "message": "feedback not enabled"}
         return feedback.get_model_rankings()
+
+    @router.post("/v1/coordinator/evolve")
+    async def evolve_coordinator(request: Request):
+        body = await request.json()
+        tasks_data = body.get("tasks", [])
+        fast = body.get("fast", True)
+        coordinator = deps.get("coordinator")
+        if not coordinator:
+            return {"status": "error", "message": "coordinator not enabled"}
+        tasks = [Task(p=t["prompt"], category=t.get("category", "general")) for t in tasks_data]
+        coordinator.evolve(tasks, fast=fast)
+        return {"status": "ok", "stats": coordinator.get_stats()}
+
+    @router.get("/v1/coordinator/stats")
+    async def coordinator_stats():
+        coordinator = deps.get("coordinator")
+        if not coordinator:
+            return {"status": "error", "message": "coordinator not enabled"}
+        return coordinator.get_stats()
+
+    @router.post("/v1/coordinator/route")
+    async def coordinator_route(request: Request):
+        body = await request.json()
+        prompt = body.get("prompt", "")
+        coordinator = deps.get("coordinator")
+        if not coordinator:
+            return {"status": "error", "message": "coordinator not enabled"}
+        result = coordinator.route(prompt)
+        return {
+            "model": result.model,
+            "confidence": result.confidence,
+            "scores": result.scores,
+            "strategy": result.strategy,
+            "latency_ms": result.latency_ms,
+        }
 
     return router

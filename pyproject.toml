@@ -1,6 +1,6 @@
 [project]
 name = "fugusashi"
-version = "0.3.0"
+version = "1.0.0"
 description = "Open-source intelligent model router and multi-agent orchestrator. The open alternative to Sakana AI's Fugu."
 readme = "README.md"
 license = {text = "MIT"}

@@ -9,6 +9,7 @@ from fastapi.responses import FileResponse
 
 from .api.routes import create_router
 from .config import AppConfig
+from .coordinator import CMAESRouter
 from .feedback import FeedbackLoop
 from .providers import ModelClient
 from .router import EnsembleRouter
@@ -41,6 +42,7 @@ def create_app(config: AppConfig) -> FastAPI:
     )
 
     feedback = FeedbackLoop()
+    coordinator = CMAESRouter()
 
     deps: Dict[str, Any] = {
         "config": config,
@@ -48,6 +50,7 @@ def create_app(config: AppConfig) -> FastAPI:
         "tracker": tracker,
         "router": router_engine,
         "feedback": feedback,
+        "coordinator": coordinator,
     }
 
     api_router = create_router(deps)

@@ -15,7 +15,7 @@
 
 ### The Open-Source Alternative to Sakana AI's Fugu
 
-*Fugusashi* (Japanese: 不縛 — "unbound, unrestrained") is an intelligent model router and multi-agent orchestrator. Named after *Fugu Sashi* — the famous Japanese pufferfish delicacy — because this router serves up the world's best AI models without the poison of vendor lock-in or the pricing of Sakana Fugu. It automatically picks the best model for each prompt, learns from every request, and runs entirely on your infrastructure.
+*Fugusashi* (Japanese: 不縛 — "unbound, unrestrained") is an intelligent model router and multi-agent orchestrator. Named after *Fugu Sashi* — the famous Japanese pufferfish delicacy — because this router serves up the world's best AI models without the poison of vendor lock-in or the pricing of Sakana Fugu. It automatically picks the best model for each prompt, learns from every request via a CMA-ES coordinator inspired by Sakana's TRINITY paper, and runs entirely on your infrastructure.
 
 **Like Sakana Fugu. But Free. [Live Demo](https://eulogik.github.io/fugusashi/) · [Docs](https://eulogik.github.io/fugusashi/) · [PyPI](https://pypi.org/project/fugusashi/) · [GitHub](https://github.com/eulogik/fugusashi)**
 
