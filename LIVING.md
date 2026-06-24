@@ -332,4 +332,15 @@ Custom routing strategies. The interface is already defined (`BaseRouter`). Next
 
 ---
 
-*Last updated: 2026-06-23*
+*Last updated: 2026-06-24*
+
+---
+
+## Links
+
+- **Website**: [eulogik.com](https://eulogik.com)
+- **GitHub**: [github.com/eulogik/fugusashi](https://github.com/eulogik/fugusashi)
+- **PyPI**: [pypi.org/project/fugusashi](https://pypi.org/project/fugusashi/)
+- **HuggingFace**: [Model](https://huggingface.co/eulogik/fugusashi-router) · [Dataset](https://huggingface.co/datasets/eulogik/fugusashi-preferences) · [Live Demo](https://huggingface.co/spaces/eulogik/fugusashi)
+- **Docs**: [eulogik.github.io/fugusashi](https://eulogik.github.io/fugusashi/)
+- **Issues**: [github.com/eulogik/fugusashi/issues](https://github.com/eulogik/fugusashi/issues)
