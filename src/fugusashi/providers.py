@@ -3,9 +3,7 @@ from __future__ import annotations
 import time
 from typing import Any, AsyncGenerator, Dict, List, Optional, Tuple
 
-import litellm
 from litellm import Router as LiteLLMRouter
-from litellm.utils import get_llm_provider
 
 
 def build_litellm_router(model_configs: List[Dict[str, Any]]) -> LiteLLMRouter:
@@ -84,7 +82,6 @@ class ModelClient:
         prompt_tokens = getattr(usage, "prompt_tokens", 0) if usage else 0
         completion_tokens = getattr(usage, "completion_tokens", 0) if usage else 0
 
-        cost = litellm.completion_cost(response)
         return response, elapsed, prompt_tokens, completion_tokens, provider
 
     async def call_model_stream(

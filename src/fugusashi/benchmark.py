@@ -1,12 +1,9 @@
 from __future__ import annotations
 
-import asyncio
 import json
-import sys
 import time
 from dataclasses import dataclass, field
-from pathlib import Path
-from typing import Any, Dict, List, Optional
+from typing import Dict, List, Optional
 
 import click
 
@@ -100,17 +97,17 @@ class BenchmarkReport:
         click.echo(f"  Cost vs ideal:    {self.cost_savings_pct:+.1f}%")
         click.echo(f"  Avg routing time: {self.avg_latency_ms:.2f}ms")
 
-        click.echo(f"\n  ── Strategy Distribution ──")
+        click.echo("\n  ── Strategy Distribution ──")
         for strat, count in sorted(self.strategy_distribution.items(), key=lambda x: -x[1]):
             pct = count / len(self.results) * 100
             click.echo(f"    {strat:30s} {count:3d} ({pct:.0f}%)")
 
-        click.echo(f"\n  ── Model Distribution ──")
+        click.echo("\n  ── Model Distribution ──")
         for model, count in sorted(self.model_distribution.items(), key=lambda x: -x[1]):
             pct = count / len(self.results) * 100
             click.echo(f"    {model:30s} {count:3d} ({pct:.0f}%)")
 
-        click.echo(f"\n  ── By Category ──")
+        click.echo("\n  ── By Category ──")
         for cat, data in sorted(self.by_category.items()):
             acc = data["correct"] / data["total"] if data["total"] else 0
             savings = (1 - data["cost_routed"] / data["cost_ideal"]) * 100 if data["cost_ideal"] else 0

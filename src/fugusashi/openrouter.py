@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import json
 import os
 import time
 from typing import Any, Dict, List, Optional
@@ -51,7 +50,7 @@ class OpenRouterClient:
                 if data.get("choices") and data["choices"][0].get("message", {}).get("content") is None:
                     data["choices"][0]["message"]["content"] = ""
                 return data
-            except (httpx.HTTPStatusError, httpx.TimeoutException) as e:
+            except (httpx.HTTPStatusError, httpx.TimeoutException):
                 if attempt < retries - 1:
                     time.sleep(2 ** attempt)
                     continue
