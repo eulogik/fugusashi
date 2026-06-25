@@ -1,16 +1,15 @@
 from __future__ import annotations
 
-import hashlib
 import json
 import os
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any, Dict, List, Optional
 
 import numpy as np
 
-from .coordinator import CMAESRouter, Task, RouteDecision
-from .openrouter import OpenRouterClient, WORKER_MODELS
+from .coordinator import CMAESRouter, RouteDecision
+from .openrouter import WORKER_MODELS
 
 
 @dataclass
