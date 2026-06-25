@@ -100,7 +100,9 @@ a:hover{text-decoration:underline}
 <div class="nav-links">
     <a href="#features">Features</a>
     <a href="#comparison">vs Fugu</a>
-    <a href="#coordinator">Coordinator</a>
+    <a href="#coordinator">CMA-ES Coordinator</a>
+    <a href="#federated">Federated</a>
+    <a href="#explanations">Explanations</a>
     <a href="#quickstart">Quickstart</a>
 <a href="#feedback">Feedback</a>
 <a href="https://github.com/eulogik/fugusashi" class="nav-cta">⭐ GitHub</a>
@@ -214,6 +216,45 @@ a:hover{text-decoration:underline}
 <div class="stat-card"><div class="stat-value">90%</div><div class="stat-label">Code Task Accuracy</div></div>
 <div class="stat-card"><div class="stat-value">&lt;20ms</div><div class="stat-label">Routing Latency</div></div>
 <div class="stat-card"><div class="stat-value">100+</div><div class="stat-label">Supported Providers</div></div>
+</div>
+</section>
+<section class="section" id="federated">
+<h2>Federated Routing</h2>
+<p class="subtitle">Collaborative routing without data sharing.</p>
+<div class="feedback-loop">
+<div class="step"><div class="step-num">🏥</div><div class="step-label">Hospital A</div></div>
+<div class="arrow">+</div>
+<div class="step"><div class="step-num">🚀</div><div class="step-label">Startup B</div></div>
+<div class="arrow">+</div>
+<div class="step"><div class="step-num">🏢</div><div class="step-label">Enterprise C</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">🧬</div><div class="step-label">Federated Avg</div></div>
+<div class="arrow">→</div>
+<div class="step"><div class="step-num">🧠</div><div class="step-label">Global Router</div></div>
+</div>
+<p style="text-align:center;color:var(--text2);max-width:600px;margin:0 auto;">Each organization trains locally on their own data. Only weight updates (with differential privacy noise) are shared. The result is a router smarter than any single deployment.</p>
+</section>
+<section class="section" id="explanations">
+<h2>Human-Interpretable Explanations</h2>
+<p class="subtitle">Every routing decision comes with a natural language explanation.</p>
+<div class="code-block" style="max-width:600px;margin:0 auto;">
+<span class="prompt">POST /v1/explain {"prompt": "Write a Python class for a binary tree"}</span><br>
+<br>
+<span class="cmd">Decision:</span> Route to <span class="string">gpt-oss-120b</span> (confidence: 87%)<br>
+<span class="cmd">Why:</span> This prompt involves code generation. gpt-oss-120b is best suited for complex reasoning.<br>
+<br>
+<span class="cmd">Alternatives considered:</span><br>
+<span class="flag">- lfm-2.5-1.2b (12%):</span> better for fast responses<br>
+<span class="flag">- hermes-3-405b (1%):</span> better for creative writing<br>
+<br>
+<span class="cmd">Latency:</span> 5.5ms | <span class="cmd">Strategy:</span> cma-es
+</div>
+</section>
+<section class="section" id="paper">
+<h2>Paper</h2>
+<p style="text-align:center;color:var(--text2);">Research contributions: federated routing learning, human-interpretable routing, CMA-ES adaptation.</p>
+<div style="text-align:center;margin-top:16px;">
+<a href="https://github.com/eulogik/fugusashi/blob/main/paper/main.tex" class="btn btn-primary">Read the Paper</a>
 </div>
 </section>
 <section class="section">

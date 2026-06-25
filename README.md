@@ -4,7 +4,9 @@
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg?logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/eulogik/fugusashi?style=social)](https://github.com/eulogik/fugusashi/stargazers)
+[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%20HuggingFace-ef4444.svg)](https://huggingface.co/eulogik/fugusashi-router)
 [![Docs](https://img.shields.io/badge/docs-eulogik.github.io-red.svg)](https://eulogik.github.io/fugusashi/)
+[![Paper](https://img.shields.io/badge/arXiv-paper-B31B1B.svg)](https://github.com/eulogik/fugusashi/blob/main/paper/main.tex)
 [![Website](https://img.shields.io/badge/website-eulogik.com-ef4444.svg)](https://eulogik.com)
 
 **By [eulogik](https://eulogik.com) — building AI infrastructure for everyone.**
@@ -13,11 +15,13 @@
 
 # Fugusashi
 
-### The Open-Source Alternative to Sakana AI's Fugu
+### Fugu Sashi. Served Free.
 
 *Fugusashi* (Japanese: 不縛 — "unbound, unrestrained") is an intelligent model router and multi-agent orchestrator. Named after *Fugu Sashi* — the famous Japanese pufferfish delicacy — because this router serves up the world's best AI models without the poison of vendor lock-in or the pricing of Sakana Fugu. It automatically picks the best model for each prompt, learns from every request via a CMA-ES coordinator inspired by Sakana's TRINITY paper, and runs entirely on your infrastructure.
 
-**Like Sakana Fugu. But Free. [Live Demo](https://eulogik.github.io/fugusashi/) · [Docs](https://eulogik.github.io/fugusashi/) · [PyPI](https://pypi.org/project/fugusashi/) · [GitHub](https://github.com/eulogik/fugusashi)**
+**Research contributions:** (1) **Federated routing learning** — multiple organizations collaboratively improve routing without sharing data; (2) **Human-interpretable routing** — every decision comes with a natural language explanation; (3) **Continuous CMA-ES adaptation** — routing weights evolve from outcomes.
+
+**Like Sakana Fugu. But Free. [Live Demo](https://huggingface.co/spaces/eulogik/fugusashi) · [Docs](https://eulogik.github.io/fugusashi/) · [PyPI](https://pypi.org/project/fugusashi/) · [GitHub](https://github.com/eulogik/fugusashi)**
 
 </div>
 
@@ -138,6 +142,46 @@ Three routing strategies in priority order:
 ### Tier 2 — Multi-Agent Orchestrator *(Phase 2)*
 
 A planning model that decomposes hard tasks into subtasks, assigns them to specialist models, and synthesizes results. Uses reinforcement learning (GRPO-style) to learn teamwork patterns.
+
+### Federated Routing
+
+Multiple Fugusashi instances collaboratively improve a shared routing model **without sharing prompts or data**.
+Each organization trains locally, adds differential privacy noise, and contributes weight updates.
+The result: a router that's smarter than any single deployment.
+
+```bash
+# Register as a federated client
+curl -X POST http://localhost:6060/v1/federated/register \
+  -d '{"client_id": "my-org", "metadata": {"type": "healthcare"}}'
+
+# Submit local routing updates
+curl -X POST http://localhost:6060/v1/federated/submit \
+  -d '{"client_id": "my-org", "weights": [...], "n_samples": 1000}'
+
+# Trigger aggregation (requires min 3 clients)
+curl -X POST http://localhost:6060/v1/federated/aggregate
+```
+
+### Routing Explanations
+
+Every routing decision comes with a natural language explanation:
+
+```bash
+curl -X POST http://localhost:6060/v1/explain \
+  -d '{"prompt": "Write a Python class for a binary tree"}'
+```
+
+Response:
+```
+Decision: Route to gpt-oss-120b (confidence: 87%)
+Why: This prompt involves code generation. gpt-oss-120b is best suited for complex reasoning.
+Alternatives:
+  - lfm-2.5-1.2b (12%): better for fast responses
+  - hermes-3-405b (1%): better for creative writing
+Latency: 5.5ms | Strategy: cma-es
+```
+
+Users can override decisions with natural language feedback, which becomes training data.
 
 ---
 
@@ -297,14 +341,32 @@ fugusashi/
 
 ---
 
+## Paper
+
+This project is accompanied by a research paper:
+
+> **Fugusashi: Federated Learning of LLM Routing with Human-Interpretable Decisions**
+
+The paper introduces three contributions:
+1. **Federated routing learning** — collaborative model routing without data sharing
+2. **Human-interpretable routing** — natural language explanations for every decision
+3. **CMA-ES adaptation** — continuous evolution of routing weights
+
+📄 [Read the paper](https://github.com/eulogik/fugusashi/blob/main/paper/main.tex)
+
 ## Links
 
-- **Website**: [eulogik.com](https://eulogik.com)
-- **GitHub**: [github.com/eulogik/fugusashi](https://github.com/eulogik/fugusashi)
-- **PyPI**: [pypi.org/project/fugusashi](https://pypi.org/project/fugusashi/)
-- **HuggingFace**: [Model](https://huggingface.co/eulogik/fugusashi-router) · [Dataset](https://huggingface.co/datasets/eulogik/fugusashi-preferences) · [Live Demo](https://huggingface.co/spaces/eulogik/fugusashi)
-- **Docs**: [eulogik.github.io/fugusashi](https://eulogik.github.io/fugusashi/)
-- **Issues**: [github.com/eulogik/fugusashi/issues](https://github.com/eulogik/fugusashi/issues)
+| Resource | Link |
+|---|---|
+| 🌐 Website | [eulogik.com](https://eulogik.com) |
+| 💻 GitHub | [github.com/eulogik/fugusashi](https://github.com/eulogik/fugusashi) |
+| 📦 PyPI | [pypi.org/project/fugusashi](https://pypi.org/project/fugusashi/) |
+| 🤗 HF Model | [huggingface.co/eulogik/fugusashi-router](https://huggingface.co/eulogik/fugusashi-router) |
+| 📊 HF Dataset | [huggingface.co/datasets/eulogik/fugusashi-preferences](https://huggingface.co/datasets/eulogik/fugusashi-preferences) |
+| 🚀 HF Space | [huggingface.co/spaces/eulogik/fugusashi](https://huggingface.co/spaces/eulogik/fugusashi) |
+| 📖 Docs | [eulogik.github.io/fugusashi](https://eulogik.github.io/fugusashi/) |
+| 📝 Paper | [paper/main.tex](https://github.com/eulogik/fugusashi/blob/main/paper/main.tex) |
+| 🌍 eulogik | [eulogik.com](https://eulogik.com) |
 
 ---
 
@@ -318,6 +380,6 @@ MIT — use it however you want.
 
 **Built with ❤️ by [eulogik](https://eulogik.com)**
 
-**[⭐ Star on GitHub](https://github.com/eulogik/fugusashi) · [🐦 Twitter](https://twitter.com/eulogik) · [💬 Discussions](https://github.com/eulogik/fugusashi/discussions)**
+**[⭐ Star on GitHub](https://github.com/eulogik/fugusashi) · [🤗 HuggingFace](https://huggingface.co/eulogik/fugusashi-router) · [🐦 Twitter](https://twitter.com/eulogik) · [💬 Discussions](https://github.com/eulogik/fugusashi/discussions)**
 
 </div>

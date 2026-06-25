@@ -69,6 +69,45 @@ The priority chain (similarity → cost → fallback) means we use the smartest 
 
 ---
 
+## Phase 1.5: Federated Routing & Explanations (Paper Contributions)
+
+### What we built
+
+**`FederatedRouter`** — Collaborative routing without data sharing:
+
+- Multiple organizations train locally on their own prompts
+- Weight updates are shared with differential privacy noise (σ=0.1)
+- Federated averaging combines updates from ≥3 clients
+- Result: a global router smarter than any single deployment
+- New endpoints: `/v1/federated/register`, `/v1/federated/submit`, `/v1/federated/aggregate`
+
+**`RoutingExplainer`** — Natural language explanations for every routing decision:
+```
+Decision: Route to gpt-oss-120b (confidence: 87%)
+Why: This prompt involves code generation. gpt-oss-120b is best suited for complex reasoning.
+Alternatives:
+  - lfm-2.5-1.2b (12%): better for fast responses
+  - hermes-3-405b (1%): better for creative writing
+Latency: 5.5ms | Strategy: cma-es
+```
+
+- Prompt analysis classifies into capability categories
+- Explanation template includes decision, reasoning, and alternatives
+- Users can override decisions → feedback becomes training data
+- New endpoint: `/v1/explain`
+
+### Key files
+- `src/fugusashi/federated.py` — `FederatedRouter`, `RoutingExplainer`
+- `src/fugusashi/api/routes.py` — `/v1/federated/*`, `/v1/explain` endpoints
+- `paper/main.tex` — arXiv-ready research paper
+
+### Research contributions
+1. **Federated routing learning** — First system for collaborative LLM routing without data sharing
+2. **Human-interpretable routing** — Natural language explanations for model selection
+3. **CMA-ES adaptation** — Continuous evolution of routing weights from outcomes
+
+---
+
 ## Phase 1: The Router
 
 ### What we built
