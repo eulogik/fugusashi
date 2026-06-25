@@ -10,6 +10,7 @@ from fastapi.responses import FileResponse
 from .api.routes import create_router
 from .config import AppConfig
 from .coordinator import CMAESRouter
+from .federated import FederatedRouter, RoutingExplainer
 from .feedback import FeedbackLoop
 from .providers import ModelClient
 from .router import EnsembleRouter
@@ -19,7 +20,7 @@ from .tracker import TransparencyTracker
 def create_app(config: AppConfig) -> FastAPI:
     app = FastAPI(
         title="Fugusashi",
-        version="0.1.0",
+        version="1.1.0",
         description="Intelligent model router — OpenAI-compatible API",
     )
 
@@ -43,6 +44,8 @@ def create_app(config: AppConfig) -> FastAPI:
 
     feedback = FeedbackLoop()
     coordinator = CMAESRouter()
+    federated = FederatedRouter()
+    explainer = RoutingExplainer()
 
     deps: Dict[str, Any] = {
         "config": config,
@@ -51,6 +54,8 @@ def create_app(config: AppConfig) -> FastAPI:
         "router": router_engine,
         "feedback": feedback,
         "coordinator": coordinator,
+        "federated": federated,
+        "explainer": explainer,
     }
 
     api_router = create_router(deps)

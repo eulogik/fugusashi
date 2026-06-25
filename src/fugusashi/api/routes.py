@@ -5,6 +5,7 @@ import uuid
 from datetime import datetime
 from typing import Any, Dict, List, Optional
 
+import numpy as np
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
@@ -422,6 +423,73 @@ def create_router(deps) -> APIRouter:
             "scores": result.scores,
             "strategy": result.strategy,
             "latency_ms": result.latency_ms,
+        }
+
+    @router.post("/v1/federated/register")
+    async def federated_register(request: Request):
+        body = await request.json()
+        client_id = body.get("client_id", "")
+        metadata = body.get("metadata", {})
+        federated = deps.get("federated")
+        if not federated:
+            return {"status": "error", "message": "federated not enabled"}
+        federated.register_client(client_id, metadata)
+        return {"status": "ok", "client_id": client_id}
+
+    @router.post("/v1/federated/submit")
+    async def federated_submit(request: Request):
+        body = await request.json()
+        client_id = body.get("client_id", "")
+        weights = body.get("weights", [])
+        n_samples = body.get("n_samples", 0)
+        metrics = body.get("metrics", {})
+        federated = deps.get("federated")
+        if not federated:
+            return {"status": "error", "message": "federated not enabled"}
+        result = federated.submit_update(
+            client_id,
+            np.array(weights),
+            n_samples,
+            metrics,
+        )
+        return result
+
+    @router.post("/v1/federated/aggregate")
+    async def federated_aggregate():
+        federated = deps.get("federated")
+        if not federated:
+            return {"status": "error", "message": "federated not enabled"}
+        result = federated.aggregate()
+        if result is None:
+            return {"status": "waiting", "message": "Not enough updates to aggregate"}
+        return {
+            "status": "ok",
+            "round": result.round_id,
+            "participants": result.participating_clients,
+        }
+
+    @router.get("/v1/federated/stats")
+    async def federated_stats():
+        federated = deps.get("federated")
+        if not federated:
+            return {"status": "error", "message": "federated not enabled"}
+        return federated.get_client_stats()
+
+    @router.post("/v1/explain")
+    async def explain_routing(request: Request):
+        body = await request.json()
+        prompt = body.get("prompt", "")
+        coordinator = deps.get("coordinator")
+        explainer = deps.get("explainer")
+        if not coordinator or not explainer:
+            return {"status": "error", "message": "explanation not enabled"}
+        decision = coordinator.route(prompt)
+        explanation = explainer.explain(prompt, decision, decision.scores)
+        return {
+            "model": decision.model,
+            "confidence": decision.confidence,
+            "scores": decision.scores,
+            "explanation": explanation,
         }
 
     return router
