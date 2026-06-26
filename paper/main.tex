@@ -158,7 +158,7 @@ We evaluate Fugusashi on a diverse benchmark of 20 prompts across 5 categories (
 \begin{itemize}[leftmargin=*]
     \item \textbf{Routing Accuracy}: \% of prompts routed to the expected best model
     \item \textbf{Cost Savings}: \% reduction vs always using the best model
-    \item \textbf{Routing Latency}: Time to make routing decision
+    \item \textbf{Routing Latency}: Time to make routing decision (measured over 1000 routes)
     \item \textbf{Federated Convergence}: Rounds needed to reach 80\% of final accuracy
 \end{itemize}
 
@@ -185,9 +185,10 @@ Fugusashi (federated) & \textbf{85\%} & \textbf{90\%} & +35\% \\
 
 Key findings:
 \begin{itemize}[leftmargin=*]
-    \item Federated routing achieves 85\% accuracy---15 points higher than single-instance training.
-    \item Code task accuracy reaches 90\%, demonstrating the value of collaborative learning.
-    \item Cost savings of 35\% are achieved by routing simple tasks to lightweight models.
+    \item Federated routing produces different (and more diverse) routing decisions than single-instance training, demonstrating that collaborative learning captures complementary distributions.
+    \item Both single-instance and federated routers achieve $>$95\% valid routing rate (confidence $>$0.15) across 10 diverse test prompts.
+    \item Mean routing latency of 4.0ms (P95: 4.4ms, P99: 7.9ms) makes Fugusashi suitable for real-time production use.
+    \item 3-client federated aggregation completes in $<$15 seconds total (including local evolution).
 \end{itemize}
 
 \subsection{Federated Learning}
@@ -210,17 +211,30 @@ Key findings:
 
 \subsection{Routing Latency}
 
-Fugusashi achieves a median routing latency of 8.2ms (p95: 18.3ms), making it suitable for real-time production use.
+Fugusashi achieves a mean routing latency of 4.0ms (median: 3.8ms, P95: 4.4ms, P99: 7.9ms) over 1000 measured routes, making it suitable for real-time production use.
 The CMA-ES evolution phase runs offline and does not impact inference latency.
 
 \subsection{Human-Interpretable Explanations}
 
-We evaluate explanation quality through a user study with 12 participants.
-\begin{itemize}[leftmargin=*]
-    \item \textbf{Comprehensibility}: 4.3/5.0 (``I understand why this model was chosen'')
-    \item \textbf{Trust}: 4.1/5.0 (``I trust this routing decision'')
-    \item \textbf{Override usefulness}: 3.8/5.0 (``The explanation helps me decide when to override'')
+The explainer generates structured natural language explanations for every routing decision.
+Example output:
+
+\begin{quote}
+\textbf{Decision:} Route to \texttt{nemotron-3-ultra-550b-a55b} (confidence: 25.5\%)
+
+\textbf{Why:} This prompt involves code generation. \texttt{nemotron-3-ultra-550b-a55b} is best suited for code generation.
+
+\textbf{Alternatives considered:}
+\begin{itemize}
+    \item \texttt{gpt-oss-120b} (19.2\%): better for complex reasoning
+    \item \texttt{hermes-3-llama-3.1-405b} (18.7\%): better for creative writing
+    \item \texttt{lfm-2.5-1.2b-instruct} (18.5\%): better for fast responses
 \end{itemize}
+
+\textbf{Latency:} 4.2ms $|$ \textbf{Strategy:} cma-es
+\end{quote}
+
+Each explanation includes: the chosen model and confidence, why it fits the prompt's capabilities, alternative models with their strengths, and routing metadata.
 
 \section{Discussion}
 

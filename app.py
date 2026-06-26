@@ -1,34 +1,33 @@
 import gradio as gr
 import numpy as np
-import json
 import sys
 import os
+import json
 import time
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
 
 from fugusashi.coordinator import CMAESRouter, Task
-from fugusashi.router import EnsembleRouter
 from fugusashi.dataset import PreferenceDataset, seed_default_dataset
+from fugusashi.federated import FederatedRouter, RoutingExplainer
 
+# Initialize components
 router = CMAESRouter(population_size=16, n_generations=30)
-ensemble = EnsembleRouter()
-
 ds = PreferenceDataset(data_dir="/tmp/hf_space")
 seed_default_dataset(ds)
 tasks = [Task(p.prompt, p.category) for p in ds.preferences]
 router.evolve(tasks, fast=True)
+explainer = RoutingExplainer()
 
 
 def route_prompt(prompt, strategy):
+    if not prompt:
+        return "Please enter a prompt."
+
     if strategy == "CMA-ES Coordinator":
         result = router.route(prompt)
-        model = result.model
-        confidence = result.confidence
-        scores = result.scores
-        latency = result.latency_ms
-        strat = "cma-es"
+        explanation = explainer.explain(prompt, result, result.scores)
+        return explanation
     else:
         available = {
             "gpt-oss-120b": {"cost_per_input_token": 0, "cost_per_output_token": 0, "capabilities": ["chat", "code", "reasoning"]},
@@ -36,33 +35,22 @@ def route_prompt(prompt, strategy):
             "hermes-3-405b": {"cost_per_input_token": 0, "cost_per_output_token": 0, "capabilities": ["chat", "reasoning", "creative"]},
             "lfm-2.5-1.2b": {"cost_per_input_token": 0, "cost_per_output_token": 0, "capabilities": ["chat", "code"]},
         }
+        from fugusashi.router import EnsembleRouter
+        ensemble = EnsembleRouter()
         result = ensemble.route(prompt, [{"role": "user", "content": prompt}], available)
-        model = result.model
-        confidence = result.confidence
-        scores = result.scores
-        latency = result.latency_ms
-        strat = result.strategy
-
-    scores_text = "\n".join([f"  {m}: {s:.3f}" for m, s in sorted(scores.items(), key=lambda x: -x[1])])
-    return (
-        f"**Routed to:** `{model}`\n"
-        f"**Confidence:** {confidence:.3f}\n"
-        f"**Strategy:** {strat}\n"
-        f"**Latency:** {latency:.1f}ms\n\n"
-        f"**All scores:**\n{scores_text}"
-    )
+        explanation = explainer.explain(prompt, type('obj', (), {'model': result.model, 'confidence': result.confidence, 'scores': result.scores, 'strategy': result.strategy, 'latency_ms': result.latency_ms})(), result.scores)
+        return explanation
 
 
 def get_stats():
     stats = router.get_stats()
-    return (
-        f"**CMA-ES Coordinator Stats**\n"
-        f"- Generation: {stats['generation']}\n"
-        f"- Best fitness: {stats['best_fitness']:.4f}\n"
-        f"- Sigma: {stats['sigma']:.4f}\n"
-        f"- Models: {', '.join(stats['model_names'])}\n"
-        f"- Training tasks: {stats['history_length']}"
-    )
+    return f"""**CMA-ES Coordinator Stats**
+- Generation: {stats['generation']}
+- Best fitness: {stats['best_fitness']:.4f}
+- Sigma: {stats['sigma']:.4f}
+- Models: {', '.join(stats['model_names'])}
+- Training tasks: {stats['history_length']}
+"""
 
 
 with gr.Blocks(
@@ -106,6 +94,17 @@ with gr.Blocks(
         ["Explain the theory of relativity", "CMA-ES Coordinator"],
     ]
     gr.Examples(examples=examples, inputs=[prompt, strategy])
+
+    gr.Markdown("""
+    ## API Usage
+
+    ```bash
+    pip install gradio_client
+    from gradio_client import Client
+    client = Client("eulogik/fugusashi")
+    result = client.predict("Write a Python function", "CMA-ES Coordinator", api_name="/route_prompt")
+    ```
+    """)
 
 
 demo.launch()
