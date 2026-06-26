@@ -7,3 +7,4 @@ dist/
 build/
 .env
 .fugusashi_data/
+.DS_Store
