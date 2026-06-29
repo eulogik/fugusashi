@@ -380,6 +380,6 @@ MIT — use it however you want.
 
 **Built with ❤️ by [eulogik](https://eulogik.com)**
 
-**[⭐ Star on GitHub](https://github.com/eulogik/fugusashi) · [🤗 HuggingFace](https://huggingface.co/eulogik/fugusashi-router) · [🐦 Twitter](https://twitter.com/eulogik) · [💬 Discussions](https://github.com/eulogik/fugusashi/discussions)**
+**[⭐ Star on GitHub](https://github.com/eulogik/fugusashi) · [🤗 HuggingFace](https://huggingface.co/eulogik/fugusashi-router) · [🐦 X/Twitter](https://x.com/eulogik) · [📦 Docker](https://github.com/orgs/eulogik/packages/container/fugusashi)**
 
 </div>
