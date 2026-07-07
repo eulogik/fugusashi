@@ -293,16 +293,15 @@ Auto-refreshes every 3 seconds. Pure HTML/CSS/JS, no build step, no dependencies
 
 ## What's Next
 
-### Tier 2: Multi-Agent Orchestrator
+### Tier 2: Multi-Agent Orchestrator — COMPLETED
 
-The big one. A planning model that:
-1. Takes a complex task
-2. Decomposes it into subtasks
-3. Assigns each subtask to the best specialist model
-4. Synthesizes results
-5. Learns from outcomes (GRPO-style reinforcement learning)
-
-This is what makes Fugu Ultra powerful. Our version will be open and transparent — you'll see the plan, the assignments, and the synthesis.
+Built and deployed:
+- `MultiAgentOrchestrator`: rule-based + LLM decomposition, parallel execution, synthesis
+- `GRPOTrainer`: team reward scoring (decomposition, routing, synthesis, latency, cost), policy updates, persistence
+- 6 new API endpoints: `/v1/orchestrate`, `/v1/orchestration/trace`, history, GRPO stats/score
+- Auto-escalation from Tier 1 when confidence < 0.3
+- Tier2Config: planner_model, synthesizer_model, max_subtasks, grpo settings
+- 17 new tests, all 22 tests passing
 
 ### Community Preference Sharing
 
@@ -315,6 +314,18 @@ Custom routing strategies. The interface is already defined (`BaseRouter`). Next
 ---
 
 ## Changelog
+
+### v1.2.0 — Tier 2 Multi-Agent Orchestrator
+
+- MultiAgentOrchestrator with rule-based + LLM decomposition
+- TaskType classification (code, reasoning, creative, factual, synthesis)
+- Parallel subtask execution with dependency resolution
+- GRPOTrainer for team reward scoring and policy learning
+- 6 new API endpoints: /v1/orchestrate, /v1/orchestration/trace, history, grpo stats/score
+- Auto-escalation from Tier 1 to Tier 2 when confidence < threshold
+- Tier2Config expanded with planner_model, synthesizer_model, grpo settings
+- 17 new tests (orchestrator, GRPO, classification, task plan)
+- All 22 tests passing, lint clean
 
 ### v1.1.0 — CMA-ES Evolution, Docker, Community Dataset
 
@@ -371,7 +382,7 @@ Custom routing strategies. The interface is already defined (`BaseRouter`). Next
 
 ---
 
-*Last updated: 2026-06-24*
+*Last updated: 2026-07-03*
 
 ---
 
