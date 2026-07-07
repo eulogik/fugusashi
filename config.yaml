@@ -44,7 +44,14 @@ tier1:
     prefer_local: true
 
 tier2:
-  enabled: false
+  enabled: true
+  planner_model: null
+  synthesizer_model: null
+  max_subtasks: 5
+  auto_escalate: true
+  escalation_threshold: 0.3
+  grpo_learning_rate: 0.1
+  grpo_enabled: true
 
 observability:
   log_routing_decisions: true

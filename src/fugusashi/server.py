@@ -12,6 +12,8 @@ from .config import AppConfig
 from .coordinator import CMAESRouter
 from .federated import FederatedRouter, RoutingExplainer
 from .feedback import FeedbackLoop
+from .grpo import GRPOTrainer
+from .orchestrator import MultiAgentOrchestrator
 from .providers import ModelClient
 from .router import EnsembleRouter
 from .tracker import TransparencyTracker
@@ -47,6 +49,18 @@ def create_app(config: AppConfig) -> FastAPI:
     federated = FederatedRouter()
     explainer = RoutingExplainer()
 
+    orchestrator = None
+    grpo = None
+    if config.tier2.enabled:
+        orchestrator = MultiAgentOrchestrator(
+            model_client=model_client,
+            planner_model=config.tier2.planner_model,
+            synthesizer_model=config.tier2.synthesizer_model,
+            max_subtasks=config.tier2.max_subtasks,
+        )
+        if config.tier2.grpo_enabled:
+            grpo = GRPOTrainer(learning_rate=config.tier2.grpo_learning_rate)
+
     deps: Dict[str, Any] = {
         "config": config,
         "model_client": model_client,
@@ -56,6 +70,8 @@ def create_app(config: AppConfig) -> FastAPI:
         "coordinator": coordinator,
         "federated": federated,
         "explainer": explainer,
+        "orchestrator": orchestrator,
+        "grpo": grpo,
     }
 
     api_router = create_router(deps)

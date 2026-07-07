@@ -146,8 +146,25 @@ def create_router(deps) -> APIRouter:
                 threshold=threshold,
             )
 
-            if result.needs_escalation and config.tier2.enabled:
-                pass
+            if result.needs_escalation and config.tier2.enabled and config.tier2.auto_escalate:
+                orchestrator = deps.get("orchestrator")
+                if orchestrator:
+                    orch_result = await orchestrator.orchestrate(prompt)
+                    return ChatCompletionResponse(
+                        request_id if False else f"fugu-{uuid.uuid4().hex[:12]}",
+                        created=int(datetime.utcnow().timestamp()),
+                        model="orchestrator",
+                        choices=[{"index": 0, "message": {"role": "assistant", "content": orch_result.final_response}, "finish_reason": "stop"}],
+                        usage={"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
+                        routing_decision={
+                            "model": "orchestrator",
+                            "confidence": 1.0,
+                            "strategy": "tier2-orchestration",
+                            "latency_ms": orch_result.total_latency_ms,
+                            "explanation": orch_result.explanation,
+                            "plan": orch_result.plan.to_dict(),
+                        },
+                    )
 
             selected_model = result.model
             routing_result = RoutingDecision(
@@ -491,5 +508,87 @@ def create_router(deps) -> APIRouter:
             "scores": decision.scores,
             "explanation": explanation,
         }
+
+    @router.post("/v1/orchestrate")
+    async def orchestrate(request: Request):
+        body = await request.json()
+        prompt = body.get("prompt", "")
+        messages = body.get("messages", [])
+        if not prompt and messages:
+            prompt = messages[-1].get("content", "")
+
+        orchestrator = deps.get("orchestrator")
+        if not orchestrator:
+            return {"status": "error", "message": "Tier 2 orchestrator not enabled. Set tier2.enabled=true in config."}
+
+        result = await orchestrator.orchestrate(prompt, messages or None)
+        return {
+            "request_id": result.request_id,
+            "response": result.final_response,
+            "plan": result.plan.to_dict(),
+            "total_latency_ms": result.total_latency_ms,
+            "total_cost": result.total_cost,
+            "models_used": result.models_used,
+            "explanation": result.explanation,
+        }
+
+    @router.get("/v1/orchestration/trace/{plan_id}")
+    async def orchestration_trace(plan_id: str):
+        orchestrator = deps.get("orchestrator")
+        if not orchestrator:
+            return {"status": "error", "message": "Tier 2 not enabled"}
+        for result in orchestrator.get_history():
+            if result.request_id == plan_id:
+                return result.plan.to_dict()
+        raise HTTPException(status_code=404, detail="Plan not found")
+
+    @router.get("/v1/orchestration/history")
+    async def orchestration_history(limit: int = 10):
+        orchestrator = deps.get("orchestrator")
+        if not orchestrator:
+            return {"status": "error", "message": "Tier 2 not enabled"}
+        history = orchestrator.get_history()[-limit:]
+        return {
+            "total": len(orchestrator.get_history()),
+            "plans": [
+                {
+                    "id": r.request_id,
+                    "subtasks": len(r.plan.subtasks),
+                    "models_used": r.models_used,
+                    "latency_ms": r.total_latency_ms,
+                    "cost": r.total_cost,
+                }
+                for r in history
+            ],
+        }
+
+    @router.get("/v1/orchestration/grpo/stats")
+    async def grpo_stats():
+        grpo = deps.get("grpo")
+        if not grpo:
+            return {"status": "error", "message": "GRPO not enabled"}
+        return grpo.get_stats()
+
+    @router.post("/v1/orchestration/grpo/score")
+    async def grpo_score(request: Request):
+        body = await request.json()
+        plan_id = body.get("plan_id", "")
+        grpo = deps.get("grpo")
+        orchestrator = deps.get("orchestrator")
+        if not grpo or not orchestrator:
+            return {"status": "error", "message": "GRPO or orchestrator not enabled"}
+        for result in orchestrator.get_history():
+            if result.request_id == plan_id:
+                reward = grpo.score(result)
+                grpo.update_policy(result, reward.reward)
+                return {
+                    "plan_id": plan_id,
+                    "reward": reward.reward,
+                    "decomposition": reward.decomposition_score,
+                    "routing": reward.routing_score,
+                    "synthesis": reward.synthesis_score,
+                    "baseline": grpo.baseline,
+                }
+        raise HTTPException(status_code=404, detail="Plan not found")
 
     return router

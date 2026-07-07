@@ -38,6 +38,13 @@ class Tier1Config(BaseSettings):
 
 class Tier2Config(BaseSettings):
     enabled: bool = False
+    planner_model: Optional[str] = None
+    synthesizer_model: Optional[str] = None
+    max_subtasks: int = 5
+    auto_escalate: bool = True
+    escalation_threshold: float = 0.3
+    grpo_learning_rate: float = 0.1
+    grpo_enabled: bool = True
 
 
 class ObservabilityConfig(BaseSettings):
