@@ -22,7 +22,7 @@ from .tracker import TransparencyTracker
 def create_app(config: AppConfig) -> FastAPI:
     app = FastAPI(
         title="Fugusashi",
-        version="1.1.0",
+        version="1.2.0",
         description="Intelligent model router — OpenAI-compatible API",
     )
 

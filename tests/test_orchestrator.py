@@ -1,11 +1,8 @@
 from __future__ import annotations
 
-import json
 import os
 import tempfile
-from unittest.mock import AsyncMock, MagicMock, patch
-
-import pytest
+from unittest.mock import MagicMock
 
 from fugusashi.orchestrator import (
     MultiAgentOrchestrator,
@@ -16,7 +13,7 @@ from fugusashi.orchestrator import (
     _classify_prompt,
     _best_model_for_type,
 )
-from fugusashi.grpo import GRPOTrainer, RoutingPolicy, TeamReward
+from fugusashi.grpo import GRPOTrainer, RoutingPolicy
 from fugusashi.providers import ModelClient
 
 

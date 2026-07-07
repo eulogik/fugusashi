@@ -34,6 +34,13 @@ CMA-ES evolved routing weights for the **Fugusashi** intelligent model router. A
 
 **Like Sakana Fugu. But Free. And Yours.**
 
+### What's New in v1.2.0
+
+- **Multi-Agent Orchestrator** — decomposes complex tasks, assigns to specialist models, synthesizes results
+- **GRPO Learning** — team reward scoring learns which model assignments work best
+- **Auto-escalation** — Tier 1 automatically escalates to Tier 2 when confidence is low
+- 6 new API endpoints for orchestration and learning
+
 ## Usage
 
 ```python

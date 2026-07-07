@@ -38,7 +38,7 @@
 | Feature | Sakana Fugu | Fugusashi |
 |---|---|---|
 | **Model Routing** | ✅ Proprietary | ✅ Open, transparent |
-| **Multi-Agent Orchestration** | ✅ Fugu Ultra | 🔄 Phase 2 |
+| **Multi-Agent Orchestration** | ✅ Fugu Ultra | ✅ Implemented |
 | **Self-Hosting** | ❌ Cloud-only | ✅ Local-first, air-gapped |
 | **Cost** | $5-30/M tokens | ✅ Free (pay only for model APIs) |
 | **Transparency** | ❌ Black box | ✅ Every decision visible |
@@ -139,9 +139,21 @@ Three routing strategies in priority order:
 2. **CostRouter** — Capability-aware routing with cost optimization. Respects `prefer_local` for air-gapped deployments.
 3. **FallbackRouter** — Always returns a result, even with no data.
 
-### Tier 2 — Multi-Agent Orchestrator *(Phase 2)*
+### Tier 2 — Multi-Agent Orchestrator
 
 A planning model that decomposes hard tasks into subtasks, assigns them to specialist models, and synthesizes results. Uses reinforcement learning (GRPO-style) to learn teamwork patterns.
+
+```bash
+# Orchestrate a complex task
+curl -X POST http://localhost:6060/v1/orchestrate \
+  -d '{"prompt": "Write a Python web scraper, test it, and write documentation"}'
+
+# View orchestration history
+curl http://localhost:6060/v1/orchestration/history
+
+# Check GRPO learning stats
+curl http://localhost:6060/v1/orchestration/grpo/stats
+```
 
 ### Federated Routing
 
@@ -236,6 +248,17 @@ curl -X POST http://localhost:6060/v1/feedback/rate \
 
 ### `GET /v1/feedback/rankings` — Per-model win rates
 
+### `POST /v1/orchestrate` — Multi-agent orchestration
+
+```bash
+curl -X POST http://localhost:6060/v1/orchestrate \
+  -d '{"prompt": "Write code, test it, and document it"}'
+```
+
+### `GET /v1/orchestration/history` — Orchestration history
+
+### `GET /v1/orchestration/grpo/stats` — GRPO learning stats
+
 ---
 
 ## Dashboard
@@ -314,16 +337,19 @@ fugusashi/
 │   ├── tracker.py           # Cost/routing transparency
 │   ├── feedback.py          # Feedback loop + learning
 │   ├── benchmark.py         # Benchmark runner
+│   ├── orchestrator.py      # Multi-agent orchestrator
+│   ├── grpo.py              # GRPO-style reward learning
 │   ├── api/
 │   │   └── routes.py        # All API endpoints
 │   ├── router/
 │   │   ├── interface.py     # Abstract router protocol
-│   │   ├── strategies.py        # Cost, Similarity, Fallback routers
+│   │   ├── strategies.py    # Cost, Similarity, Fallback routers
 │   │   └── ensemble.py      # Priority-chain ensemble
 │   └── static/
 │       └── dashboard.html   # Live web dashboard
 ├── tests/
-│   └── test_integration.py  # Integration tests
+│   ├── test_integration.py  # Integration tests
+│   └── test_orchestrator.py # Orchestrator + GRPO tests
 └── docs/                    # GitHub Pages documentation
 ```
 
