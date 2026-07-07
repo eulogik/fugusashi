@@ -29,26 +29,28 @@
 
 ## Why Fugusashi?
 
-[Sakana AI's Fugu](https://sakana.ai/fugu) is a proprietary model router. It works — but you can't see inside it, you can't train it on your own data, you can't self-host it, and you pay $5-30 per million tokens.
+[Sakana AI's Fugu](https://sakana.ai/fugu) is a trained orchestration model — a 7B LLM that coordinates frontier models behind a single API. It's powerful, but it's a black box: you can't see why it routes where it does, you can't self-host it, you can't train it on your data, and you pay $5-30 per million tokens plus a $20-200/month subscription.
 
-**Fugusashi does everything Fugu does, but open, transparent, and self-hosting.** It also adds a feedback loop that Fugu doesn't have — the router learns from every request and gets smarter over time.
+**Fugusashi is the transparent alternative.** Same CMA-ES evolution concept (both inspired by Sakana's TRINITY paper), but open, self-hostable, and designed to learn from your specific traffic. Where Fugu hides its routing logic, Fugusashi exposes every decision. Where Fugu runs only in Sakana's cloud, Fugusashi runs on your infrastructure. Where Fugu is static, Fugusashi learns from every request via a feedback loop.
 
 ### Fugusashi vs Sakana AI Fugu
 
 | Feature | Sakana Fugu | Fugusashi |
 |---|---|---|
-| **Model Routing** | ✅ Proprietary | ✅ Open, transparent |
-| **Multi-Agent Orchestration** | ✅ Fugu Ultra | ✅ Implemented |
+| **Architecture** | Trained 7B coordinator LLM | CMA-ES evolved weights + rule-based ensemble |
+| **Orchestration** | ✅ TRINITY/Conductor (ICLR 2026) | ✅ Rule-based + GRPO learning |
 | **Self-Hosting** | ❌ Cloud-only | ✅ Local-first, air-gapped |
-| **Cost** | $5-30/M tokens | ✅ Free (pay only for model APIs) |
-| **Transparency** | ❌ Black box | ✅ Every decision visible |
-| **Feedback Loop** | ❌ Static | ✅ Learns from every request |
-| **Model Pool** | ❌ Fixed by Sakana | ✅ You control |
-| **Training Data** | ❌ Proprietary | ✅ Community + your traffic |
-| **Customization** | ❌ None | ✅ Fine-tune on your data |
+| **Cost** | $5-30/M tokens + $20-200/mo | ✅ Free (pay only for model APIs) |
+| **Transparency** | ❌ Black box routing | ✅ Every decision visible + explained |
+| **Feedback Loop** | ❌ Static | ✅ Learns from your traffic |
+| **Federated Learning** | ❌ | ✅ Collaborative routing without data sharing |
+| **Model Pool** | Sakana-controlled frontier models | ✅ You control (100+ providers) |
+| **Training Data** | ❌ Proprietary | ✅ Community preference datasets |
+| **Dashboard** | ❌ | ✅ Live routing visualization |
+| **EU Availability** | ❌ Blocked (GDPR) | ✅ Available everywhere |
 | **License** | Proprietary | ✅ MIT |
-| **Dashboard** | ❌ | ✅ Open web dashboard |
-| **API** | Limited | ✅ OpenAI-compatible |
+
+**Our edge:** Fugu is a powerful trained orchestrator with frontier models in its pool. Fugusashi is the transparent, self-hosting alternative you can run on your own infrastructure, train on your own data, and audit every decision. Different bets — Fugu bets on a trained coordinator, we bet on transparency and control.
 
 ---
 
@@ -355,15 +357,15 @@ fugusashi/
 
 ---
 
-## How It Beats Sakana AI's Fugu
+## Why Fugusashi Over Fugu?
 
-1. **Transparent**: Every routing decision is visible and explainable. No black box.
-2. **Self-hosting**: Runs entirely on-premise with local models via Ollama.
-3. **Learning**: Gets smarter from every request via the feedback loop. Fugu can't do this.
-4. **Open**: Community-owned preference datasets, not proprietary training data.
-5. **Extensible**: Add your own routing strategies via the plugin interface.
-6. **Observable**: Dashboard + stats + traces out of the box.
-7. **Free**: MIT licensed. No usage fees. No vendor lock-in.
+1. **Transparent**: Every routing decision is visible and explainable. Fugu is a black box.
+2. **Self-hosting**: Runs entirely on-premise with local models via Ollama. Fugu is cloud-only.
+3. **Learning**: Gets smarter from your specific traffic via the feedback loop. Fugu is static.
+4. **Federated**: Multiple organizations can collaboratively improve routing without sharing data. Fugu doesn't offer this.
+5. **Free**: MIT licensed, no usage fees beyond model APIs. Fugu costs $5-30/M tokens + subscription.
+6. **EU-available**: No GDPR restrictions. Fugu is blocked in the EU/EEA.
+7. **Yours**: Community-owned preference datasets, customizable, extensible. Fugu is Sakana's.
 
 ---
 

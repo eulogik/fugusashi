@@ -134,24 +134,26 @@ a:hover{text-decoration:underline}
 </section>
 <section class="section" id="comparison">
 <h2>Fugusashi vs Sakana AI Fugu</h2>
-<p class="subtitle">See why developers are switching to open source.</p>
+<p class="subtitle">Two different bets on the future of AI routing.</p>
 <img src="https://raw.githubusercontent.com/eulogik/fugusashi/main/assets/compare.svg" alt="Fugusashi vs Sakana AI Fugu Comparison" style="width:100%;max-width:600px;margin:0 auto 32px;display:block;border-radius:12px;"/>
 <div style="overflow-x:auto;">
 <table class="comparison">
 <thead><tr><th>Feature</th><th>Sakana Fugu</th><th>Fugusashi</th></tr></thead>
 <tbody>
-<tr><td>Model Routing</td><td class="fugu-val">✓ Proprietary</td><td class="fugusashi-val">✓ Open & transparent</td></tr>
-<tr><td>Multi-Agent Orchestration</td><td class="fugu-val">✓ Fugu Ultra</td><td class="fugusashi-val">✓ Implemented</td></tr>
+<tr><td>Architecture</td><td class="fugu-val">Trained 7B coordinator LLM</td><td class="fugusashi-val">CMA-ES evolved weights + ensemble</td></tr>
+<tr><td>Orchestration</td><td class="fugu-val">TRINITY/Conductor (ICLR 2026)</td><td class="fugusashi-val">Rule-based + GRPO learning</td></tr>
 <tr><td>Self-Hosting</td><td class="cross">❌ Cloud-only</td><td class="fugusashi-val">✓ Local-first</td></tr>
 <tr><td>Cost</td><td class="fugu-val">$5-30/M tokens</td><td class="fugusashi-val">✓ Free</td></tr>
-<tr><td>Transparency</td><td class="cross">❌ Black box</td><td class="fugusashi-val">✓ Every decision visible</td></tr>
-<tr><td>Feedback Loop</td><td class="cross">❌ Static</td><td class="fugusashi-val">✓ Learns from every request</td></tr>
-<tr><td>Model Pool</td><td class="cross">❌ Fixed by Sakana</td><td class="fugusashi-val">✓ You control</td></tr>
-<tr><td>Training Data</td><td class="cross">❌ Proprietary</td><td class="fugusashi-val">✓ Community + your traffic</td></tr>
+<tr><td>Transparency</td><td class="cross">❌ Black box</td><td class="fugusashi-val">✓ Every decision visible + explained</td></tr>
+<tr><td>Feedback Loop</td><td class="cross">❌ Static</td><td class="fugusashi-val">✓ Learns from your traffic</td></tr>
+<tr><td>Federated Learning</td><td class="cross">❌</td><td class="fugusashi-val">✓ Collaborative routing</td></tr>
+<tr><td>Model Pool</td><td class="fugu-val">Sakana-controlled</td><td class="fugusashi-val">✓ You control (100+ providers)</td></tr>
+<tr><td>EU Availability</td><td class="cross">❌ Blocked (GDPR)</td><td class="fugusashi-val">✓ Available everywhere</td></tr>
 <tr><td>License</td><td class="fugu-val">Proprietary</td><td class="fugusashi-val">✓ MIT</td></tr>
 </tbody>
 </table>
 </div>
+<p style="text-align:center;color:var(--text2);max-width:700px;margin:24px auto 0;font-size:14px;">Fugu bets on a trained coordinator with frontier models. Fugusashi bets on transparency, self-hosting, and control. Both are valid — pick based on what matters to you.</p>
 </section>
 <section class="section" id="quickstart">
 <h2>Quickstart</h2>
