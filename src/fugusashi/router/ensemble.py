@@ -4,6 +4,7 @@ import time
 from typing import Dict, List
 
 from .interface import BaseRouter, RouterResult
+from .learned import LearnedRouter
 from .strategies import CostRouter, FallbackRouter, SimilarityRouter
 
 
@@ -16,10 +17,16 @@ class EnsembleRouter(BaseRouter):
         confidence_threshold: float = 0.4,
         fallback_model: str = "default",
         prefer_local: bool = True,
+        model_dir: str = ".fugusashi_data/router_model",
+        learned_router_enabled: bool = True,
+        learned_confidence_threshold: float = 0.3,
     ):
         self.confidence_threshold = confidence_threshold
         self.fallback_model = fallback_model
         self.prefer_local = prefer_local
+        self.learned_router_enabled = learned_router_enabled
+        self.learned_confidence_threshold = learned_confidence_threshold
+        self.learned_router = LearnedRouter(model_dir=model_dir)
         self.similarity_router = SimilarityRouter(embedding_model=embedding_model)
         self.cost_router = CostRouter()
         self.fallback_router = FallbackRouter()
@@ -40,6 +47,9 @@ class EnsembleRouter(BaseRouter):
             ("cost", self.cost_router),
         ]
 
+        if self.learned_router_enabled and self.learned_router.is_trained:
+            strategies.insert(0, ("learned", self.learned_router))
+
         best_result = None
 
         for name, router in strategies:
@@ -59,11 +69,11 @@ class EnsembleRouter(BaseRouter):
                 break
 
         if best_result is None:
-            all = []
+            all_results = []
             for name, router in strategies:
                 result = router.route(prompt, messages, available_models, 0.0)
-                all.append(result)
-            best_result = max(all, key=lambda r: r.confidence) if all else None
+                all_results.append(result)
+            best_result = max(all_results, key=lambda r: r.confidence) if all_results else None
 
         if best_result is None:
             best_result = self.fallback_router.route(prompt, messages, available_models, effective_threshold)

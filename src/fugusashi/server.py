@@ -22,7 +22,7 @@ from .tracker import TransparencyTracker
 def create_app(config: AppConfig) -> FastAPI:
     app = FastAPI(
         title="Fugusashi",
-        version="1.2.0",
+        version="1.3.0",
         description="Intelligent model router — OpenAI-compatible API",
     )
 
@@ -42,6 +42,9 @@ def create_app(config: AppConfig) -> FastAPI:
         confidence_threshold=config.tier1.router.confidence_threshold,
         fallback_model=config.default_model,
         prefer_local=config.tier1.router.prefer_local,
+        model_dir=config.tier1.learned_router_model_dir,
+        learned_router_enabled=config.tier1.learned_router_enabled,
+        learned_confidence_threshold=config.tier1.learned_router_confidence_threshold,
     )
 
     feedback = FeedbackLoop()

@@ -35,6 +35,11 @@ class Tier1Config(BaseSettings):
     overhead_ms_max: int = 20
     router: RouterStrategy = RouterStrategy()
 
+    learned_router_enabled: bool = True
+    learned_router_confidence_threshold: float = 0.3
+    learned_router_model_dir: str = ".fugusashi_data/router_model"
+    training_data_dir: str = ".fugusashi_data"
+
 
 class Tier2Config(BaseSettings):
     enabled: bool = False

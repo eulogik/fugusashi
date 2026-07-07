@@ -13,8 +13,10 @@
 5. [Phase 3: Feedback Loop (Week 2)](#phase-3-feedback-loop)
 6. [Phase 4: Benchmarking (Week 2)](#phase-4-benchmarking)
 7. [Phase 5: Dashboard (Week 2)](#phase-5-dashboard)
-8. [What's Next](#whats-next)
-9. [Changelog](#changelog)
+8. [Phase 6: Multi-Agent Orchestrator (Week 3)](#phase-6-multi-agent-orchestrator)
+9. [Phase 7: Learned Router with ModernBERT (v1.3.0)](#phase-7-learned-router-with-modernbert-v130)
+10. [What's Next](#whats-next)
+11. [Changelog](#changelog)
 
 ---
 
@@ -384,6 +386,8 @@ Custom routing strategies. The interface is already defined (`BaseRouter`). Next
 
 *Last updated: 2026-07-03*
 
+*Last updated: 2026-07-07*
+
 ---
 
 ## Links
@@ -394,3 +398,83 @@ Custom routing strategies. The interface is already defined (`BaseRouter`). Next
 - **HuggingFace**: [Model](https://huggingface.co/eulogik/fugusashi-router) · [Dataset](https://huggingface.co/datasets/eulogik/fugusashi-preferences) · [Live Demo](https://huggingface.co/spaces/eulogik/fugusashi)
 - **Docs**: [eulogik.github.io/fugusashi](https://eulogik.github.io/fugusashi/)
 - **Issues**: [github.com/eulogik/fugusashi/issues](https://github.com/eulogik/fugusashi/issues)
+
+---
+
+## Phase 7: Learned Router with ModernBERT (v1.3.0)
+
+### Motivation
+
+Fugu uses a trained 7B coordinator LLM (TRINITY/Conductor, ICLR 2026) to classify prompts and route them to the optimal model. This works well but requires running a 7B model for every routing decision — expensive and slow (~1-2s per call).
+
+Our bet: a fine-tuned ModernBERT-base (149M params) can match or exceed Fugu's routing accuracy at a fraction of the cost. One forward pass → softmax → best model. No cross-encoder. No LLM overhead. ~83ms on CPU.
+
+### Architecture
+
+```
+Prompt → ModernBERT Tokenizer → ModernBERT Encoder → [CLS] → Classifier Head → Softmax → Model Scores
+```
+
+Three model classes trained from seed data:
+- **gpt-oss-120b:free** — code, complex reasoning (100 samples)
+- **hermes-3-405b:free** — medium explanation (51 samples)
+- **lfm-2.5-1.2b:free** — factual, creative, simple (73 samples)
+
+### Training Pipeline
+
+- `expand_dataset()` → 224 training examples from seed data + synthetic variants
+- `train_modernbert()` → fine-tunes ModernBERT with cross-entropy + weighted samples + cosine scheduler
+- 80% accuracy on held-out test (45 samples)
+- Training time: ~2.3 minutes on MacBook Pro (MPS)
+
+### Integration
+
+- `LearnedRouter` class in `router/learned.py` — loads fine-tuned model, one forward pass
+- `EnsembleRouter` includes LearnedRouter as first strategy (if trained)
+- Falls back to CostRouter when confidence < threshold (0.3 default)
+- `POST /v1/router/train` — add training data via API
+- `POST /v1/router/train_and_update` — add data + retrain + hot-reload in one call
+- `fugusashi expand-data` / `fugusashi train` CLI commands
+- Feedback loop writes to `outcomes.jsonl`, `load_dataset()` reads it into training pipeline
+
+### Benchmark Results (30 held-out samples)
+
+| Strategy | Accuracy | Avg Latency |
+|----------|----------|-------------|
+| **Learned Router** | **83.3%** | **83.5ms** |
+| Cost-only baseline | 36.7% | 0.01ms |
+
+By category with learned router: code 100%, factual 100%, creative 100%, explanation 50%, general 100%.
+
+The 50% on explanation is an inherent ambiguity — gpt-oss-120b and hermes-3-405b are both capable explainers, and prompt text alone doesn't always distinguish "medium" from "complex" explanations. The confidence-based fallback handles this gracefully.
+
+### Comparison to Fugu
+
+| Capability | Fugu (Sakana AI) | Fugusashi |
+|-----------|------------------|-----------|
+| Routing mechanism | 7B coordinator LLM | ModernBERT classifier (149M) |
+| Training data | Community preference data | Seed dataset + feedback loop |
+| Latency per route | ~1-2s (LLM inference) | ~83ms (one forward pass) |
+| Cost per route | $0.001+ (7B LLM) | Free (CPU inference) |
+| Multi-agent orchestration | Via Conductor | GRPO-trained orchestrator |
+| Federated learning | No | Yes (built-in) |
+| Open source | No | MIT |
+| EU availability | No | Yes |
+
+---
+
+## Changelog
+
+### v1.3.0 (2026-07-07)
+- Phase 3: Learned Router with ModernBERT classifier
+  - `training.py` — fine-tuning pipeline, expand_dataset, weighted cross-entropy, cosine scheduler
+  - `router/learned.py` — one-forward-pass inference, confidence-based fallback
+  - `router/ensemble.py` — includes LearnedRouter as first strategy
+  - 83.3% routing accuracy (vs 36.7% cost-only baseline)
+  - Training API endpoints (POST /v1/router/train, /v1/router/train_and_update)
+  - CLI commands (expand-data, train)
+  - Feedback loop wired to training pipeline
+- Config: learned_router_enabled, confidence_threshold, model_dir, data_dir
+- 37 tests passing, lint clean
+- Updated benchmark dataset with 3-model-class ground truth
+- Published trained model to HuggingFace

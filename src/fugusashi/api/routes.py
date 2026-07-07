@@ -591,4 +591,66 @@ def create_router(deps) -> APIRouter:
                 }
         raise HTTPException(status_code=404, detail="Plan not found")
 
+    @router.post("/v1/router/train")
+    async def train_router(request: Request):
+        body = await request.json()
+        data = body.get("data", [])
+        if not data:
+            return {"status": "error", "message": "No training data provided"}
+
+        config = deps["config"]
+        data_dir = config.tier1.training_data_dir
+        import os
+        os.makedirs(data_dir, exist_ok=True)
+        path = os.path.join(data_dir, "training_data.jsonl")
+        with open(path, "a") as f:
+            for item in data:
+                f.write(json.dumps({
+                    "prompt": item["prompt"],
+                    "model": item.get("model", item.get("preferred_model", "")),
+                    "preferred_model": item.get("model", item.get("preferred_model", "")),
+                    "source": "api",
+                    "category": item.get("category", "general"),
+                    "score": item.get("score", 1.0),
+                }) + "\n")
+
+        return {
+            "status": "ok",
+            "added": len(data),
+            "message": f"Added {len(data)} examples. Run 'fugusashi train' to retrain the router.",
+        }
+
+    @router.post("/v1/router/train_and_update")
+    async def train_and_update(request: Request):
+        body = await request.json()
+        data = body.get("data", [])
+
+        config = deps["config"]
+        model_dir = config.tier1.learned_router_model_dir
+        data_dir = config.tier1.training_data_dir
+
+        import os
+        os.makedirs(data_dir, exist_ok=True)
+        path = os.path.join(data_dir, "training_data.jsonl")
+        with open(path, "a") as f:
+            for item in data:
+                f.write(json.dumps({
+                    "prompt": item["prompt"],
+                    "model": item.get("model", item.get("preferred_model", "")),
+                    "preferred_model": item.get("model", item.get("preferred_model", "")),
+                    "source": "api",
+                    "category": item.get("category", "general"),
+                    "score": item.get("score", 1.0),
+                }) + "\n")
+
+        from ..training import train_modernbert
+        try:
+            result = train_modernbert(model_dir=model_dir, data_dir=data_dir)
+            router_engine = deps.get("router")
+            if router_engine and hasattr(router_engine, "learned_router"):
+                router_engine.learned_router._loaded = False
+            return {"status": "ok", "result": result.to_dict()}
+        except Exception as e:
+            return {"status": "error", "message": str(e)}
+
     return router

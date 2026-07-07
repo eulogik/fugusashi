@@ -1,6 +1,6 @@
 [project]
 name = "fugusashi"
-version = "1.2.0"
+version = "1.3.0"
 description = "Open-source intelligent model router and multi-agent orchestrator. The open alternative to Sakana AI's Fugu."
 readme = "README.md"
 license = {text = "MIT"}
@@ -42,6 +42,18 @@ Changelog = "https://github.com/eulogik/fugusashi/blob/main/LIVING.md"
 
 [project.optional-dependencies]
 dev = [
+    "pytest>=8.0",
+    "ruff>=0.5",
+    "torch>=2.0",
+    "transformers>=4.40",
+]
+train = [
+    "torch>=2.0",
+    "transformers>=4.40",
+]
+all = [
+    "torch>=2.0",
+    "transformers>=4.40",
     "pytest>=8.0",
     "ruff>=0.5",
 ]

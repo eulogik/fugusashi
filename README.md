@@ -332,13 +332,15 @@ fugusashi/
 ├── LICENSE                  # MIT
 ├── src/fugusashi/
 │   ├── __init__.py
-│   ├── __main__.py          # CLI: serve, benchmark
+│   ├── __main__.py          # CLI: serve, benchmark, train, expand-data
 │   ├── server.py            # FastAPI app factory
 │   ├── config.py            # Pydantic config from YAML
 │   ├── providers.py         # LiteLLM multi-provider wrapper
 │   ├── tracker.py           # Cost/routing transparency
 │   ├── feedback.py          # Feedback loop + learning
 │   ├── benchmark.py         # Benchmark runner
+│   ├── training.py          # ModernBERT training pipeline
+│   ├── dataset.py           # Preference dataset management
 │   ├── orchestrator.py      # Multi-agent orchestrator
 │   ├── grpo.py              # GRPO-style reward learning
 │   ├── api/
@@ -346,11 +348,13 @@ fugusashi/
 │   ├── router/
 │   │   ├── interface.py     # Abstract router protocol
 │   │   ├── strategies.py    # Cost, Similarity, Fallback routers
-│   │   └── ensemble.py      # Priority-chain ensemble
+│   │   ├── learned.py       # ModernBERT learned classifier router
+│   │   └── ensemble.py      # Priority-chain ensemble (learned → similarity → cost)
 │   └── static/
 │       └── dashboard.html   # Live web dashboard
 ├── tests/
 │   ├── test_integration.py  # Integration tests
+│   ├── test_learned.py      # Learned router tests
 │   └── test_orchestrator.py # Orchestrator + GRPO tests
 └── docs/                    # GitHub Pages documentation
 ```

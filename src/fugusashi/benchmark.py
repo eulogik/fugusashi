@@ -141,26 +141,39 @@ class BenchmarkReport:
 
 
 DEFAULT_DATASET = [
-    BenchmarkSample(prompt="Write a Python function to sort a list", expected_model="llama3.2-local", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is the capital of France?", expected_model="llama3.2-local", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a poem about autumn", expected_model="llama3.2-local", category="creative", ideal_cost=0.0),
-    BenchmarkSample(prompt="Debug this: console.log('hello'", expected_model="gpt-4o-mini", category="code", ideal_cost=0.00001),
-    BenchmarkSample(prompt="Implement merge sort in Python", expected_model="gpt-4o-mini", category="code", ideal_cost=0.00002),
-    BenchmarkSample(prompt="What is 2 + 2?", expected_model="llama3.2-local", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a bash script to backup a directory", expected_model="gpt-4o-mini", category="code", ideal_cost=0.00001),
-    BenchmarkSample(prompt="Describe the water cycle", expected_model="llama3.2-local", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="Explain how HTTP works", expected_model="llama3.2-local", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a SQL query to join two tables", expected_model="gpt-4o-mini", category="code", ideal_cost=0.00001),
-    BenchmarkSample(prompt="What is the meaning of life?", expected_model="llama3.2-local", category="general", ideal_cost=0.0),
-    BenchmarkSample(prompt="Create a React component for a todo list", expected_model="gpt-4o-mini", category="code", ideal_cost=0.00002),
-    BenchmarkSample(prompt="Summarize the plot of The Great Gatsby", expected_model="llama3.2-local", category="general", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a Dockerfile for a Node.js app", expected_model="gpt-4o-mini", category="code", ideal_cost=0.00001),
-    BenchmarkSample(prompt="Convert this Python code to JavaScript", expected_model="gpt-4o-mini", category="code", ideal_cost=0.00001),
-    BenchmarkSample(prompt="Tell me a joke", expected_model="llama3.2-local", category="creative", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is the Pythagorean theorem?", expected_model="llama3.2-local", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a regular expression for email validation", expected_model="gpt-4o-mini", category="code", ideal_cost=0.00001),
-    BenchmarkSample(prompt="Explain the concept of recursion", expected_model="llama3.2-local", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a poem about AI", expected_model="llama3.2-local", category="creative", ideal_cost=0.0),
+    # --- code → gpt-oss-120b ---
+    BenchmarkSample(prompt="Write a Python function to sort a list", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Implement merge sort in Java", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a REST API endpoint in FastAPI", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Debug this JavaScript error: 'undefined is not a function'", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a recursive Fibonacci function", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Create a React component for a todo list", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a Dockerfile for a Node.js app", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a SQL query to join three tables", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a regex for email validation", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Explain recursion with examples in Python", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    # --- explanation / medium → hermes-3-405b ---
+    BenchmarkSample(prompt="How does the event loop work in Node.js?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is blockchain technology?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="Explain the CAP theorem in distributed systems", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="How does OAuth2 authentication work?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is a microservice architecture?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="Explain how containerization differs from virtualization", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="How does a compiler translate source code?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is CRISPR gene editing technology?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="Explain how neural networks learn from data", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is quantum computing and why does it matter?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    # --- factual / simple → lfm-2.5-1.2b ---
+    BenchmarkSample(prompt="What is the capital of France?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is the capital of Japan?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is the meaning of life?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="general", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is the Pythagorean theorem?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is photosynthesis?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="Who invented the telephone?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is the speed of light?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is the tallest mountain in the world?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="Who painted the Mona Lisa?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="Tell me a joke", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="creative", ideal_cost=0.0),
 ]
 
 
@@ -223,15 +236,31 @@ DEFAULT_TRAINING = [
 ]
 
 
-def run_benchmark_cli(dataset_path=None, threshold=0.4, verbose=False, json_out=False, train=False):
+def run_benchmark_cli(dataset_path=None, threshold=0.4, verbose=False, json_out=False, train=False, model_dir=None, no_learned=False):
     from .router import EnsembleRouter
 
-    router = EnsembleRouter(confidence_threshold=threshold)
+    router = EnsembleRouter(
+        confidence_threshold=threshold,
+        learned_router_enabled=not no_learned,
+        model_dir=model_dir or ".fugusashi_data/router_model",
+    )
 
     if train:
         router.similarity_router.build_index(DEFAULT_TRAINING)
 
     models_config = {
+        "openai/gpt-oss-120b:free": {
+            "cost_per_input_token": 0.0, "cost_per_output_token": 0.0,
+            "capabilities": ["chat", "code", "reasoning"],
+        },
+        "meta-llama/hermes-3-405b:free": {
+            "cost_per_input_token": 0.0, "cost_per_output_token": 0.0,
+            "capabilities": ["chat", "explanation"],
+        },
+        "liquid/lfm-2.5-1.2b-instruct:free": {
+            "cost_per_input_token": 0.0, "cost_per_output_token": 0.0,
+            "capabilities": ["chat", "creative", "factual"],
+        },
         "llama3.2-local": {
             "cost_per_input_token": 0.0, "cost_per_output_token": 0.0,
             "capabilities": ["chat"],
@@ -283,8 +312,13 @@ def run_benchmark_cli(dataset_path=None, threshold=0.4, verbose=False, json_out=
 @click.option("--verbose", "-v", is_flag=True, help="Show per-sample results")
 @click.option("--json", "json_out", is_flag=True, help="Output as JSON")
 @click.option("--train", is_flag=True, help="Seed training data for similarity routing")
-def benchmark(dataset, threshold, verbose, json_out, train):
-    run_benchmark_cli(dataset_path=dataset, threshold=threshold, verbose=verbose, json_out=json_out, train=train)
+@click.option("--model-dir", default=".fugusashi_data/router_model", help="Trained model directory")
+@click.option("--no-learned", is_flag=True, help="Disable learned router (baseline comparison)")
+def benchmark(dataset, threshold, verbose, json_out, train, model_dir, no_learned):
+    run_benchmark_cli(
+        dataset_path=dataset, threshold=threshold, verbose=verbose,
+        json_out=json_out, train=train, model_dir=model_dir, no_learned=no_learned,
+    )
 
 
 if __name__ == "__main__":

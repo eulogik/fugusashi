@@ -35,6 +35,10 @@ models:
 tier1:
   enabled: true
   overhead_ms_max: 20
+  learned_router_enabled: true
+  learned_router_confidence_threshold: 0.3
+  learned_router_model_dir: ".fugusashi_data/router_model"
+  training_data_dir: ".fugusashi_data"
   router:
     name: "ensemble"
     confidence_threshold: 0.4

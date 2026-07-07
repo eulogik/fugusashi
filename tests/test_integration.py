@@ -1,11 +1,20 @@
 from __future__ import annotations
 
+import tempfile
+
 from fugusashi.router import EnsembleRouter
 from fugusashi.tracker import TransparencyTracker
 
 
+def _router(**kw):
+    """Create an EnsembleRouter with learned router disabled for test isolation."""
+    defaults = dict(learned_router_enabled=False, model_dir=tempfile.mkdtemp())
+    defaults.update(kw)
+    return EnsembleRouter(**defaults)
+
+
 def test_cost_router_picks_local_for_general():
-    router = EnsembleRouter(confidence_threshold=0.4)
+    router = _router(confidence_threshold=0.4)
     available = {
         "llama3.2-local": {
             "cost_per_input_token": 0.0,
@@ -29,7 +38,7 @@ def test_cost_router_picks_local_for_general():
 
 
 def test_similarity_router_learns_from_history():
-    router = EnsembleRouter(confidence_threshold=0.4)
+    router = _router(confidence_threshold=0.4)
     available = {
         "llama3.2-local": {
             "cost_per_input_token": 0.0,
@@ -57,7 +66,7 @@ def test_similarity_router_learns_from_history():
 
 
 def test_user_specified_model_bypasses_routing():
-    router = EnsembleRouter(confidence_threshold=0.4)
+    router = _router(confidence_threshold=0.4)
     available = {"gpt-4o": {"cost_per_input_token": 0.0, "cost_per_output_token": 0.0, "capabilities": []}}
     result = router.route(
         "Any prompt",
@@ -68,7 +77,7 @@ def test_user_specified_model_bypasses_routing():
 
 
 def test_fallback_when_no_models():
-    router = EnsembleRouter(confidence_threshold=0.4)
+    router = _router(confidence_threshold=0.4)
     result = router.route("test", [{"role": "user", "content": "test"}], {})
     assert result.needs_escalation
 
