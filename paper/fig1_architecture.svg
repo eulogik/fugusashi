@@ -1,0 +1,181 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 620" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#333"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0,0 L10,5 L0,10 Z" fill="#16a34a"/>
+    </marker>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="t1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#eff6ff"/>
+      <stop offset="100%" stop-color="#bfdbfe"/>
+    </linearGradient>
+    <linearGradient id="t2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fdf4ff"/>
+      <stop offset="100%" stop-color="#f5d0fe"/>
+    </linearGradient>
+    <linearGradient id="fed" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f0fdf4"/>
+      <stop offset="100%" stop-color="#bbf7d0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="900" height="620" fill="url(#bg)" rx="8"/>
+
+  <!-- Title -->
+  <text x="450" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e293b">Fugusashi System Architecture</text>
+
+  <!-- ===================== INPUT ===================== -->
+  <rect x="50" y="55" width="140" height="50" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="2"/>
+  <text x="120" y="83" text-anchor="middle" font-size="13" font-weight="bold" fill="#92400e">User Prompt</text>
+
+  <!-- ===================== TIER 1 BOX ===================== -->
+  <rect x="30" y="120" width="420" height="280" rx="8" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="240" y="142" text-anchor="middle" font-size="14" font-weight="bold" fill="#1e40af">Tier 1: Intelligent Router</text>
+
+  <!-- LearnedRouter -->
+  <rect x="50" y="155" width="180" height="50" rx="6" fill="url(#t1)" stroke="#2563eb" stroke-width="2"/>
+  <text x="140" y="176" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">LearnedRouter</text>
+  <text x="140" y="193" text-anchor="middle" font-size="10" fill="#475569">ModernBERT-149M Classifier</text>
+
+  <!-- SimilarityRouter -->
+  <rect x="250" y="155" width="180" height="50" rx="6" fill="url(#t1)" stroke="#2563eb" stroke-width="2"/>
+  <text x="340" y="176" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">SimilarityRouter</text>
+  <text x="340" y="193" text-anchor="middle" font-size="10" fill="#475569">sentence-transformers + FAISS</text>
+
+  <!-- CostRouter -->
+  <rect x="50" y="220" width="180" height="50" rx="6" fill="url(#t1)" stroke="#2563eb" stroke-width="2"/>
+  <text x="140" y="241" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">CostRouter</text>
+  <text x="140" y="258" text-anchor="middle" font-size="10" fill="#475569">Capability-aware cost optimization</text>
+
+  <!-- CMAESRouter -->
+  <rect x="250" y="220" width="180" height="50" rx="6" fill="url(#t1)" stroke="#2563eb" stroke-width="2"/>
+  <text x="340" y="241" text-anchor="middle" font-size="12" font-weight="bold" fill="#1e3a5f">CMAESRouter</text>
+  <text x="340" y="258" text-anchor="middle" font-size="10" fill="#475569">Evolved 385-dim routing weights</text>
+
+  <!-- Consensus -->
+  <rect x="130" y="290" width="220" height="40" rx="20" fill="#1e40af" opacity="0.9"/>
+  <text x="240" y="315" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">Consensus &amp; Confidence Scoring</text>
+
+  <!-- Arrow: input to tier1 -->
+  <line x1="120" y1="105" x2="120" y2="150" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Arrows in tier1 -->
+  <line x1="230" y1="180" x2="245" y2="180" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="140" y1="205" x2="140" y2="215" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="205" x2="340" y2="215" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="140" y1="270" x2="170" y2="288" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="340" y1="270" x2="310" y2="288" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Confidence threshold check -->
+  <polygon points="370,290 430,290 430,330 370,330" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="400" y="307" text-anchor="middle" font-size="10" font-weight="bold" fill="#92400e">Confidence</text>
+  <text x="400" y="320" text-anchor="middle" font-size="10" fill="#92400e">≥ 0.3?</text>
+
+  <!-- Arrow: tier1 to output -->
+  <line x1="350" y1="330" x2="350" y2="420" stroke="#16a34a" stroke-width="2" marker-end="url(#arrow-green)"/>
+  <text x="360" y="380" font-size="10" fill="#16a34a">Confidence ≥ 0.3: Direct Route</text>
+
+  <!-- Arrow: tier1 escalate to tier2 -->
+  <line x1="430" y1="310" x2="480" y2="310" stroke="#dc2626" stroke-width="2" marker-end="url(#arrow)"/>
+  <text x="455" y="302" text-anchor="middle" font-size="10" fill="#dc2626">Confidence &lt; 0.3</text>
+
+  <!-- ===================== TIER 2 BOX ===================== -->
+  <rect x="480" y="120" width="400" height="280" rx="8" fill="none" stroke="#9333ea" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="680" y="142" text-anchor="middle" font-size="14" font-weight="bold" fill="#6b21a8">Tier 2: Federated Orchestrator</text>
+
+  <!-- Planner -->
+  <rect x="500" y="155" width="170" height="50" rx="6" fill="url(#t2)" stroke="#9333ea" stroke-width="2"/>
+  <text x="585" y="176" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a1d6e">Task Planner</text>
+  <text x="585" y="193" text-anchor="middle" font-size="10" fill="#475569">Decompose → Plan → Execute</text>
+
+  <!-- Supervisor -->
+  <rect x="690" y="155" width="170" height="50" rx="6" fill="url(#t2)" stroke="#9333ea" stroke-width="2"/>
+  <text x="775" y="176" text-anchor="middle" font-size="12" font-weight="bold" fill="#4a1d6e">Supervisor Agent</text>
+  <text x="775" y="193" text-anchor="middle" font-size="10" fill="#475569">Monitor &amp; synthesize results</text>
+
+  <!-- Worker agents -->
+  <rect x="500" y="225" width="120" height="45" rx="6" fill="#f3e8ff" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="560" y="247" text-anchor="middle" font-size="11" font-weight="bold" fill="#4a1d6e">Worker 1</text>
+  <text x="560" y="260" text-anchor="middle" font-size="9" fill="#475569">Specialist LLM</text>
+
+  <rect x="630" y="225" width="120" height="45" rx="6" fill="#f3e8ff" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="690" y="247" text-anchor="middle" font-size="11" font-weight="bold" fill="#4a1d6e">Worker 2</text>
+  <text x="690" y="260" text-anchor="middle" font-size="9" fill="#475569">Specialist LLM</text>
+
+  <rect x="760" y="225" width="100" height="45" rx="6" fill="#f3e8ff" stroke="#a855f7" stroke-width="1.5"/>
+  <text x="810" y="247" text-anchor="middle" font-size="11" font-weight="bold" fill="#4a1d6e">Worker N</text>
+  <text x="810" y="260" text-anchor="middle" font-size="9" fill="#475569">Specialist</text>
+
+  <!-- GRPO Trainer -->
+  <rect x="500" y="290" width="220" height="40" rx="6" fill="#6b21a8" opacity="0.85"/>
+  <text x="610" y="315" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">GRPO Reinforcement Learning</text>
+
+  <!-- Orchestration arrows -->
+  <line x1="585" y1="205" x2="585" y2="220" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="775" y1="205" x2="775" y2="220" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="560" y1="270" x2="560" y2="285" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="690" y1="270" x2="690" y2="285" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="775" y1="225" x2="775" y2="285" stroke="#9333ea" stroke-width="1" stroke-dasharray="4,2"/>
+
+  <!-- ===================== OUTPUT ===================== -->
+  <rect x="280" y="420" width="340" height="45" rx="22" fill="#16a34a" opacity="0.9"/>
+  <text x="450" y="447" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff">Response + Routing Decision + Explanation</text>
+
+  <!-- Arrow from tier2 to output -->
+  <line x1="680" y1="400" x2="530" y2="417" stroke="#333" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- ===================== FEEDBACK LOOP ===================== -->
+  <rect x="30" y="420" width="200" height="45" rx="6" fill="url(#fed)" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="130" y="440" text-anchor="middle" font-size="11" font-weight="bold" fill="#166534">Feedback Loop</text>
+  <text x="130" y="455" text-anchor="middle" font-size="9" fill="#166534">User feedback → outcomes.jsonl</text>
+
+  <!-- Arrow: output to feedback -->
+  <line x1="280" y1="442" x2="235" y2="442" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- Arrow: feedback back to tier1 -->
+  <line x1="130" y1="420" x2="130" y2="375" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-green)" stroke-dasharray="4,2"/>
+  <text x="80" y="400" font-size="9" fill="#166534">Retrain / Re-evolve</text>
+
+  <!-- ===================== FEDERATED AGGREGATION ===================== -->
+  <rect x="30" y="490" width="840" height="115" rx="8" fill="none" stroke="#16a34a" stroke-width="2" stroke-dasharray="6,3"/>
+  <text x="450" y="512" text-anchor="middle" font-size="14" font-weight="bold" fill="#166534">Federated Routing Learning</text>
+
+  <!-- Client nodes -->
+  <rect x="55" y="525" width="140" height="60" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="125" y="548" text-anchor="middle" font-size="11" font-weight="bold" fill="#166534">Client A</text>
+  <text x="125" y="563" text-anchor="middle" font-size="9" fill="#475569">Medical domain</text>
+  <text x="125" y="575" text-anchor="middle" font-size="9" fill="#475569">1000 samples</text>
+
+  <rect x="250" y="525" width="140" height="60" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="320" y="548" text-anchor="middle" font-size="11" font-weight="bold" fill="#166534">Client B</text>
+  <text x="320" y="563" text-anchor="middle" font-size="9" fill="#475569">Code generation</text>
+  <text x="320" y="575" text-anchor="middle" font-size="9" fill="#475569">800 samples</text>
+
+  <rect x="445" y="525" width="140" height="60" rx="6" fill="#dcfce7" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="515" y="548" text-anchor="middle" font-size="11" font-weight="bold" fill="#166534">Client C</text>
+  <text x="515" y="563" text-anchor="middle" font-size="9" fill="#475569">Creative writing</text>
+  <text x="515" y="575" text-anchor="middle" font-size="9" fill="#475569">600 samples</text>
+
+  <rect x="640" y="525" width="210" height="60" rx="6" fill="#16a34a" opacity="0.85"/>
+  <text x="745" y="548" text-anchor="middle" font-size="12" font-weight="bold" fill="#fff">Federated Aggregator</text>
+  <text x="745" y="565" text-anchor="middle" font-size="9" fill="#fff">DP noise: η ~ N(0, σ²I)</text>
+  <text x="745" y="578" text-anchor="middle" font-size="9" fill="#fff">Weighted averaging by n_i</text>
+
+  <!-- Arrows: clients to aggregator -->
+  <line x1="195" y1="555" x2="245" y2="555" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <line x1="390" y1="555" x2="440" y2="555" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+  <line x1="585" y1="555" x2="635" y2="555" stroke="#16a34a" stroke-width="1.5" marker-end="url(#arrow-green)"/>
+
+  <!-- Aggregator to clients (dashed, return) -->
+  <line x1="635" y1="575" x2="195" y2="575" stroke="#166534" stroke-width="1" stroke-dasharray="4,2" marker-end="url(#arrow-green)"/>
+  <text x="410" y="595" text-anchor="middle" font-size="9" fill="#166534">θ_global ← θ_global + Σ (n_i / N) · Δθ_i (with DP)</text>
+</svg>

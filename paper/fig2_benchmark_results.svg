@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 700 480" font-family="Helvetica, Arial, sans-serif">
+  <defs>
+    <linearGradient id="bar1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+    <linearGradient id="bar2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#f87171"/>
+      <stop offset="100%" stop-color="#dc2626"/>
+    </linearGradient>
+    <linearGradient id="bar3" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#fbbf24"/>
+      <stop offset="100%" stop-color="#d97706"/>
+    </linearGradient>
+    <linearGradient id="bar4" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#60a5fa"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+    <linearGradient id="bar5" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#34d399"/>
+      <stop offset="100%" stop-color="#16a34a"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="700" height="480" fill="#f8fafc" rx="8"/>
+
+  <text x="350" y="30" text-anchor="middle" font-size="16" font-weight="bold" fill="#1e293b">Fugusashi Benchmark Results (v1.3.0)</text>
+
+  <!-- Chart area: x=100 to x=650, y=50 to y=380, baseline at y=370 -->
+  <line x1="100" y1="370" x2="650" y2="370" stroke="#94a3b8" stroke-width="2"/>
+  <line x1="100" y1="50" x2="100" y2="370" stroke="#94a3b8" stroke-width="2"/>
+
+  <!-- Y-axis labels and gridlines -->
+  <line x1="100" y1="130" x2="650" y2="130" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="90" y="134" text-anchor="end" font-size="11" fill="#64748b">80%</text>
+
+  <line x1="100" y1="210" x2="650" y2="210" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="90" y="214" text-anchor="end" font-size="11" fill="#64748b">60%</text>
+
+  <line x1="100" y1="290" x2="650" y2="290" stroke="#e2e8f0" stroke-width="1" stroke-dasharray="4,2"/>
+  <text x="90" y="294" text-anchor="end" font-size="11" fill="#64748b">40%</text>
+
+  <line x1="100" y1="370" x2="650" y2="370" stroke="#e2e8f0" stroke-width="1"/>
+  <text x="90" y="374" text-anchor="end" font-size="11" fill="#64748b">0%</text>
+
+  <!-- Bar 1: Random - 20% -->
+  <rect x="120" y="338" width="70" height="32" rx="4" fill="url(#bar1)"/>
+  <text x="155" y="360" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">20%</text>
+  <text x="155" y="390" text-anchor="middle" font-size="11" fill="#475569">Random</text>
+
+  <!-- Bar 2: Cost-only baseline - 36.7% -->
+  <rect x="210" y="300" width="70" height="70" rx="4" fill="url(#bar2)"/>
+  <text x="245" y="336" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">36.7%</text>
+  <text x="245" y="390" text-anchor="middle" font-size="11" fill="#475569">Cost-Only</text>
+
+  <!-- Bar 3: CMA-ES only - 70% -->
+  <rect x="300" y="146" width="70" height="224" rx="4" fill="url(#bar3)"/>
+  <text x="335" y="240" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">70%</text>
+  <text x="335" y="390" text-anchor="middle" font-size="11" fill="#475569">CMA-ES Only</text>
+
+  <!-- Bar 4: Learned (ModernBERT) - 80% test -->
+  <rect x="390" y="114" width="70" height="256" rx="4" fill="url(#bar4)"/>
+  <text x="425" y="210" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">80%</text>
+  <text x="425" y="390" text-anchor="middle" font-size="11" fill="#475569">Learned (Test)</text>
+
+  <!-- Bar 5: Learned (Benchmark) - 83.3% -->
+  <rect x="480" y="104" width="70" height="266" rx="4" fill="url(#bar5)"/>
+  <text x="515" y="200" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">83.3%</text>
+  <text x="515" y="390" text-anchor="middle" font-size="11" fill="#475569">Learned (Benchmark)</text>
+
+  <!-- Bar 6: Federated - 85% -->
+  <rect x="570" y="98" width="70" height="272" rx="4" fill="#1e40af"/>
+  <text x="605" y="195" text-anchor="middle" font-size="11" fill="#fff" font-weight="bold">85%</text>
+  <text x="605" y="390" text-anchor="middle" font-size="11" fill="#475569">Federated</text>
+
+  <!-- Annotation: learned beats cost-only -->
+  <line x1="245" y1="295" x2="515" y2="100" stroke="#dc2626" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="310" y="140" font-size="10" fill="#dc2626" transform="rotate(-30,310,140)">+127% vs cost-only</text>
+
+  <!-- Footer notes -->
+  <text x="100" y="430" font-size="9" fill="#94a3b8">Metrics: 30 held-out prompts, 3 model classes (gpt-oss-120b, hermes-3-405b, lfm-2.5-1.2b)</text>
+  <text x="100" y="445" font-size="9" fill="#94a3b8">Router latency: 83ms (ModernBERT) | Training: 224 samples, 137s | Federated: 3 clients with DP (ε=1.8)</text>
+  <text x="100" y="460" font-size="9" fill="#94a3b8">Fugu (Sakana AI) baseline: proprietary 7B coordinator LLM, trained on undisclosed data</text>
+</svg>
