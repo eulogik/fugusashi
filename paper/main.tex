@@ -404,13 +404,14 @@ LearnedRouter (ModernBERT) & 83ms & 95ms & 120ms \\
 SimilarityRouter (FAISS) & 2ms & 3ms & 5ms \\
 CostRouter & $<$1ms & $<$1ms & 1ms \\
 CMAESRouter & 4ms & 6ms & 10ms \\
-Tier 1 Total & 4ms & 6ms & 11ms \\
+Tier 1 (LearnedRouter disabled) & 4ms & 6ms & 11ms \\
+Tier 1 (LearnedRouter enabled) & 83ms & 95ms & 120ms \\
 Full Pipeline (Tier 1 + Tier 2) & 250ms & 400ms & 800ms \\
 Federated Aggregation (per round) & 3s & 5s & 8s \\
 Training (224 samples, CPU) & 137s & --- & --- \\
 \bottomrule
 \end{tabular}
-\caption{Latency benchmarks. Tier 1 routing adds 4ms median overhead. ModernBERT classifier adds 83ms per forward pass but runs only when the ensemble router needs a learned prediction.}
+\caption{Latency benchmarks. LearnedRouter adds 83ms when enabled; otherwise Tier 1 routing adds 4ms median overhead. ModernBERT classifier runs only when the ensemble router needs a learned prediction.}
 \label{tab:latency}
 \end{table}
 
@@ -419,7 +420,8 @@ The ModernBERT classifier trains in 137 seconds on a single CPU core (Apple M3 P
 The federated aggregator processes 3 clients in approximately 3 seconds per round (mostly network latency).
 
 \textbf{Inference efficiency.}
-Tier 1 routing adds a median of 4ms overhead (excluding the LLM response time).
+When the LearnedRouter is enabled, Tier 1 routing adds a median of 83ms overhead (ModernBERT forward pass).
+When disabled or when confidence exceeds threshold and earlier strategies suffice, Tier 1 overhead is 4ms median (SimilarityRouter + CostRouter + CMAESRouter).
 The full pipeline including Tier 2 orchestration averages 250ms for simple escalations and up to 800ms for complex multi-agent tasks.
 
 \subsection{Explanation Quality}
@@ -514,7 +516,7 @@ Sakana AI.
 \newblock \url{https://sakana.ai/fugu}, 2026.
 
 \bibitem{routellm2024}
-Zhuoer Xu, Zhangming Li, and et al.
+Zhuoer Xu, Zhangming Li, et al.
 \newblock RouteLLM: Learning to Route LLMs with Preference Data.
 \newblock In \emph{Proceedings of the 62nd Annual Meeting of the Association for Computational Linguistics}, 2024.
 
@@ -534,7 +536,7 @@ Nikolaus Hansen and Andreas Ostermeier.
 \newblock \emph{Evolutionary Computation}, 9(2):159--195, 2001.
 
 \bibitem{mcmahan2017}
-Brendan McMahan, Eider Moore, and et al.
+Brendan McMahan, Eider Moore, et al.
 \newblock Communication-efficient learning of deep networks from decentralized data.
 \newblock In \emph{Proceedings of the 20th International Conference on Artificial Intelligence and Statistics}, 2017.
 
@@ -554,17 +556,17 @@ OpenRouter.
 \newblock \url{https://openrouter.ai}, 2025.
 
 \bibitem{fednlp2021}
-Tianyi Zhang and et al.
+Tianyi Zhang, et al.
 \newblock Federated NLP: A Survey.
 \newblock \emph{arXiv preprint arXiv:2104.05915}, 2021.
 
 \bibitem{fedrec2020}
-Chen, Y. and et al.
+Y. Chen, et al.
 \newblock Federated Recommendation Systems.
 \newblock In \emph{Proceedings of the 29th ACM International Conference on Information and Knowledge Management}, 2020.
 
 \bibitem{fedhealth2021}
-Rui Zhang and et al.
+Rui Zhang, et al.
 \newblock Federated Learning for Healthcare: A Survey.
 \newblock \emph{ACM Computing Surveys}, 2021.
 
@@ -574,17 +576,17 @@ Yisong Yue and Thorsten Joachims.
 \newblock In \emph{Proceedings of ICML}, 2020.
 
 \bibitem{bayesopt2023}
-Shahriari, B. and et al.
+B. Shahriari, et al.
 \newblock Bayesian Optimization for Model Selection.
 \newblock \emph{Journal of Machine Learning Research}, 2023.
 
 \bibitem{prompt2model2024}
-Vivek Natarajan and et al.
+Vivek Natarajan, et al.
 \newblock Prompt-to-Model: Learning to Route Prompts to LLMs.
 \newblock \emph{arXiv preprint arXiv:2401.12345}, 2024.
 
 \bibitem{rankllm2024}
-Shuai Zhang and et al.
+Shuai Zhang, et al.
 \newblock Learning to Rank LLMs for Task-Specific Routing.
 \newblock In \emph{Proceedings of EMNLP}, 2024.
 
