@@ -1,7 +1,5 @@
 from __future__ import annotations
 
-from typing import Dict, List
-
 import numpy as np
 
 from .interface import BaseRouter, RouterResult
@@ -29,8 +27,8 @@ class FallbackRouter(BaseRouter):
     def route(
         self,
         prompt: str,
-        messages: List[Dict[str, str]],
-        available_models: Dict[str, dict],
+        messages: list[dict[str, str]],
+        available_models: dict[str, dict],
         threshold: float = 0.0,
     ) -> RouterResult:
         if not available_models:
@@ -61,8 +59,8 @@ class CostRouter(BaseRouter):
     def route(
         self,
         prompt: str,
-        messages: List[Dict[str, str]],
-        available_models: Dict[str, dict],
+        messages: list[dict[str, str]],
+        available_models: dict[str, dict],
         threshold: float = 0.0,
     ) -> RouterResult:
         if not available_models:
@@ -118,7 +116,7 @@ class SimilarityRouter(BaseRouter):
         self.embedding_model_name = embedding_model
         self._model = None
         self._index = None
-        self._index_data: List[dict] = []
+        self._index_data: list[dict] = []
 
     @property
     def model(self):
@@ -127,7 +125,7 @@ class SimilarityRouter(BaseRouter):
             self._model = SentenceTransformer(self.embedding_model_name)
         return self._model
 
-    def build_index(self, history: List[dict]):
+    def build_index(self, history: list[dict]):
         if not history:
             return
         texts = [h.get("prompt", "") for h in history]
@@ -138,8 +136,8 @@ class SimilarityRouter(BaseRouter):
     def route(
         self,
         prompt: str,
-        messages: List[Dict[str, str]],
-        available_models: Dict[str, dict],
+        messages: list[dict[str, str]],
+        available_models: dict[str, dict],
         threshold: float = 0.0,
     ) -> RouterResult:
         if not available_models:
@@ -154,7 +152,7 @@ class SimilarityRouter(BaseRouter):
         top_indices = np.argsort(scores)[-top_k:][::-1]
 
         min_similarity = 0.2
-        model_votes: Dict[str, list] = {}
+        model_votes: dict[str, list] = {}
         for idx in top_indices:
             entry = self._index_data[idx]
             model_name = entry.get("model", "")
@@ -164,8 +162,8 @@ class SimilarityRouter(BaseRouter):
                 model_votes.setdefault(model_name, []).append(sim_score * quality)
 
         model_scores = {}
-        for name, cfg in available_models.items():
-            if name in model_votes and model_votes[name]:
+        for name in available_models:
+            if model_votes.get(name):
                 model_scores[name] = round(float(np.max(model_votes[name])), 4)
             else:
                 model_scores[name] = 0.0

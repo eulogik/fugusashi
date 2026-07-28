@@ -5,7 +5,6 @@ import time
 import uuid
 from dataclasses import dataclass, field
 from enum import Enum
-from typing import Dict, List, Optional
 
 from .providers import ModelClient
 
@@ -32,11 +31,11 @@ class SubTask:
     id: str
     description: str
     task_type: TaskType
-    depends_on: List[str] = field(default_factory=list)
-    assigned_model: Optional[str] = None
+    depends_on: list[str] = field(default_factory=list)
+    assigned_model: str | None = None
     status: TaskStatus = TaskStatus.PENDING
-    result: Optional[str] = None
-    error: Optional[str] = None
+    result: str | None = None
+    error: str | None = None
     latency_ms: float = 0.0
     prompt_tokens: int = 0
     completion_tokens: int = 0
@@ -46,9 +45,9 @@ class SubTask:
 class TaskPlan:
     id: str
     original_prompt: str
-    subtasks: List[SubTask] = field(default_factory=list)
+    subtasks: list[SubTask] = field(default_factory=list)
     status: TaskStatus = TaskStatus.PENDING
-    final_result: Optional[str] = None
+    final_result: str | None = None
     total_latency_ms: float = 0.0
     total_cost: float = 0.0
 
@@ -83,7 +82,7 @@ class OrchestratorResult:
     final_response: str
     total_latency_ms: float
     total_cost: float
-    models_used: List[str]
+    models_used: list[str]
     explanation: str
 
 
@@ -108,7 +107,7 @@ _TYPE_KEYWORDS = {
     TaskType.FACTUAL: ["what is", "who", "when", "where", "how many", "definition", "fact", "list", "name"],
 }
 
-_MODEL_CAPABILITIES: Dict[str, List[TaskType]] = {
+_MODEL_CAPABILITIES: dict[str, list[TaskType]] = {
     "code": [TaskType.CODE, TaskType.REASONING],
     "reasoning": [TaskType.REASONING, TaskType.FACTUAL],
     "creative": [TaskType.CREATIVE, TaskType.FACTUAL],
@@ -125,9 +124,9 @@ def _classify_prompt(prompt: str) -> TaskType:
 
 
 def _best_model_for_type(
-    task_type: TaskType, models: Dict[str, dict]
-) -> Optional[str]:
-    scored: List[tuple[str, float]] = []
+    task_type: TaskType, models: dict[str, dict]
+) -> str | None:
+    scored: list[tuple[str, float]] = []
     for name, cfg in models.items():
         caps = cfg.get("capabilities", [])
         score = 0.0
@@ -140,7 +139,7 @@ def _best_model_for_type(
     if scored:
         scored.sort(key=lambda x: x[1], reverse=True)
         return scored[0][0]
-    return list(models.keys())[0] if models else None
+    return next(iter(models)) if models else None
 
 
 class MultiAgentOrchestrator:
@@ -150,18 +149,18 @@ class MultiAgentOrchestrator:
     def __init__(
         self,
         model_client: ModelClient,
-        planner_model: Optional[str] = None,
-        synthesizer_model: Optional[str] = None,
+        planner_model: str | None = None,
+        synthesizer_model: str | None = None,
         max_subtasks: int = 5,
     ):
         self.model_client = model_client
         self.planner_model = planner_model
         self.synthesizer_model = synthesizer_model
         self.max_subtasks = max_subtasks
-        self._history: List[OrchestratorResult] = []
+        self._history: list[OrchestratorResult] = []
 
     async def orchestrate(
-        self, prompt: str, messages: Optional[List[Dict[str, str]]] = None
+        self, prompt: str, messages: list[dict[str, str]] | None = None
     ) -> OrchestratorResult:
         start = time.perf_counter()
         request_id = f"fugu-{uuid.uuid4().hex[:12]}"
@@ -213,7 +212,7 @@ class MultiAgentOrchestrator:
             if content.startswith("```"):
                 content = content.split("\n", 1)[-1].rsplit("```", 1)[0].strip()
             subtasks_raw = json.loads(content)
-        except Exception:
+        except Exception:  # noqa: BLE001
             return self._rule_based_decompose(prompt, plan)
 
         for i, st in enumerate(subtasks_raw[: self.max_subtasks]):
@@ -254,7 +253,7 @@ class MultiAgentOrchestrator:
             st.status = TaskStatus.ASSIGNED
 
     async def _execute_subtasks(self, plan: TaskPlan) -> None:
-        completed: Dict[str, SubTask] = {}
+        completed: dict[str, SubTask] = {}
         remaining = list(plan.subtasks)
 
         while remaining:
@@ -287,7 +286,7 @@ class MultiAgentOrchestrator:
                     st.prompt_tokens = pt
                     st.completion_tokens = ct
                     st.status = TaskStatus.COMPLETED
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     st.error = str(e)
                     st.status = TaskStatus.FAILED
 
@@ -298,7 +297,7 @@ class MultiAgentOrchestrator:
                 remaining.remove(st)
 
     def _build_context(
-        self, st: SubTask, completed: Dict[str, SubTask]
+        self, st: SubTask, completed: dict[str, SubTask]
     ) -> str:
         parts = [
             "You are a specialist agent. Complete the assigned subtask accurately.",
@@ -347,7 +346,7 @@ class MultiAgentOrchestrator:
                 synth_model, messages, temperature=0.3, max_tokens=2048
             )
             return resp.choices[0].message.content
-        except Exception:
+        except Exception:  # noqa: BLE001
             parts = []
             for st in plan.subtasks:
                 if st.result:
@@ -360,7 +359,7 @@ class MultiAgentOrchestrator:
             caps = cfg.get("capabilities", [])
             if "reasoning" in caps or "chat" in caps:
                 return name
-        return list(models.keys())[0] if models else "gpt-4o-mini"
+        return next(iter(models)) if models else "gpt-4o-mini"
 
     def _calc_cost(self, plan: TaskPlan) -> float:
         total = 0.0
@@ -381,5 +380,5 @@ class MultiAgentOrchestrator:
             )
         return "\n".join(lines)
 
-    def get_history(self) -> List[OrchestratorResult]:
+    def get_history(self) -> list[OrchestratorResult]:
         return list(self._history)

@@ -1,12 +1,13 @@
 from __future__ import annotations
 
 import time
-from typing import Any, AsyncGenerator, Dict, List, Optional, Tuple
+from collections.abc import AsyncGenerator
+from typing import Any
 
 from litellm import Router as LiteLLMRouter
 
 
-def build_litellm_router(model_configs: List[Dict[str, Any]]) -> LiteLLMRouter:
+def build_litellm_router(model_configs: list[dict[str, Any]]) -> LiteLLMRouter:
     model_list = []
     for cfg in model_configs:
         provider = cfg.get("provider", "openai")
@@ -30,21 +31,21 @@ def build_litellm_router(model_configs: List[Dict[str, Any]]) -> LiteLLMRouter:
 
 
 class ModelClient:
-    def __init__(self, model_configs: List[Dict[str, Any]]):
+    def __init__(self, model_configs: list[dict[str, Any]]):
         self.model_configs = {c.get("name", c["model"]): c for c in model_configs}
         self._router = build_litellm_router(model_configs)
 
-    def get_available_models(self) -> Dict[str, Dict[str, Any]]:
+    def get_available_models(self) -> dict[str, dict[str, Any]]:
         return self.model_configs
 
     async def call_model(
         self,
         model_name: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         stream: bool = False,
-    ) -> Tuple[Any, float, int, int, str]:
+    ) -> tuple[Any, float, int, int, str]:
         config = self.model_configs.get(model_name, {})
         provider_model = config.get("model", model_name)
         provider = config.get("provider", "openai")
@@ -87,9 +88,9 @@ class ModelClient:
     async def call_model_stream(
         self,
         model_name: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
     ) -> AsyncGenerator[bytes, None]:
         config = self.model_configs.get(model_name, {})
         provider_model = config.get("model", model_name)

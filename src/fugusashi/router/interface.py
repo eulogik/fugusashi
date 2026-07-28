@@ -1,9 +1,8 @@
 from __future__ import annotations
 
+import time
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
-from typing import Dict, List
-import time
 
 
 @dataclass
@@ -12,7 +11,7 @@ class RouterResult:
     confidence: float
     latency_ms: float
     strategy: str
-    scores: Dict[str, float] = field(default_factory=dict)
+    scores: dict[str, float] = field(default_factory=dict)
     explanation: str = ""
     needs_escalation: bool = False
 
@@ -24,8 +23,8 @@ class BaseRouter(ABC):
     def route(
         self,
         prompt: str,
-        messages: List[Dict[str, str]],
-        available_models: Dict[str, dict],
+        messages: list[dict[str, str]],
+        available_models: dict[str, dict],
         threshold: float = 0.0,
     ) -> RouterResult:
         ...

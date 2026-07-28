@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Dict
+from typing import Any
 
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
@@ -64,7 +64,7 @@ def create_app(config: AppConfig) -> FastAPI:
         if config.tier2.grpo_enabled:
             grpo = GRPOTrainer(learning_rate=config.tier2.grpo_learning_rate)
 
-    deps: Dict[str, Any] = {
+    deps: dict[str, Any] = {
         "config": config,
         "model_client": model_client,
         "tracker": tracker,

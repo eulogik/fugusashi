@@ -10,7 +10,6 @@ from __future__ import annotations
 import json
 import os
 import time
-from typing import Dict, List
 
 import torch
 import torch.nn.functional as F
@@ -35,7 +34,7 @@ class LearnedRouter(BaseRouter):
         self.fallback_strategy = fallback_strategy
         self._model = None
         self._tokenizer = None
-        self._model_names: List[str] = []
+        self._model_names: list[str] = []
         self._loaded = False
 
     @property
@@ -69,8 +68,8 @@ class LearnedRouter(BaseRouter):
     def route(
         self,
         prompt: str,
-        messages: List[Dict[str, str]],
-        available_models: Dict[str, dict],
+        messages: list[dict[str, str]],
+        available_models: dict[str, dict],
         threshold: float = 0.0,
     ) -> RouterResult:
         if not self.is_trained:
@@ -127,8 +126,8 @@ class LearnedRouter(BaseRouter):
     def _fallback(
         self,
         prompt: str,
-        messages: List[Dict[str, str]],
-        available_models: Dict[str, dict],
+        messages: list[dict[str, str]],
+        available_models: dict[str, dict],
         threshold: float,
     ) -> RouterResult:
         from .strategies import CostRouter

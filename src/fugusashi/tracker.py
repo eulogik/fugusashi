@@ -1,9 +1,9 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from dataclasses import dataclass, field, asdict
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from dataclasses import asdict, dataclass, field
+from datetime import UTC, datetime
+from typing import Any
 
 
 @dataclass
@@ -15,7 +15,7 @@ class RoutingDecision:
     routed_to: str
     confidence: float
     strategy: str
-    model_scores: Dict[str, float]
+    model_scores: dict[str, float]
     latency_ms: float
     explanation: str
     needs_escalation: bool
@@ -32,31 +32,31 @@ class ModelCallRecord:
     cost: float = 0.0
     latency_ms: float = 0.0
     status: str = "pending"
-    error: Optional[str] = None
+    error: str | None = None
 
 
 @dataclass
 class RequestTrace:
     request_id: str
     start_time: str
-    end_time: Optional[str] = None
+    end_time: str | None = None
     total_latency_ms: float = 0.0
     total_cost: float = 0.0
-    routing: Optional[RoutingDecision] = None
-    model_calls: List[ModelCallRecord] = field(default_factory=list)
+    routing: RoutingDecision | None = None
+    model_calls: list[ModelCallRecord] = field(default_factory=list)
 
 
 class TransparencyTracker:
     def __init__(self, log_to_console: bool = True):
-        self.traces: Dict[str, RequestTrace] = {}
-        self.routing_log: List[RoutingDecision] = []
+        self.traces: dict[str, RequestTrace] = {}
+        self.routing_log: list[RoutingDecision] = []
         self._log_to_console = log_to_console
         self._stats = defaultdict(lambda: {"calls": 0, "total_cost": 0.0, "total_tokens": 0})
 
     def start_trace(self, request_id: str) -> RequestTrace:
         trace = RequestTrace(
             request_id=request_id,
-            start_time=datetime.utcnow().isoformat(),
+            start_time=datetime.now(UTC).isoformat(),
         )
         self.traces[request_id] = trace
         return trace
@@ -84,7 +84,7 @@ class TransparencyTracker:
         cost: float = 0.0,
         latency_ms: float = 0.0,
         status: str = "success",
-        error: Optional[str] = None,
+        error: str | None = None,
     ):
         trace = self.traces.get(request_id)
         record = ModelCallRecord(
@@ -116,9 +116,9 @@ class TransparencyTracker:
     def finish_trace(self, request_id: str):
         trace = self.traces.get(request_id)
         if trace:
-            trace.end_time = datetime.utcnow().isoformat()
+            trace.end_time = datetime.now(UTC).isoformat()
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         return {
             "total_requests": len(self.traces),
             "total_cost": sum(t.total_cost for t in self.traces.values()),
@@ -131,7 +131,7 @@ class TransparencyTracker:
             ],
         }
 
-    def get_trace(self, request_id: str) -> Optional[Dict[str, Any]]:
+    def get_trace(self, request_id: str) -> dict[str, Any] | None:
         trace = self.traces.get(request_id)
         if trace:
             return asdict(trace)

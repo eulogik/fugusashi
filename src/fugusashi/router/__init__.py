@@ -1,12 +1,12 @@
-from .interface import RouterResult, BaseRouter
-from .strategies import FallbackRouter, CostRouter, SimilarityRouter
 from .ensemble import EnsembleRouter
+from .interface import BaseRouter, RouterResult
+from .strategies import CostRouter, FallbackRouter, SimilarityRouter
 
 __all__ = [
-    "RouterResult",
     "BaseRouter",
-    "FallbackRouter",
     "CostRouter",
-    "SimilarityRouter",
     "EnsembleRouter",
+    "FallbackRouter",
+    "RouterResult",
+    "SimilarityRouter",
 ]

@@ -4,7 +4,6 @@ import json
 import math
 import os
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 from .orchestrator import OrchestratorResult, TaskType
 
@@ -23,7 +22,7 @@ class TeamReward:
 @dataclass
 class RoutingPolicy:
     """Probability distribution over model assignments per task type."""
-    type_model_probs: Dict[str, Dict[str, float]] = field(default_factory=dict)
+    type_model_probs: dict[str, dict[str, float]] = field(default_factory=dict)
     learning_rate: float = 0.1
     exploration_rate: float = 0.1
 
@@ -50,7 +49,7 @@ class RoutingPolicy:
             for m in probs:
                 probs[m] /= total
 
-    def select(self, task_type: str, models: List[str]) -> str:
+    def select(self, task_type: str, models: list[str]) -> str:
         import random
         if random.random() < self.exploration_rate:
             return random.choice(models)
@@ -87,13 +86,13 @@ class GRPOTrainer:
         self.baseline_decay = baseline_decay
         self.policy = RoutingPolicy(learning_rate=learning_rate)
         self.baseline: float = 0.5
-        self.reward_history: List[TeamReward] = []
+        self.reward_history: list[TeamReward] = []
         self._load()
 
     def score(
         self,
         result: OrchestratorResult,
-        expected_type: Optional[TaskType] = None,
+        expected_type: TaskType | None = None,
     ) -> TeamReward:
         plan = result.plan
         n_completed = sum(
@@ -169,7 +168,7 @@ class GRPOTrainer:
         )
         self._save()
 
-    def get_stats(self) -> Dict:
+    def get_stats(self) -> dict:
         if not self.reward_history:
             return {"avg_reward": 0, "total_runs": 0, "baseline": self.baseline}
         recent = self.reward_history[-100:]
@@ -197,5 +196,5 @@ class GRPOTrainer:
                     data = json.load(f)
                 self.baseline = data.get("baseline", 0.5)
                 self.policy.type_model_probs = data.get("policy", {})
-            except Exception:
+            except Exception:  # noqa: BLE001,S110
                 pass

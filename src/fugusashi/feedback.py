@@ -3,9 +3,9 @@ from __future__ import annotations
 import json
 from collections import defaultdict
 from dataclasses import dataclass, field
+from datetime import UTC
 from pathlib import Path
-from typing import Any, Dict, List, Optional
-
+from typing import Any
 
 from .router.strategies import SimilarityRouter
 
@@ -20,8 +20,8 @@ class OutcomeRecord:
     completion_tokens: int = 0
     cost: float = 0.0
     latency_ms: float = 0.0
-    user_rating: Optional[int] = None
-    auto_score: Optional[float] = None
+    user_rating: int | None = None
+    auto_score: float | None = None
     error: bool = False
     timestamp: str = ""
 
@@ -32,7 +32,7 @@ class ModelScore:
     losses: int = 0
     total_cost: float = 0.0
     avg_latency_ms: float = 0.0
-    ratings: List[int] = field(default_factory=list)
+    ratings: list[int] = field(default_factory=list)
 
     @property
     def win_rate(self) -> float:
@@ -48,8 +48,8 @@ class FeedbackLoop:
     def __init__(self, data_dir: str = ".fugusashi_data"):
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(exist_ok=True)
-        self.outcomes: List[OutcomeRecord] = []
-        self.model_scores: Dict[str, ModelScore] = defaultdict(ModelScore)
+        self.outcomes: list[OutcomeRecord] = []
+        self.model_scores: dict[str, ModelScore] = defaultdict(ModelScore)
         self._load_data()
 
     def _data_path(self) -> Path:
@@ -65,7 +65,7 @@ class FeedbackLoop:
                     try:
                         d = json.loads(line)
                         self.outcomes.append(OutcomeRecord(**d))
-                    except Exception:
+                    except Exception:  # noqa: BLE001,S112
                         continue
         self._rebuild_scores()
 
@@ -112,7 +112,7 @@ class FeedbackLoop:
             cost=cost,
             latency_ms=latency_ms,
             error=error,
-            timestamp=datetime.utcnow().isoformat(),
+            timestamp=datetime.now(UTC).isoformat(),
         )
         self.outcomes.append(outcome)
         self._save_outcome(outcome)
@@ -151,7 +151,7 @@ class FeedbackLoop:
         if training:
             router.build_index(training)
 
-    def get_retraining_data(self, min_score: float = 0.0) -> List[dict]:
+    def get_retraining_data(self, min_score: float = 0.0) -> list[dict]:
         data = []
         for o in self.outcomes:
             if o.error:
@@ -167,7 +167,7 @@ class FeedbackLoop:
                 })
         return data
 
-    def get_model_rankings(self) -> Dict[str, Dict[str, Any]]:
+    def get_model_rankings(self) -> dict[str, dict[str, Any]]:
         rankings = {}
         for model, ms in self.model_scores.items():
             rankings[model] = {
@@ -180,7 +180,7 @@ class FeedbackLoop:
             }
         return rankings
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         total = len(self.outcomes)
         errors = sum(1 for o in self.outcomes if o.error)
         total_cost = sum(o.cost for o in self.outcomes)
@@ -219,6 +219,5 @@ class FeedbackLoop:
     def export_training_data(self, path: str, min_score: float = 0.6):
         data = self.get_retraining_data(min_score)
         with open(path, "w") as f:
-            for d in data:
-                f.write(json.dumps(d) + "\n")
+            f.writelines(json.dumps(d) + "\n" for d in data)
         return len(data)

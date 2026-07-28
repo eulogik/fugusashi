@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import time
-from typing import Dict, List
 
 from .interface import BaseRouter, RouterResult
 from .learned import LearnedRouter
@@ -31,14 +30,14 @@ class EnsembleRouter(BaseRouter):
         self.cost_router = CostRouter()
         self.fallback_router = FallbackRouter()
 
-    def build_index(self, history: List[dict]):
+    def build_index(self, history: list[dict]):
         self.similarity_router.build_index(history)
 
     def route(
         self,
         prompt: str,
-        messages: List[Dict[str, str]],
-        available_models: Dict[str, dict],
+        messages: list[dict[str, str]],
+        available_models: dict[str, dict],
         threshold: float = 0.0,
     ) -> RouterResult:
         effective_threshold = threshold or self.confidence_threshold

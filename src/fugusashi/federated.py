@@ -4,7 +4,7 @@ import json
 import os
 import time
 from dataclasses import dataclass, field
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import numpy as np
 
@@ -18,14 +18,14 @@ class LocalUpdate:
     gradient: np.ndarray
     n_samples: int
     timestamp: float
-    metrics: Dict[str, float] = field(default_factory=dict)
+    metrics: dict[str, float] = field(default_factory=dict)
 
 
 @dataclass
 class FederatedRound:
     round_id: int
     global_weights: np.ndarray
-    participating_clients: List[str]
+    participating_clients: list[str]
     aggregated_gradient: np.ndarray
     timestamp: float
 
@@ -48,11 +48,11 @@ class FederatedRouter:
 
         self.global_weights = np.zeros(self.n_params)
         self.current_round = 0
-        self._pending_updates: List[LocalUpdate] = []
-        self._round_history: List[FederatedRound] = []
-        self._client_registry: Dict[str, Dict[str, Any]] = {}
+        self._pending_updates: list[LocalUpdate] = []
+        self._round_history: list[FederatedRound] = []
+        self._client_registry: dict[str, dict[str, Any]] = {}
 
-    def register_client(self, client_id: str, metadata: Optional[Dict[str, Any]] = None):
+    def register_client(self, client_id: str, metadata: dict[str, Any] | None = None):
         self._client_registry[client_id] = {
             "registered_at": time.time(),
             "n_updates": 0,
@@ -74,7 +74,7 @@ class FederatedRouter:
         client_id: str,
         local_weights: np.ndarray,
         n_samples: int,
-        metrics: Optional[Dict[str, float]] = None,
+        metrics: dict[str, float] | None = None,
     ):
         if client_id not in self._client_registry:
             self.register_client(client_id)
@@ -99,10 +99,10 @@ class FederatedRouter:
         return {"status": "accepted", "pending_updates": len(self._pending_updates)}
 
     def should_aggregate(self) -> bool:
-        unique_clients = len(set(u.client_id for u in self._pending_updates))
+        unique_clients = len({u.client_id for u in self._pending_updates})
         return unique_clients >= self.min_clients
 
-    def aggregate(self) -> Optional[FederatedRound]:
+    def aggregate(self) -> FederatedRound | None:
         if not self.should_aggregate():
             return None
 
@@ -119,7 +119,7 @@ class FederatedRouter:
         round_info = FederatedRound(
             round_id=self.current_round,
             global_weights=self.global_weights.copy(),
-            participating_clients=list(set(u.client_id for u in self._pending_updates)),
+            participating_clients=list({u.client_id for u in self._pending_updates}),
             aggregated_gradient=weighted_gradient,
             timestamp=time.time(),
         )
@@ -128,7 +128,7 @@ class FederatedRouter:
 
         return round_info
 
-    def get_client_stats(self) -> Dict[str, Any]:
+    def get_client_stats(self) -> dict[str, Any]:
         return {
             "n_clients": len(self._client_registry),
             "current_round": self.current_round,
@@ -142,7 +142,7 @@ class FederatedRouter:
             },
         }
 
-    def save(self, path: Optional[str] = None):
+    def save(self, path: str | None = None):
         if path is None:
             path = os.path.join(self.data_dir, "federated_state.json")
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -162,7 +162,7 @@ class FederatedRouter:
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
 
-    def load(self, path: Optional[str] = None):
+    def load(self, path: str | None = None):
         if path is None:
             path = os.path.join(self.data_dir, "federated_state.json")
         if not os.path.exists(path):
@@ -174,13 +174,13 @@ class FederatedRouter:
 
 
 class RoutingExplainer:
-    def __init__(self, model_names: Optional[List[str]] = None):
+    def __init__(self, model_names: list[str] | None = None):
         if model_names is None:
             model_names = [n.split("/")[-1].split(":")[0] for n in WORKER_MODELS.values()]
         self.model_names = model_names
         self._capability_map = self._build_capability_map()
 
-    def _build_capability_map(self) -> Dict[str, List[str]]:
+    def _build_capability_map(self) -> dict[str, list[str]]:
         return {
             "gpt-oss-120b": ["complex reasoning", "code generation", "long context"],
             "nemotron-3-ultra-550b-a55b": ["code generation", "math", "reasoning"],
@@ -189,7 +189,7 @@ class RoutingExplainer:
             "lfm-2.5-1.2b-instruct": ["fast responses", "simple tasks", "low latency"],
         }
 
-    def explain(self, prompt: str, decision: RouteDecision, scores: Dict[str, float]) -> str:
+    def explain(self, prompt: str, decision: RouteDecision, scores: dict[str, float]) -> str:
         chosen_short = decision.model.split("/")[-1].split(":")[0]
         capabilities = self._capability_map.get(chosen_short, ["general tasks"])
 
@@ -198,8 +198,8 @@ class RoutingExplainer:
         lines = [
             f"**Decision:** Route to `{chosen_short}` (confidence: {decision.confidence:.1%})",
             "",
-            f"**Why:** This prompt involves {prompt_features}. "
-            f"`{chosen_short}` is best suited for {capabilities[0]}.",
+            (f"**Why:** This prompt involves {prompt_features}. "
+             f"`{chosen_short}` is best suited for {capabilities[0]}."),
             "",
             "**Alternatives considered:**",
         ]

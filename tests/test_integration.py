@@ -8,7 +8,7 @@ from fugusashi.tracker import TransparencyTracker
 
 def _router(**kw):
     """Create an EnsembleRouter with learned router disabled for test isolation."""
-    defaults = dict(learned_router_enabled=False, model_dir=tempfile.mkdtemp())
+    defaults = {"learned_router_enabled": False, "model_dir": tempfile.mkdtemp()}
     defaults.update(kw)
     return EnsembleRouter(**defaults)
 

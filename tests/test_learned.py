@@ -5,13 +5,15 @@ import os
 import tempfile
 from unittest.mock import MagicMock, patch
 
-import pytest
 import torch
 
-from fugusashi.router.interface import BaseRouter, RouterResult
 from fugusashi.router.learned import LearnedRouter
-from fugusashi.training import TrainingConfig, TrainingResult, expand_dataset, load_dataset
-
+from fugusashi.training import (
+    TrainingConfig,
+    TrainingResult,
+    expand_dataset,
+    load_dataset,
+)
 
 # ---------------------------------------------------------------------------
 # Dataset & config tests

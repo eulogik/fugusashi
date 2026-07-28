@@ -2,15 +2,15 @@ from __future__ import annotations
 
 import json
 import uuid
-from datetime import datetime
-from typing import Any, Dict, List, Optional
+from datetime import UTC, datetime
+from typing import Any
 
 import numpy as np
 from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 
-from ..tracker import RoutingDecision
 from ..coordinator import Task
+from ..tracker import RoutingDecision
 
 
 class ChatMessage(BaseModel):
@@ -26,11 +26,11 @@ class TrainingExample(BaseModel):
 
 class ChatCompletionRequest(BaseModel):
     model: str = "auto"
-    messages: List[ChatMessage]
+    messages: list[ChatMessage]
     temperature: float = 0.7
-    max_tokens: Optional[int] = None
+    max_tokens: int | None = None
     stream: bool = False
-    user: Optional[str] = None
+    user: str | None = None
 
 
 class ChatCompletionResponse(BaseModel):
@@ -38,9 +38,9 @@ class ChatCompletionResponse(BaseModel):
     object: str = "chat.completion"
     created: int
     model: str
-    choices: List[Dict[str, Any]]
-    usage: Dict[str, Any]
-    routing_decision: Optional[Dict[str, Any]] = None
+    choices: list[dict[str, Any]]
+    usage: dict[str, Any]
+    routing_decision: dict[str, Any] | None = None
 
 
 class ModelInfo(BaseModel):
@@ -49,7 +49,7 @@ class ModelInfo(BaseModel):
     created: int
     owned_by: str = "fugusashi"
     description: str = ""
-    capabilities: List[str] = []
+    capabilities: list[str] = []
     cost_per_input_token: float = 0.0
     cost_per_output_token: float = 0.0
 
@@ -68,7 +68,7 @@ def create_router(deps) -> APIRouter:
         for name, cfg in available.items():
             models.append(ModelInfo(
                 id=name,
-                created=int(datetime.utcnow().timestamp()),
+                created=int(datetime.now(UTC).timestamp()),
                 description=cfg.get("description", ""),
                 capabilities=cfg.get("capabilities", []),
                 cost_per_input_token=cfg.get("cost_per_input_token", 0.0),
@@ -95,7 +95,7 @@ def create_router(deps) -> APIRouter:
                 selected_model = coord_result.model
                 routing_result = RoutingDecision(
                     request_id=request_id,
-                    timestamp=datetime.utcnow().isoformat(),
+                    timestamp=datetime.now(UTC).isoformat(),
                     prompt_hash=str(hash(prompt)),
                     prompt_preview=prompt_preview,
                     routed_to=selected_model,
@@ -110,7 +110,7 @@ def create_router(deps) -> APIRouter:
                 selected_model = config.default_model
                 routing_result = RoutingDecision(
                     request_id=request_id,
-                    timestamp=datetime.utcnow().isoformat(),
+                    timestamp=datetime.now(UTC).isoformat(),
                     prompt_hash=str(hash(prompt)),
                     prompt_preview=prompt_preview,
                     routed_to=selected_model,
@@ -125,7 +125,7 @@ def create_router(deps) -> APIRouter:
             selected_model = body.model
             routing_result = RoutingDecision(
                 request_id=request_id,
-                timestamp=datetime.utcnow().isoformat(),
+                timestamp=datetime.now(UTC).isoformat(),
                 prompt_hash=str(hash(prompt)),
                 prompt_preview=prompt_preview,
                 routed_to=selected_model,
@@ -152,7 +152,7 @@ def create_router(deps) -> APIRouter:
                     orch_result = await orchestrator.orchestrate(prompt)
                     return ChatCompletionResponse(
                         request_id if False else f"fugu-{uuid.uuid4().hex[:12]}",
-                        created=int(datetime.utcnow().timestamp()),
+                        created=int(datetime.now(UTC).timestamp()),
                         model="orchestrator",
                         choices=[{"index": 0, "message": {"role": "assistant", "content": orch_result.final_response}, "finish_reason": "stop"}],
                         usage={"prompt_tokens": 0, "completion_tokens": 0, "total_tokens": 0},
@@ -169,7 +169,7 @@ def create_router(deps) -> APIRouter:
             selected_model = result.model
             routing_result = RoutingDecision(
                 request_id=request_id,
-                timestamp=datetime.utcnow().isoformat(),
+                timestamp=datetime.now(UTC).isoformat(),
                 prompt_hash=str(hash(prompt)),
                 prompt_preview=prompt_preview,
                 routed_to=selected_model,
@@ -214,7 +214,7 @@ def create_router(deps) -> APIRouter:
                     }})}\n\n"
 
                     yield "data: [DONE]\n\n"
-                except Exception as e:
+                except Exception as e:  # noqa: BLE001
                     yield f"data: {json.dumps({'error': str(e)})}\n\n"
 
                 tracker.log_model_call(
@@ -276,7 +276,7 @@ def create_router(deps) -> APIRouter:
 
                 tracker.finish_trace(request_id)
                 break
-            except Exception as e:
+            except Exception as e:  # noqa: BLE001
                 last_error = e
                 tracker.log_model_call(
                     request_id=request_id,
@@ -314,7 +314,7 @@ def create_router(deps) -> APIRouter:
 
         return ChatCompletionResponse(
             id=request_id,
-            created=int(datetime.utcnow().timestamp()),
+            created=int(datetime.now(UTC).timestamp()),
             model=model_to_try,
             choices=response_dict.get("choices", []),
             usage=sanitized_usage,
@@ -359,7 +359,7 @@ def create_router(deps) -> APIRouter:
         return trace
 
     @router.post("/v1/routing/training")
-    async def add_training_data(examples: List[TrainingExample]):
+    async def add_training_data(examples: list[TrainingExample]):
         router_engine = deps["router"]
         history = [
             {"prompt": ex.prompt, "model": ex.model, "score": ex.score}
@@ -600,20 +600,23 @@ def create_router(deps) -> APIRouter:
 
         config = deps["config"]
         data_dir = config.tier1.training_data_dir
-        import os
-        os.makedirs(data_dir, exist_ok=True)
-        path = os.path.join(data_dir, "training_data.jsonl")
-        with open(path, "a") as f:
-            for item in data:
-                f.write(json.dumps({
+        import asyncio
+
+        def _write():
+            import os
+            os.makedirs(data_dir, exist_ok=True)
+            path = os.path.join(data_dir, "training_data.jsonl")
+            with open(path, "a") as f:
+                f.writelines(json.dumps({
                     "prompt": item["prompt"],
                     "model": item.get("model", item.get("preferred_model", "")),
                     "preferred_model": item.get("model", item.get("preferred_model", "")),
                     "source": "api",
                     "category": item.get("category", "general"),
                     "score": item.get("score", 1.0),
-                }) + "\n")
+                }) + "\n" for item in data)
 
+        await asyncio.to_thread(_write)
         return {
             "status": "ok",
             "added": len(data),
@@ -628,20 +631,23 @@ def create_router(deps) -> APIRouter:
         config = deps["config"]
         model_dir = config.tier1.learned_router_model_dir
         data_dir = config.tier1.training_data_dir
+        import asyncio
 
-        import os
-        os.makedirs(data_dir, exist_ok=True)
-        path = os.path.join(data_dir, "training_data.jsonl")
-        with open(path, "a") as f:
-            for item in data:
-                f.write(json.dumps({
+        def _write():
+            import os
+            os.makedirs(data_dir, exist_ok=True)
+            path = os.path.join(data_dir, "training_data.jsonl")
+            with open(path, "a") as f:
+                f.writelines(json.dumps({
                     "prompt": item["prompt"],
                     "model": item.get("model", item.get("preferred_model", "")),
                     "preferred_model": item.get("model", item.get("preferred_model", "")),
                     "source": "api",
                     "category": item.get("category", "general"),
                     "score": item.get("score", 1.0),
-                }) + "\n")
+                }) + "\n" for item in data)
+
+        await asyncio.to_thread(_write)
 
         from ..training import train_modernbert
         try:
@@ -650,7 +656,7 @@ def create_router(deps) -> APIRouter:
             if router_engine and hasattr(router_engine, "learned_router"):
                 router_engine.learned_router._loaded = False
             return {"status": "ok", "result": result.to_dict()}
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             return {"status": "error", "message": str(e)}
 
     return router

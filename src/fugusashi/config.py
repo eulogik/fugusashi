@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from typing import List, Optional
 from pydantic import Field
 from pydantic_settings import BaseSettings, YamlConfigSettingsSource
 
@@ -9,12 +8,12 @@ class ModelConfig(BaseSettings):
     name: str
     provider: str = "openai"
     model: str
-    api_base: Optional[str] = None
-    api_key: Optional[str] = None
+    api_base: str | None = None
+    api_key: str | None = None
     cost_per_input_token: float = 0.0
     cost_per_output_token: float = 0.0
     max_tokens: int = 8192
-    capabilities: List[str] = Field(default_factory=lambda: ["chat"])
+    capabilities: list[str] = Field(default_factory=lambda: ["chat"])
     weight: float = 1.0
     rpm: int = 1000
     tpm: int = 100000
@@ -43,8 +42,8 @@ class Tier1Config(BaseSettings):
 
 class Tier2Config(BaseSettings):
     enabled: bool = False
-    planner_model: Optional[str] = None
-    synthesizer_model: Optional[str] = None
+    planner_model: str | None = None
+    synthesizer_model: str | None = None
     max_subtasks: int = 5
     auto_escalate: bool = True
     escalation_threshold: float = 0.3
@@ -62,9 +61,9 @@ class ObservabilityConfig(BaseSettings):
 class AppConfig(BaseSettings):
     host: str = "0.0.0.0"
     port: int = 6060
-    api_key: Optional[str] = None
+    api_key: str | None = None
     default_model: str = "gpt-4o-mini"
-    models: List[ModelConfig] = Field(default_factory=list)
+    models: list[ModelConfig] = Field(default_factory=list)
     tier1: Tier1Config = Tier1Config()
     tier2: Tier2Config = Tier2Config()
     observability: ObservabilityConfig = ObservabilityConfig()

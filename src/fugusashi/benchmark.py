@@ -3,7 +3,6 @@ from __future__ import annotations
 import json
 import time
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional
 
 import click
 
@@ -32,8 +31,8 @@ class BenchmarkResult:
 
 @dataclass
 class BenchmarkReport:
-    results: List[BenchmarkResult] = field(default_factory=list)
-    router: Optional[EnsembleRouter] = None
+    results: list[BenchmarkResult] = field(default_factory=list)
+    router: EnsembleRouter | None = None
 
     def add(self, r: BenchmarkResult):
         self.results.append(r)
@@ -61,21 +60,21 @@ class BenchmarkReport:
         return sum(r.routing_latency_ms for r in self.results) / len(self.results)
 
     @property
-    def strategy_distribution(self) -> Dict[str, int]:
+    def strategy_distribution(self) -> dict[str, int]:
         dist = {}
         for r in self.results:
             dist[r.strategy] = dist.get(r.strategy, 0) + 1
         return dist
 
     @property
-    def model_distribution(self) -> Dict[str, int]:
+    def model_distribution(self) -> dict[str, int]:
         dist = {}
         for r in self.results:
             dist[r.chosen_model] = dist.get(r.chosen_model, 0) + 1
         return dist
 
     @property
-    def by_category(self) -> Dict[str, Dict[str, float]]:
+    def by_category(self) -> dict[str, dict[str, float]]:
         cats = {}
         for r in self.results:
             cat = r.sample.category
@@ -179,8 +178,8 @@ DEFAULT_DATASET = [
 
 def run_benchmark(
     router: EnsembleRouter,
-    dataset: List[BenchmarkSample],
-    models_config: Dict[str, dict],
+    dataset: list[BenchmarkSample],
+    models_config: dict[str, dict],
     confidence_threshold: float = 0.4,
     verbose: bool = False,
 ) -> BenchmarkReport:

@@ -14,7 +14,7 @@ from __future__ import annotations
 import json
 import os
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 
 @dataclass
@@ -24,7 +24,7 @@ class Preference:
     source: str = "community"
     category: str = "general"
     score: float = 1.0
-    metadata: Dict[str, Any] = None
+    metadata: dict[str, Any] = None
 
     def __post_init__(self):
         if self.metadata is None:
@@ -34,7 +34,7 @@ class Preference:
 class PreferenceDataset:
     def __init__(self, data_dir: str = ".fugusashi_data"):
         self.data_dir = data_dir
-        self.preferences: List[Preference] = []
+        self.preferences: list[Preference] = []
         self._ensure_dir()
 
     def _ensure_dir(self):
@@ -42,7 +42,7 @@ class PreferenceDataset:
 
     def add(self, prompt: str, model: str, source: str = "community",
             category: str = "general", score: float = 1.0,
-            metadata: Optional[Dict[str, Any]] = None):
+            metadata: dict[str, Any] | None = None):
         self.preferences.append(Preference(
             prompt=prompt,
             preferred_model=model,
@@ -52,22 +52,21 @@ class PreferenceDataset:
             metadata=metadata or {},
         ))
 
-    def save(self, path: Optional[str] = None):
+    def save(self, path: str | None = None):
         if path is None:
             path = os.path.join(self.data_dir, "preferences.jsonl")
         with open(path, "w") as f:
-            for p in self.preferences:
-                f.write(json.dumps({
+            f.writelines(json.dumps({
                     "prompt": p.prompt,
                     "preferred_model": p.preferred_model,
                     "source": p.source,
                     "category": p.category,
                     "score": p.score,
                     "metadata": p.metadata,
-                }) + "\n")
+                }) + "\n" for p in self.preferences)
         return len(self.preferences)
 
-    def load(self, path: Optional[str] = None):
+    def load(self, path: str | None = None):
         if path is None:
             path = os.path.join(self.data_dir, "preferences.jsonl")
         if not os.path.exists(path):
@@ -80,7 +79,7 @@ class PreferenceDataset:
                 count += 1
         return count
 
-    def export_for_training(self, path: Optional[str] = None) -> List[Dict[str, Any]]:
+    def export_for_training(self, path: str | None = None) -> list[dict[str, Any]]:
         if path is None:
             path = os.path.join(self.data_dir, "training_data.jsonl")
         data = []
@@ -96,7 +95,7 @@ class PreferenceDataset:
                 f.write(json.dumps(entry) + "\n")
         return data
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         sources = {}
         categories = {}
         models = {}

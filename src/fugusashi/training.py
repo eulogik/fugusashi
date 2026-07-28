@@ -11,10 +11,9 @@ import json
 import os
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import numpy as np
-
 
 BACKBONE = "answerdotai/ModernBERT-base"
 
@@ -42,7 +41,7 @@ class TrainingResult:
     n_classes: int
     n_train: int
     n_test: int
-    per_class_accuracy: Dict[str, float]
+    per_class_accuracy: dict[str, float]
     backbone: str
 
     def to_dict(self) -> dict:
@@ -61,7 +60,7 @@ class TrainingResult:
         }
 
 
-def load_dataset(data_dir: str = ".fugusashi_data") -> List[Dict[str, Any]]:
+def load_dataset(data_dir: str = ".fugusashi_data") -> list[dict[str, Any]]:
     """Load all preference data from JSONL files, including feedback outcomes."""
     samples = []
     for fname in ["preferences.jsonl", "training_data.jsonl", "expanded_preferences.jsonl", "outcomes.jsonl"]:
@@ -102,20 +101,20 @@ def load_dataset(data_dir: str = ".fugusashi_data") -> List[Dict[str, Any]]:
 def train_modernbert(
     model_dir: str = ".fugusashi_data/router_model",
     data_dir: str = ".fugusashi_data",
-    config: Optional[TrainingConfig] = None,
+    config: TrainingConfig | None = None,
 ) -> TrainingResult:
     """Fine-tune a ModernBERT sequence classifier on (prompt, model) pairs."""
     if config is None:
         config = TrainingConfig()
 
+    import torch
+    from torch.utils.data import DataLoader, Dataset
     from transformers import (
         AutoConfig,
         AutoModelForSequenceClassification,
         AutoTokenizer,
         get_scheduler,
     )
-    import torch
-    from torch.utils.data import DataLoader, Dataset
 
     samples = load_dataset(data_dir)
     if not samples:
@@ -124,7 +123,7 @@ def train_modernbert(
             "Run 'fugusashi expand-data' first."
         )
 
-    model_names = sorted(set(s.get("model", s.get("preferred_model", "")) for s in samples))
+    model_names = sorted({s.get("model", s.get("preferred_model", "")) for s in samples})
     model_to_idx = {m: i for i, m in enumerate(model_names)}
     n_classes = len(model_names)
 
@@ -237,8 +236,8 @@ def train_modernbert(
         model.eval()
         correct, total = 0, 0
         top3_correct = 0
-        per_class_correct: Dict[int, int] = {}
-        per_class_total: Dict[int, int] = {}
+        per_class_correct: dict[int, int] = {}
+        per_class_total: dict[int, int] = {}
         with torch.no_grad():
             for batch in test_loader:
                 input_ids = batch["input_ids"].to(device)
@@ -350,7 +349,7 @@ def train_modernbert(
 
 def expand_dataset(data_dir: str = ".fugusashi_data") -> int:
     """Generate expanded training data from seed data + synthetic variants."""
-    from .dataset import seed_default_dataset, PreferenceDataset
+    from .dataset import PreferenceDataset, seed_default_dataset
 
     ds = PreferenceDataset(data_dir=data_dir)
     seed_default_dataset(ds)

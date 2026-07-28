@@ -4,25 +4,25 @@ import json
 import os
 import time
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import numpy as np
 
-from .openrouter import OpenRouterClient, WORKER_MODELS
+from .openrouter import WORKER_MODELS, OpenRouterClient
 
 
 @dataclass
 class Task:
     prompt: str
     category: str = "general"
-    embedding: Optional[np.ndarray] = None
+    embedding: np.ndarray | None = None
 
 
 @dataclass
 class RouteDecision:
     model: str
     confidence: float
-    scores: Dict[str, float]
+    scores: dict[str, float]
     strategy: str
     latency_ms: float
 
@@ -46,7 +46,7 @@ class PromptEmbedder:
 class RateLimiter:
     def __init__(self, requests_per_minute: int = 30):
         self.rpm = requests_per_minute
-        self._timestamps: List[float] = []
+        self._timestamps: list[float] = []
 
     def wait_if_needed(self):
         now = time.time()
@@ -62,7 +62,7 @@ class RateLimiter:
 class CMAESRouter:
     def __init__(
         self,
-        model_names: Optional[List[str]] = None,
+        model_names: list[str] | None = None,
         embed_dim: int = 384,
         population_size: int = 16,
         n_generations: int = 30,
@@ -89,10 +89,10 @@ class CMAESRouter:
         self.mean = np.zeros(self.n_params)
         self.sigma = sigma_init
         self.best_fitness = -float("inf")
-        self.best_params: Optional[np.ndarray] = None
+        self.best_params: np.ndarray | None = None
         self._generation = 0
-        self._history: List[Dict[str, Any]] = []
-        self._model_failures: Dict[str, int] = {}
+        self._history: list[dict[str, Any]] = []
+        self._model_failures: dict[str, int] = {}
 
     def _predict(self, params: np.ndarray, embedding: np.ndarray) -> np.ndarray:
         weights = params[:self.embed_dim]
@@ -105,7 +105,7 @@ class CMAESRouter:
         exp = np.exp(logits - np.max(logits))
         return exp / exp.sum()
 
-    def _sample_population(self) -> List[np.ndarray]:
+    def _sample_population(self) -> list[np.ndarray]:
         return [
             self.mean + self.sigma * np.random.randn(self.n_params)
             for _ in range(self.population_size)
@@ -152,13 +152,13 @@ class CMAESRouter:
             self._model_failures[chosen_model] = 0
 
             return quality * 0.5 + efficiency * 0.2 + confidence * 0.3
-        except Exception as e:
+        except Exception as e:  # noqa: BLE001
             error_str = str(e)[:50]
             if "429" in error_str:
                 self._model_failures[chosen_model] = self._model_failures.get(chosen_model, 0) + 1
             return 0.05
 
-    def evolve(self, tasks: List[Task], fast: bool = False) -> None:
+    def evolve(self, tasks: list[Task], fast: bool = False) -> None:
         if not tasks:
             return
 
@@ -242,7 +242,7 @@ class CMAESRouter:
             latency_ms=round(elapsed, 2),
         )
 
-    def get_stats(self) -> Dict[str, Any]:
+    def get_stats(self) -> dict[str, Any]:
         return {
             "generation": self._generation,
             "best_fitness": round(self.best_fitness, 4) if self.best_fitness > -float("inf") else 0.0,
@@ -253,7 +253,7 @@ class CMAESRouter:
             "model_failures": dict(self._model_failures),
         }
 
-    def save(self, path: Optional[str] = None):
+    def save(self, path: str | None = None):
         if path is None:
             path = os.path.join(self.data_dir, "cmaes_params.json")
         os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -268,7 +268,7 @@ class CMAESRouter:
         with open(path, "w") as f:
             json.dump(data, f, indent=2)
 
-    def load(self, path: Optional[str] = None):
+    def load(self, path: str | None = None):
         if path is None:
             path = os.path.join(self.data_dir, "cmaes_params.json")
         if not os.path.exists(path):

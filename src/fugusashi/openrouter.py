@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import os
 import time
-from typing import Any, Dict, List, Optional
+from typing import Any
 
 import httpx
 
@@ -10,7 +10,7 @@ import httpx
 class OpenRouterClient:
     BASE_URL = "https://openrouter.ai/api/v1"
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: str | None = None):
         self.api_key = api_key or os.environ.get("OPENROUTER_API_KEY", "")
         self._client = httpx.Client(
             headers={
@@ -24,13 +24,13 @@ class OpenRouterClient:
     def chat_completion(
         self,
         model: str,
-        messages: List[Dict[str, str]],
+        messages: list[dict[str, str]],
         temperature: float = 0.7,
-        max_tokens: Optional[int] = None,
+        max_tokens: int | None = None,
         stream: bool = False,
         retries: int = 3,
-    ) -> Dict[str, Any]:
-        payload: Dict[str, Any] = {
+    ) -> dict[str, Any]:
+        payload: dict[str, Any] = {
             "model": model,
             "messages": messages,
             "temperature": temperature,
@@ -56,12 +56,12 @@ class OpenRouterClient:
                     continue
                 raise
 
-    def get_models(self) -> List[Dict[str, Any]]:
+    def get_models(self) -> list[dict[str, Any]]:
         resp = self._client.get(f"{self.BASE_URL}/models")
         resp.raise_for_status()
         return resp.json().get("data", [])
 
-    def get_free_models(self) -> List[Dict[str, Any]]:
+    def get_free_models(self) -> list[dict[str, Any]]:
         models = self.get_models()
         free = []
         for m in models:

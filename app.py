@@ -1,15 +1,13 @@
-import gradio as gr
-import numpy as np
-import sys
 import os
-import json
-import time
+import sys
+
+import gradio as gr
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "src"))
 
 from fugusashi.coordinator import CMAESRouter, Task
 from fugusashi.dataset import PreferenceDataset, seed_default_dataset
-from fugusashi.federated import FederatedRouter, RoutingExplainer
+from fugusashi.federated import RoutingExplainer
 
 # Initialize components
 router = CMAESRouter(population_size=16, n_generations=30)
