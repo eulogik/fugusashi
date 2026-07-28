@@ -34,7 +34,20 @@
 
 ---
 
-![Architecture](fig1_architecture.png)
+![Architecture Diagram](paper/fig1_architecture.png)
+
+---
+
+## Benchmark Results
+
+| Method | Accuracy | vs. Cost-Only | Latency |
+|--------|----------|---------------|---------|
+| Cost-Only (baseline) | 36.7% | 1.0× | <1ms |
+| CMA-ES Only | 70.0% | 1.9× | 4ms |
+| **ModernBERT Learned** | **83.3%** | **2.3×** | 83ms |
+| Federated (3 clients) | 85.0% | 2.3× | — |
+
+![Benchmark Chart](paper/fig2_benchmark_results.png)
 
 ---
 
