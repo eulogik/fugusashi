@@ -4,7 +4,7 @@
 [![Python](https://img.shields.io/badge/python-3.12+-blue.svg?logo=python&logoColor=white)](https://python.org)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](LICENSE)
 [![GitHub stars](https://img.shields.io/github/stars/eulogik/fugusashi?style=social)](https://github.com/eulogik/fugusashi/stargazers)
-[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%20HuggingFace-ef4444.svg)](https://huggingface.co/eulogik/fugusashi-router)
+[![HuggingFace](https://img.shields.io/badge/%F0%9F%A4%20HuggingFace-ef4444.svg)](https://huggingface.co/eulogik/fugusashi-v1.3)
 [![Docs](https://img.shields.io/badge/docs-eulogik.github.io-red.svg)](https://eulogik.github.io/fugusashi/)
 [![Paper](https://img.shields.io/badge/arXiv-paper-B31B1B.svg)](https://github.com/eulogik/fugusashi/blob/main/paper/main.tex)
 [![Website](https://img.shields.io/badge/website-eulogik.com-ef4444.svg)](https://eulogik.com)
@@ -17,13 +17,24 @@
 
 ### Fugu Sashi. Served Free.
 
-*Fugusashi* (Japanese: 不縛 — "unbound, unrestrained") is an intelligent model router and multi-agent orchestrator. Named after *Fugu Sashi* — the famous Japanese pufferfish delicacy — because this router serves up the world's best AI models without the poison of vendor lock-in or the pricing of Sakana Fugu. It automatically picks the best model for each prompt, learns from every request via a CMA-ES coordinator inspired by Sakana's TRINITY paper, and runs entirely on your infrastructure.
+*Fugusashi* (Japanese: 不縛 — "unbound, unrestrained") is an intelligent model orchestration engine and multi-agent orchestrator. Named after *Fugu Sashi* — the famous Japanese pufferfish delicacy — because this router serves up the world's best AI models without the poison of vendor lock-in or the pricing of Sakana Fugu. It automatically picks the best model for each prompt, learns from every request via a CMA-ES coordinator inspired by Sakana's TRINITY paper, and runs entirely on your infrastructure.
 
 **Research contributions:** (1) **Federated routing learning** — multiple organizations collaboratively improve routing without sharing data; (2) **Human-interpretable routing** — every decision comes with a natural language explanation; (3) **Continuous CMA-ES adaptation** — routing weights evolve from outcomes.
 
-**Like Sakana Fugu. But Free. [Live Demo](https://huggingface.co/spaces/eulogik/fugusashi) · [Docs](https://eulogik.github.io/fugusashi/) · [PyPI](https://pypi.org/project/fugusashi/) · [GitHub](https://github.com/eulogik/fugusashi)**
+**Like Sakana Fugu. But Free.** 🐡
 
-</div>
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-ef4444?style=flat-square&logo=huggingface)](https://huggingface.co/spaces/eulogik/fugusashi)
+[![Docs](https://img.shields.io/badge/Docs-eulogik.github.io-red?style=flat-square)](https://eulogik.github.io/fugusashi/)
+[![PyPI](https://img.shields.io/pypi/v/fugusashi?color=ef4444&label=pypi&logo=pypi&logoColor=white)](https://pypi.org/project/fugusashi/)
+[![GitHub Stars](https://img.shields.io/github/stars/eulogik/fugusashi?style=social)](https://github.com/eulogik/fugusashi/stargazers)
+
+*Intelligent model dispatch engine using ModernBERT, CMA-ES evolution, and federated learning — with human-readable explanations and zero cost.*
+
+**[Live Demo](https://huggingface.co/spaces/eulogik/fugusashi) · [Docs](https://eulogik.github.io/fugusashi/) · [PyPI](https://pypi.org/project/fugusashi/) · [GitHub](https://github.com/eulogik/fugusashi) · [HF Model v1.3.0](https://huggingface.co/eulogik/fugusashi-v1.3)**
+
+---
+
+![Architecture](fig1_architecture.png)
 
 ---
 
@@ -393,7 +404,7 @@ The paper introduces three contributions:
 | 🌐 Website | [eulogik.com](https://eulogik.com) |
 | 💻 GitHub | [github.com/eulogik/fugusashi](https://github.com/eulogik/fugusashi) |
 | 📦 PyPI | [pypi.org/project/fugusashi](https://pypi.org/project/fugusashi/) |
-| 🤗 HF Model | [huggingface.co/eulogik/fugusashi-router](https://huggingface.co/eulogik/fugusashi-router) |
+| 🤗 HF Model | [huggingface.co/eulogik/fugusashi-v1.3](https://huggingface.co/eulogik/fugusashi-v1.3) |
 | 📊 HF Dataset | [huggingface.co/datasets/eulogik/fugusashi-preferences](https://huggingface.co/datasets/eulogik/fugusashi-preferences) |
 | 🚀 HF Space | [huggingface.co/spaces/eulogik/fugusashi](https://huggingface.co/spaces/eulogik/fugusashi) |
 | 📖 Docs | [eulogik.github.io/fugusashi](https://eulogik.github.io/fugusashi/) |
@@ -412,6 +423,6 @@ MIT — use it however you want.
 
 **Built with ❤️ by [eulogik](https://eulogik.com)**
 
-**[⭐ Star on GitHub](https://github.com/eulogik/fugusashi) · [🤗 HuggingFace](https://huggingface.co/eulogik/fugusashi-router) · [🐦 X/Twitter](https://x.com/eulogik) · [📦 Docker](https://github.com/orgs/eulogik/packages/container/fugusashi)**
+**[⭐ Star on GitHub](https://github.com/eulogik/fugusashi) · [🤗 HuggingFace](https://huggingface.co/eulogik/fugusashi-v1.3) · [🐦 X/Twitter](https://x.com/eulogik) · [📦 Docker](https://github.com/orgs/eulogik/packages/container/fugusashi)**
 
 </div>
