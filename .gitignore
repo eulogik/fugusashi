@@ -8,4 +8,8 @@ build/
 .env
 .fugusashi_data/
 .DS_Store
-.fugusashi_data/
+
+# HuggingFace model weights (stored on HF, too large for GitHub)
+hf-models/**/model.safetensors
+hf-models/**/.git/
+hf-models/**/.gitattributes
