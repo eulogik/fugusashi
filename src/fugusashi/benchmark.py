@@ -140,39 +140,42 @@ class BenchmarkReport:
 
 
 DEFAULT_DATASET = [
-    # --- code → gpt-oss-120b ---
-    BenchmarkSample(prompt="Write a Python function to sort a list", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Implement merge sort in Java", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a REST API endpoint in FastAPI", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Debug this JavaScript error: 'undefined is not a function'", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a recursive Fibonacci function", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Create a React component for a todo list", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a Dockerfile for a Node.js app", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a SQL query to join three tables", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Write a regex for email validation", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    BenchmarkSample(prompt="Explain recursion with examples in Python", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
-    # --- explanation / medium → hermes-3-405b ---
-    BenchmarkSample(prompt="How does the event loop work in Node.js?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is blockchain technology?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="Explain the CAP theorem in distributed systems", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="How does OAuth2 authentication work?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is a microservice architecture?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="Explain how containerization differs from virtualization", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="How does a compiler translate source code?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is CRISPR gene editing technology?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="Explain how neural networks learn from data", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is quantum computing and why does it matter?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
-    # --- factual / simple → lfm-2.5-1.2b ---
-    BenchmarkSample(prompt="What is the capital of France?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is the capital of Japan?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is the meaning of life?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="general", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is the Pythagorean theorem?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is photosynthesis?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="Who invented the telephone?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is the speed of light?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="What is the tallest mountain in the world?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="Who painted the Mona Lisa?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
-    BenchmarkSample(prompt="Tell me a joke", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="creative", ideal_cost=0.0),
+    # --- code -> gpt-oss-120b ---
+    BenchmarkSample(prompt="Write a Python function that checks if a string is a palindrome", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Create a JavaScript function to debounce user input", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a SQL query to find duplicate email addresses", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Build a bash script that backs up a PostgreSQL database", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a Python function to flatten a nested dictionary", expected_model="openai/gpt-oss-120b:free", category="code", ideal_cost=0.0),
+    # --- mathematical reasoning -> gpt-oss-120b ---
+    BenchmarkSample(prompt="Solve the equation 3x + 7 = 22 and show your work", expected_model="openai/gpt-oss-120b:free", category="mathematical", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is the derivative of f(x) = x^3 + 2x?", expected_model="openai/gpt-oss-120b:free", category="mathematical", ideal_cost=0.0),
+    BenchmarkSample(prompt="Compute the sum of the first 50 prime numbers", expected_model="openai/gpt-oss-120b:free", category="mathematical", ideal_cost=0.0),
+    BenchmarkSample(prompt="Explain how to calculate the area under a curve", expected_model="openai/gpt-oss-120b:free", category="mathematical", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a proof that the square root of 2 is irrational", expected_model="openai/gpt-oss-120b:free", category="mathematical", ideal_cost=0.0),
+    # --- creative writing -> lfm-2.5-1.2b ---
+    BenchmarkSample(prompt="Write a haiku about the changing seasons", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="creative", ideal_cost=0.0),
+    BenchmarkSample(prompt="Compose a short story about a time-traveling librarian", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="creative", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a product tagline for an eco-friendly water bottle", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="creative", ideal_cost=0.0),
+    BenchmarkSample(prompt="Create a dialogue between the Moon and the Sun", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="creative", ideal_cost=0.0),
+    BenchmarkSample(prompt="Write a limerick about a lazy AI assistant", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="creative", ideal_cost=0.0),
+    # --- factual QA -> lfm-2.5-1.2b ---
+    BenchmarkSample(prompt="What is the capital of Spain?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="Who discovered penicillin?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is the chemical symbol for table salt?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="How many continents are there?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    BenchmarkSample(prompt="What year was the Eiffel Tower completed?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="factual", ideal_cost=0.0),
+    # --- explanation -> hermes-3-405b ---
+    BenchmarkSample(prompt="Explain how blockchain achieves consensus without a central authority", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="How does a hash function work and why does it matter for cryptography?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="Explain the difference between symmetric and asymmetric encryption", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="What is the Observer pattern in software design?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    BenchmarkSample(prompt="How does DNS resolve a domain name to an IP address?", expected_model="meta-llama/hermes-3-405b:free", category="explanation", ideal_cost=0.0),
+    # --- general -> lfm-2.5-1.2b ---
+    BenchmarkSample(prompt="Tell me an interesting fact about octopuses", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="general", ideal_cost=0.0),
+    BenchmarkSample(prompt="Suggest some names for a pet cat", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="general", ideal_cost=0.0),
+    BenchmarkSample(prompt="Give me a recipe for a quick vegetarian dinner", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="general", ideal_cost=0.0),
+    BenchmarkSample(prompt="What are some good habits for staying productive?", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="general", ideal_cost=0.0),
+    BenchmarkSample(prompt="Recommend a book for someone who loves mysteries", expected_model="liquid/lfm-2.5-1.2b-instruct:free", category="general", ideal_cost=0.0),
 ]
 
 
@@ -286,7 +289,7 @@ def run_benchmark_cli(dataset_path=None, threshold=0.4, verbose=False, json_out=
                     ideal_cost=data.get("ideal_cost", 0.0),
                 ))
     else:
-        click.echo("Using default benchmark dataset (20 samples)")
+        click.echo("Using default benchmark dataset (30 samples, held-out)")
         samples = DEFAULT_DATASET
 
     if train:

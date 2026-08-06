@@ -28,6 +28,7 @@ class TrainingConfig:
     warmup_ratio: float = 0.1
     max_length: int = 96
     patience: int = 3
+    seed: int = 42
 
 
 @dataclass
@@ -147,6 +148,9 @@ def train_modernbert(
         )
 
     import random
+    random.seed(config.seed)
+    np.random.seed(config.seed)
+    torch.manual_seed(config.seed)
     combined = list(zip(prompts, labels, weights))
     random.shuffle(combined)
     prompts, labels, weights = zip(*combined)

@@ -30,7 +30,7 @@ datasets:
 
 ## What is This?
 
-CMA-ES evolved routing weights for the **Fugusashi** intelligent model router. A 385-dimensional weight vector that maps prompt embeddings to model selection — learned via Covariance Matrix Adaptation Evolution Strategy, the same approach used in Sakana AI's [TRINITY](https://arxiv.org/abs/2503.10018) paper.
+CMA-ES evolved routing weights for the **Fugusashi** intelligent model router. A 385-dimensional weight vector that maps prompt embeddings to model selection — learned via Covariance Matrix Adaptation Evolution Strategy, the same approach used in Sakana AI's [TRINITY](https://arxiv.org/abs/2512.04695) paper.
 
 **Like Sakana Fugu. But Free. And Yours.**
 

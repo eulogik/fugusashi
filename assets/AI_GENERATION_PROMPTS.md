@@ -11,7 +11,7 @@
 Professional tech announcement graphic for "Fugusashi v1.3.0" — open source LLM router.
 Clean dark theme (background #0d1117), accent cyan (#00d4ff) and magenta (#ff006e).
 Center: "Fugusashi" in modern geometric sans-serif (Inter/IBM Plex Sans), subtitle "Like Sakana Fugu. But Free."
-Below: 3 key metrics in pill cards with icons: "83.3% Accuracy" (target icon), "83ms CPU" (cpu icon), "$0 Cost" (dollar-slash icon).
+Below: 3 key metrics in pill cards with icons: "80.0% Accuracy" (target icon), "22ms CPU" (cpu icon), "$0 Cost" (dollar-slash icon).
 Bottom row: tech tags "ModernBERT • Federated • CMA-ES • MIT" in rounded rectangles.
 Style: GitHub/technical blog aesthetic, high contrast, crisp, publication-ready. 1200x675.
 ```
@@ -28,12 +28,12 @@ Clean horizontal bar chart for technical blog post.
 Title: "Routing Accuracy: Fugusashi vs Baselines"
 Dark background (#0d1117), white gridlines, cyan/magenta accent bars.
 Bars descending:
-• Federated (3 clients): 85% — BOLD CYAN
-• ModernBERT (1 pass): 80% — BOLD MAGENTA
-• CMA-ES (100 gen): 70% — muted blue
+• Federated (3 clients, preliminary): 85% — BOLD CYAN with asterisk footnote "*20 hand-curated prompts"
+• ModernBERT held-out (n=30): 80% — BOLD MAGENTA
+• ModernBERT test (n=45): 80% — magenta
 • Cost-only (cheapest): 36.7% — muted gray
 • Random: 33.3% — muted gray
-X-axis: 0-100%. Annotation arrow from 36.7% to 83.3%: "2.3× lift over cost-only" in orange.
+X-axis: 0-100%. Annotation arrow from 36.7% to 80.0%: "2.2× lift over cost-only" in orange.
 Professional, publication-ready, IEEE style. 1200x800.
 ```
 
@@ -91,8 +91,8 @@ Text: "FedAvg aggregates → global model improves for everyone."
 
 **Frame 4**:
 ```
-All three clients show "Accuracy: 85%" with shield "Privacy Preserved".
-Confetti/subtle celebration particles. Text: "85% routing accuracy. 3 clients. Zero data shared."
+All three clients show "Accuracy: 85%" with shield "Privacy Preserved" and small footnote "*preliminary: 20 hand-curated prompts".
+Confetti/subtle celebration particles. Text: "85% routing accuracy (preliminary). 3 clients. Zero data shared."
 Bottom: "Fugusashi — Federated Learning for LLM Routing"
 ```
 
@@ -115,7 +115,7 @@ LEFT PANEL (Cyan theme): "Offline Evolution (CMA-ES)"
 RIGHT PANEL (Magenta theme): "Online Inference (ModernBERT)"
 • Single ModernBERT-base (149M) forward pass
 • Input: prompt → Output: model class probabilities
-• Latency: 83ms CPU
+• Latency: 22ms CPU
 • Label: "Serves production traffic. Fast. Distilled from evolution."
 
 CENTER BRIDGE: "Knowledge Distillation" — arrow from Left weights → Right model training.
@@ -136,7 +136,7 @@ Vertical thumbnail for TikTok/Reels/Shorts.
 Split screen: LEFT (red tint) "Me paying $500/mo for GPT-4" — sad dev at laptop, money burning.
 RIGHT (green/cyan tint) "Me using Fugusashi" — happy dev, terminal showing "Routed to gpt-oss-120b (87%)", confetti.
 Center vertical text: "FREE FUGU 🍣🔪" in bold pufferfish emoji style.
-Bottom: "83% accuracy • 83ms • $0" in pill badges.
+Bottom: "80% accuracy • 22ms • $0" in pill badges.
 High contrast, emotional, click-worthy. 1080x1920.
 ```
 
@@ -153,7 +153,7 @@ Clean professional gradient: dark navy (#0a0e17) to slightly lighter (#111827).
 Center: "Fugusashi" in elegant serif (Playfair Display) or clean sans (Inter Bold).
 Subtitle: "The Open-Source LLM Router That Learns Your Workload"
 Three metric cards horizontal:
-[83.3% Accuracy] [83ms Latency] [MIT Licensed]
+[80.0% Accuracy] [22ms Latency] [MIT Licensed]
 Bottom: "ModernBERT • Federated Learning • CMA-ES Evolution"
 Subtle eulogik.com watermark bottom right.
 Corporate-tech aesthetic, trustworthy, executive-friendly. 1200x628.
@@ -186,7 +186,7 @@ Style: App icon aesthetic, memorable, distinctive.
 YouTube thumbnail for "Build Your Own Fugu in 15 Minutes".
 Split: LEFT "Sakana Fugu $30M" (red X, money burning), RIGHT "Fugusashi $0" (green check, terminal happy).
 Center large text: "15 MIN BUILD" in bold yellow/black.
-Bottom: "ModernBERT • 83ms • Free Models" in cyan pills.
+Bottom: "ModernBERT • 22ms • Free Models" in cyan pills.
 Face: excited dev pointing at terminal (optional).
 High CTR style: bright, contrast, readable at 10% size. 1280x720.
 ```

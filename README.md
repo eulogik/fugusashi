@@ -42,10 +42,14 @@
 
 | Method | Accuracy | vs. Cost-Only | Latency |
 |--------|----------|---------------|---------|
+| Random (baseline) | 33.3% | 0.9× | <1ms |
 | Cost-Only (baseline) | 36.7% | 1.0× | <1ms |
-| CMA-ES Only | 70.0% | 1.9× | 4ms |
-| **ModernBERT Learned** | **83.3%** | **2.3×** | 83ms |
-| Federated (3 clients) | 85.0% | 2.3× | — |
+| **ModernBERT Learned (held-out, n=30)** | **80.0%** | **2.2×** | 22ms |
+| Federated (3 clients)† | 85.0%† | 2.3× | — |
+
+† *Preliminary simulated evaluation on 20 hand-curated prompts — too small to publish as a benchmark.*
+
+*Learned router: 24/30 correct on held-out prompts, 80.0% test accuracy (36/45), macro F1 0.83. Fisher's exact test p = 1.4 × 10⁻³ vs cost-only. Wilson 95% CI [62.7%, 90.5%].*
 
 ![Benchmark Chart](paper/fig2_benchmark_results.png)
 
@@ -336,6 +340,8 @@ fugusashi benchmark -d my_data.jsonl     # Custom dataset
 | Code accuracy | 60% | **90%** |
 | Strategy | 100% cost | 60% cost / 40% similarity |
 | Routing latency | <1ms | ~18ms |
+
+*Note: measured on the default 20-sample benchmark set — preliminary results, not a published benchmark.*
 
 Custom dataset format (JSONL):
 ```jsonl

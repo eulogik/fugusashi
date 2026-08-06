@@ -37,7 +37,7 @@ tags:
   - on-device
   - cpu-inference
   - low-latency
-  - 83ms-inference
+  - 22ms-inference
   - 3-model-classes
   - gpt-oss
   - hermes
@@ -108,11 +108,11 @@ color: blue
 
 [![GitHub Stars](https://img.shields.io/github/stars/eulogik/fugusashi?style=flat-square&logo=github)](https://github.com/eulogik/fugusashi)
 [![PyPI Version](https://img.shields.io/pypi/v/fugusashi?style=flat-square&logo=pypi)](https://pypi.org/project/fugusashi/)
-[![HuggingFace](https://img.shields.io/badge/HuggingFace-Models-yellow?style=flat-square&logo=huggingface)](https://huggingface.co/eulogik/fugusashi-model)
+[![HuggingFace](https://img.shields.io/badge/HuggingFace-Models-yellow?style=flat-square&logo=huggingface)](https://huggingface.co/eulogik/fugusashi-v1.3)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg?style=flat-square)](LICENSE)
 [![ModernBERT](https://img.shields.io/badge/Built%20with-ModernBERT-blueviolet?style=flat-square)](https://huggingface.co/microsoft/modernbert-base)
-[![CPU Inference](https://img.shields.io/badge/CPU%20Inference-83ms-brightgreen?style=flat-square)]()
-[![83.3% Accuracy](https://img.shields.io/badge/Accuracy-83.3%25-red?style=flat-square)]()
+[![CPU Inference](https://img.shields.io/badge/CPU%20Inference-22ms-brightgreen?style=flat-square)](https://github.com/eulogik/fugusashi/blob/main/paper/main.tex)
+[![80.0% Accuracy](https://img.shields.io/badge/Accuracy-80.0%25-red?style=flat-square)](https://github.com/eulogik/fugusashi/blob/main/paper/main.tex)
 
 **The world's first open-source, federated-learning-powered intelligent model orchestration engine** — selects the best LLM for every prompt with human-readable explanations, zero cost, and full privacy.
 
@@ -124,14 +124,17 @@ color: blue
 
 | Metric | Value |
 |--------|-------|
-| **Intelligent Dispatch Accuracy** | **83.3%** (30 held-out prompts, 3 models) |
-| **vs. Cost-Only Baseline** | **2.3× improvement** (83.3% vs 36.7%) |
-| **Inference Latency** | 83ms per decision (CPU, no GPU) |
-| **Training Time** | 137 seconds on CPU (Apple M3 Pro) |
-| **Training Data** | 224 examples, 80/20 split |
-| **Federated Accuracy (3 clients)** | **85.0%** with differential privacy (ε=1.8) |
+| **Intelligent Dispatch Accuracy** | **80.0%** (24/30 held-out prompts, 3 models) |
+| **vs. Cost-Only Baseline** | **2.2× improvement** (80.0% vs 36.7%, Fisher's exact test p = 1.4 × 10⁻³) |
+| **Test Accuracy** | 80.0% (36/45, macro F1 0.83) |
+| **Inference Latency** | 22ms median, 38ms p95 (M3 Pro, CPU) |
+| **Training Time** | 163 seconds on CPU (Apple M3 Pro, 4 epochs) |
+| **Training Data** | 224 examples, 179/45 split, seed 42 |
+| Federated Accuracy (3 clients)† | 85.0%† with differential privacy (ε=1.8) |
 | **Federated Convergence** | 5 rounds to reach 80% of peak |
 | **Models Supported** | 3+ open models via OpenRouter |
+
+† *Preliminary evaluation on 20 hand-curated prompts — too small to publish as a benchmark.*
 | **Overhead (Single Decision)** | <4ms (excluding model inference) |
 | **License** | MIT (fully open-source) |
 
@@ -197,9 +200,9 @@ Traditional LLM routing uses **expensive 7B-parameter coordinator LLMs** (like S
 
 Fugusashi uses a **lightweight 149M-parameter ModernBERT classifier** that:
 - ✅ Runs on **CPU only** — no GPU needed
-- ✅ Makes decisions in **83ms** per prompt — real-time capable
-- ✅ Achieves **83.3% accuracy** — outperforms cost-only baselines by **2.3×**
-- ✅ Trained in **137 seconds** on a single CPU core
+- ✅ Makes decisions in **22ms** median per prompt — real-time capable
+- ✅ Achieves **80.0% held-out accuracy** — outperforms cost-only baselines by **2.2×**
+- ✅ Trained in **163 seconds** on a single CPU core
 - ✅ Uses only **224 training examples** — minimal data requirement
 - ✅ Is **100% open-source** and fully reproducible
 
@@ -216,8 +219,8 @@ Fugusashi uses a **lightweight 149M-parameter ModernBERT classifier** that:
 | **Batch Size** | 16 |
 | **Epochs** | 10 with early stopping |
 | **Hardware** | Apple M3 Pro, 18GB RAM, CPU only |
-| **Training Time** | 137 seconds |
-| **Per-Inference Latency** | 83ms (forward pass) |
+| **Training Time** | 163 seconds (4 epochs) |
+| **Per-Inference Latency** | 22ms median, 38ms p95 (forward pass) |
 
 ### Class Distribution
 
@@ -244,16 +247,15 @@ Fugusashi uses a **lightweight 149M-parameter ModernBERT classifier** that:
 ### Accuracy Comparison
 
 ```
-Random        ████░░░░░░░░░░░░░░░░░░  33.3%
-Cost-Only     █████░░░░░░░░░░░░░░░░░  36.7%  ← Baseline
-CMA-ES Only   ████████████████░░░░░░  70.0%
-Learned (Test)█████████████████░░░░░  80.0%
-Learned (Bench)██████████████████░░░░  83.3%  ← Best
-Federated (3) ██████████████████░░░░  85.0%
-Always-Best   ██████████████████████  100%  ← Oracle
+Random          ████░░░░░░░░░░░░░░░░░░  33.3%
+Cost-Only       █████░░░░░░░░░░░░░░░░░  36.7%  ← Baseline
+Learned (Test)  █████████████████░░░░░  80.0%
+Learned (Held-Out)█████████████████░░░░  80.0%  ← Best learned
+Federated (3)   ██████████████████░░░░  85.0%†
+Always-Best     ██████████████████████  100%  ← Oracle
 ```
 
-**Key Insight:** The learned ModernBERT classifier **more than doubles** the accuracy of the simple cost-only baseline (83.3% vs 36.7%, a **2.3× improvement**) while adding minimal latency overhead.
+**Key Insight:** The learned ModernBERT classifier **more than doubles** the accuracy of the simple cost-only baseline (80.0% vs 36.7% on held-out prompts, a **2.2× improvement**, Fisher's exact test p = 1.4 × 10⁻³) while adding minimal latency overhead.
 
 ---
 
@@ -275,9 +277,11 @@ Fugusashi enables **multiple organizations** to collaboratively improve the disp
 |---------|----------------------|----------------|-------------|------------|
 | 1 (standalone) | — | 70.0% | ∞ (no privacy) | 224 |
 | 2 | 8 | 78.0% | 2.1 | 1,800 |
-| 3 | **5** | **85.0%** | **1.8** | 2,400 |
+| 3 | **5** | 85.0% | **1.8** | 2,400 |
 | 5 | 3 | 88.0% | 1.5 | 3,600 |
 | 10 | 2 | 91.0% | 1.2 | 6,000 |
+
+*Preliminary: all federated results are evaluated on 20 hand-curated prompts.*
 
 ### Why Federated Routing Works
 
@@ -391,7 +395,7 @@ fugusashi serve --host 0.0.0.0 --port 8000
 | **Federated** | ✅ w/ privacy | ❌ | ❌ | ❌ |
 | **Explainability** | ✅ Full NL explanations | ❌ | ❌ | ❌ |
 | **Overridable** | ✅ User feedback loop | ❌ | ❌ | ❌ |
-| **CPU Inference** | ✅ 83ms | ❌ GPU required | ✅ | ✅ |
+| **CPU Inference** | ✅ 22ms median | ❌ GPU required | ✅ | ✅ |
 | **Model Classes** | 3+ (expandable) | Proprietary | 2 tiers | 16 strategies |
 | **Cost** | Free (MIT) | Proprietary pricing | Free | Free |
 
@@ -415,8 +419,8 @@ All results are fully reproducible:
 | Resource | Link |
 |----------|------|
 | **Source Code** | [github.com/eulogik/fugusashi](https://github.com/eulogik/fugusashi) |
-| **Trained Model Weights** | [huggingface.co/eulogik/fugusashi-model](https://huggingface.co/eulogik/fugusashi-model) |
-| **Preference Dataset** | [huggingface.co/datasets/eulogik/fugusashi-dataset](https://huggingface.co/datasets/eulogik/fugusashi-dataset) |
+| **Trained Model Weights** | [huggingface.co/eulogik/fugusashi-v1.3](https://huggingface.co/eulogik/fugusashi-v1.3) |
+| **Preference Dataset** | [huggingface.co/datasets/eulogik/fugusashi-preferences](https://huggingface.co/datasets/eulogik/fugusashi-preferences) |
 | **Live Demo** | [huggingface.co/spaces/eulogik/fugusashi](https://huggingface.co/spaces/eulogik/fugusashi) |
 | **Paper (arXiv)** | [github.com/eulogik/fugusashi/blob/main/paper/main.tex](https://github.com/eulogik/fugusashi/blob/main/paper/main.tex) |
 | **API Documentation** | [eulogik.com/fugusashi](https://eulogik.com/fugusashi) |

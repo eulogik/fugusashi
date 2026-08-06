@@ -10,10 +10,10 @@
 - Org site: `eulogik.com` (cross-linked everywhere)
 
 **Key Proof Points** (memorize these):
-- **83.3% benchmark accuracy** vs 36.7% cost-only baseline (2.3× lift)
+- **80.0% held-out accuracy** vs 36.7% cost-only baseline (2.2× lift)
 - **80% test accuracy** on 224 examples, 3 model classes (gpt-oss-120b, hermes-3-405b, lfm-2.5-1.2b)
-- **~83ms CPU latency** — one ModernBERT-base forward pass (149M params)
-- **85% federated accuracy** with DP noise (3+ clients)
+- **~22ms median CPU latency** — one ModernBERT-base forward pass (149M params)
+- **85% federated accuracy** (preliminary: 20 hand-curated prompts, DP noise, 3+ clients)
 - **Free models only** — runs on OpenRouter free tier
 - **MIT License** — commercial friendly
 
@@ -25,12 +25,12 @@
 |----------|----------|-------|--------|--------|------|
 | **Hacker News** | Engineers, founders, researchers | "Show HN: Free Sakana Fugu alternative with 83% routing accuracy" | Text post + repo link | Day 0, 8am PT (Tue/Wed/Thu) | #1 front page, 500+ upvotes |
 | **Reddit r/MachineLearning** | Researchers, ML engineers | Technical deep-dive: ModernBERT router architecture | Paper link + discussion | Day 0, 10am PT | 200+ upvotes, comments |
-| **Reddit r/LocalLLaMA** | Hobbyists, local LLM runners | "Run a smart router locally in 83ms — free models only" | Demo GIF + install cmd | Day 1 | 300+ upvotes |
+| **Reddit r/LocalLLaMA** | Hobbyists, local LLM runners | "Run a smart router locally in 22ms — free models only" | Demo GIF + install cmd | Day 1 | 300+ upvotes |
 | **Reddit r/OpenSource** | OSS advocates | "MIT-licensed Fugu clone with federated learning" | Story + repo | Day 2 | 150+ upvotes |
 | **Twitter/X** | Tech Twitter, AI builders | Thread: "How we beat Sakana Fugu's routing with a 149M param model" | 12-tweet thread + visuals | Day 0 (thread), Day 1-7 (daily) | 10K+ impressions, 500 RTs |
 | **LinkedIn** | Enterprise decision-makers, hiring managers | "Open-source AI routing infrastructure — why we built it" | Long-form + diagram | Day 1, 8am PT | 500+ reactions, shares |
 | **YouTube** | Visual learners, tutorial seekers | "Build Your Own Fugu in 15 Minutes" | 15-min tutorial | Day 3 | 10K+ views |
-| **TikTok/Reels/Shorts** | Gen-Z devs, students | "POV: You replace $10K router with 83ms free model" | 60-sec demo | Day 0, 2, 5, 9 | 100K+ views |
+| **TikTok/Reels/Shorts** | Gen-Z devs, students | "POV: You replace $10K router with 22ms free model" | 60-sec demo | Day 0, 2, 5, 9 | 100K+ views |
 | **Discord/Slack** | Communities (HF, LangChain, OpenRouter, Ollama) | Direct value drops | Native messages | Ongoing | 50+ server joins |
 | **Dev.to / Hashnode** | Blog readers | Technical tutorial series | 3-part series | Day 4, 11, 18 | SEO long-tail |
 | **Product Hunt** | Product hunters | Launch page | Day 7 | 500+ upvotes |
@@ -41,12 +41,12 @@
 ## 2. STORY ANGLES (Per Platform)
 
 ### HN / Reddit ML / Technical: **"The 149M Parameter Giant Killer"**
-> "Sakana AI's Fugu routes LLMs with evolutionary search. We asked: *what if a single ModernBERT forward pass could do it better?* 83.3% accuracy. 83ms CPU. Zero API costs. MIT licensed."
+> "Sakana AI's Fugu routes LLMs with evolutionary search. We asked: *what if a single ModernBERT forward pass could do it better?* 80.0% accuracy. 22ms CPU. Zero API costs. MIT licensed."
 - Hook: Specific numbers, David vs Goliath, reproducible
 - Proof: Paper Eq 1-3, Fig 2 benchmark chart, HF model card
 
 ### Twitter/X / LinkedIn / TikTok: **"Free Fugu. Served Raw."**
-> "Sakana raised $30M for model routing. We built the open version in 3 months. Here's the 83ms ModernBERT classifier that beats their evolutionary search..."
+> "Sakana raised $30M for model routing. We built the open version in 3 months. Here's the 22ms ModernBERT classifier that beats their evolutionary search..."
 - Hook: Contrast ($30M vs free), time constraint, specific tech
 - Visual: Architecture diagram + benchmark chart side-by-side
 
@@ -76,10 +76,10 @@
 ### LAUNCH WEEK (Day 0-6)
 | Day | Platform | Content | Time (PT) | Assets |
 |-----|----------|---------|-----------|--------|
-| **0** | **HN** | "Show HN: Fugusashi — Free Sakana Fugu Alternative (83% routing accuracy, 83ms)" | 8:00 AM | Repo link, paper PDF, HF model |
+| **0** | **HN** | "Show HN: Fugusashi — Free Sakana Fugu Alternative (80% routing accuracy, 22ms)" | 8:00 AM | Repo link, paper PDF, HF model |
 | **0** | **Twitter/X** | 12-tweet thread (see template below) | 8:15 AM | Arch diagram, benchmark chart, demo GIF |
-| **0** | **Reddit r/ML** | "ModernBERT-based LLM router: 83.3% accuracy, one forward pass" | 10:00 AM | Paper link, Fig 2 |
-| **0** | **TikTok/Reels/Shorts** | 60-sec demo: "Free Fugu in 83ms" | 12:00 PM | Vertical demo video |
+| **0** | **Reddit r/ML** | "ModernBERT-based LLM router: 80.0% held-out accuracy, one forward pass" | 10:00 AM | Paper link, Fig 2 |
+| **0** | **TikTok/Reels/Shorts** | 60-sec demo: "Free Fugu in 22ms" | 12:00 PM | Vertical demo video |
 | **0** | **Discord** | Drop in #showcase channels: HF, LangChain, OpenRouter, Ollama, LocalLLaMA | 2:00 PM | One-liner + invite |
 | **1** | **LinkedIn** | Long-form: "Why we open-sourced a $30M idea" + architecture diagram | 8:00 AM | Arch diagram PNG |
 | **1** | **Reddit r/LocalLLaMA** | "Run a smart router locally — `pip install fugusashi`" | 10:00 AM | Install GIF, benchmark |
@@ -92,7 +92,7 @@
 | **4** | **Dev.to** | Part 1: "From Prompt to Model: Inside a Learned Router" | 8:00 AM | Code snippets + diagrams |
 | **4** | **Twitter/X** | Tweet 5/7: "The paper: formal problem formulation (Eq 1-3)" | 12:00 PM | Eq screenshot |
 | **5** | **Reddit r/MachineLearning** | Comment on related posts with "We solved this in Fugusashi..." | Ongoing | Link to paper |
-| **5** | **TikTok/Reels** | "83ms vs 3000ms — why your router is slow" | 12:00 PM | Split-screen demo |
+| **5** | **TikTok/Reels** | "22ms vs 3000ms — why your router is slow" | 12:00 PM | Split-screen demo |
 | **6** | **Twitter/X** | Tweet 6/7: "Production hardening: Tier 1→2 escalation, fallback, tracing" | 12:00 PM | Tier diagram |
 | **6** | **LinkedIn** | Share YouTube tutorial + "Hiring? We're building the routing layer for AI" | 4:00 PM | Video thumbnail |
 
@@ -102,7 +102,7 @@
 | **7** | **Product Hunt** | Launch page with demo GIF, all links | PH assets |
 | **7** | **Twitter/X** | Tweet 7/7: "One week later: 500★, 200 installs, 3 PRs. Here's what's next..." | Stats screenshot |
 | **8** | **Dev.to** | Part 2: "Federated Learning for LLMs: Privacy-Preserving Router Evolution" | Code + federated diagram |
-| **9** | **TikTok/Reels** | "I asked 100 prompts — here's which free model won each" | Results table visual |
+| **9** | **TikTok/Reels** | "I asked 30 held-out prompts — here's which free model won each" | Results table visual |
 | **10** | **Twitter/X** | Community highlight: "User @X routed 10K prompts, saved $200" | User testimonial |
 | **11** | **Dev.to** | Part 3: "CMA-ES + ModernBERT: Evolution Meets Gradient Descent" | Evolution diagram |
 | **12** | **LinkedIn** | Case study format: "How [Company] cut LLM costs 60% with Fugusashi" | Anonymized metrics |
@@ -125,7 +125,7 @@
 
 ### 4.1 HACKER NEWS — "Show HN" (Day 0, 8am PT)
 
-**Title**: Show HN: Fugusashi — Free Sakana Fugu Alternative (83% routing accuracy, 83ms CPU)
+**Title**: Show HN: Fugusashi — Free Sakana Fugu Alternative (80% routing accuracy, 22ms CPU)
 
 **Body**:
 ```
@@ -133,9 +133,9 @@ We built an open-source alternative to Sakana AI's Fugu — an intelligent LLM r
 
 **What it does:**
 - One ModernBERT-base (149M) forward pass → routes to best free model (gpt-oss-120b, hermes-3-405b, lfm-2.5-1.2b)
-- 83.3% benchmark accuracy vs 36.7% cost-only baseline (2.3× lift)
-- 80% test accuracy on 224 examples, 85% with federated learning (3+ clients, DP noise)
-- ~83ms CPU latency, zero GPU needed for routing
+- 80.0% held-out accuracy (24/30) vs 36.7% cost-only baseline (2.2× lift)
+- 80% test accuracy on 224 examples, 85% with federated learning (preliminary: 20 hand-curated prompts, 3+ clients, DP noise)
+- ~22ms median CPU latency, zero GPU needed for routing
 - Tier 1: 4 strategies (cost, similarity, learned, CMA-ES) + confidence escalation
 - Tier 2: Multi-agent orchestration (planner → specialists → synthesizer)
 - Federated learning: clients train locally, submit DP-noised gradients
@@ -156,7 +156,7 @@ Happy to answer any technical questions — architecture, training data (224 exa
 
 **Comments to seed** (post immediately after submission):
 1. Technical deep-dive: ModernBERT vs embedding+MLP latency/accuracy tradeoff
-2. Benchmark details: 224 examples, 3 classes, 80/20 split, macro-F1
+2. Benchmark details: 224 examples, 3 classes, 179/45 split, macro-F1 0.83
 3. Federated: DP noise multiplier 0.1, min 3 clients, FedAvg with sample weighting
 
 ---
@@ -169,7 +169,7 @@ Sakana AI raised $30M for Fugu — an LLM router that picks the right model for 
 
 We built the free version in 3 months.
 
-83.3% routing accuracy. 83ms CPU. Zero API costs. MIT licensed.
+80.0% routing accuracy. 22ms CPU. Zero API costs. MIT licensed.
 
 Meet Fugusashi 🍣🔪
 
@@ -205,15 +205,14 @@ One forward pass → class probabilities → route.
 
 **Tweet 4/12**
 ```
-Results on held-out benchmark (100 prompts, same 3 models):
+Results on held-out benchmark (30 held-out prompts + 45 test split, same 3 models):
 
-Random:           33.3%
+Random:                33.3%
 Cost-only (cheapest):  36.7%  ← what most people do
-CMA-ES (100 gens): 70.0%  ← Sakana's approach
-ModernBERT (1 pass): 80.0%  ← our test accuracy
-Federated (3 clients): 85.0%  ← with privacy-preserving collab
+ModernBERT (1 pass):   80.0%  ← 24/30 held-out, 36/45 test
+Federated (3 clients): 85.0%  ← preliminary, 20 hand-curated prompts
 
-2.3× lift over cost-only. One pass.
+2.2× lift over cost-only (Fisher's exact test p = 1.4 × 10-3). One pass.
 ```
 **Asset**: Same benchmark chart, annotated
 
@@ -238,7 +237,7 @@ The federated loop is where it gets wild.
 
 Each client (your server, your laptop, your colleague) runs CMA-ES locally on their workload. They submit DP-noised gradients. Server runs FedAvg. Global router improves for everyone — without ever seeing your prompts.
 
-85% accuracy with 3 clients. Privacy preserved.
+85% accuracy with 3 clients (preliminary: 20 hand-curated prompts). Privacy preserved.
 ```
 **Asset**: Federated loop animation (GIF) or static diagram
 
@@ -327,20 +326,20 @@ github.com/eulogik/fugusashi
 
 ### 4.3 REDDIT r/MACHINELEARNING (Day 0, 10am PT)
 
-**Title**: ModernBERT-based LLM Router: 83.3% accuracy, one forward pass, federated learning [R]
+**Title**: ModernBERT-based LLM Router: 80.0% held-out accuracy, one forward pass, federated learning [R]
 
 **Body**:
 ```
-We present Fugusashi v1.3.0 — an open-source learned router for LLM model selection that achieves 83.3% benchmark accuracy using a single ModernBERT-base (149M) forward pass (~83ms CPU).
+We present Fugusashi v1.3.0 — an open-source learned router for LLM model selection that achieves 80.0% held-out accuracy using a single ModernBERT-base (149M) forward pass (~22ms CPU).
 
 **Key contributions:**
-1. **Learned routing as classification**: Frame model selection as (prompt → model_class) classification. Fine-tune ModernBERT on 224 examples across 3 free model classes (gpt-oss-120b, hermes-3-405b, lfm-2.5-1.2b). 80% test accuracy, 83.3% benchmark accuracy vs 36.7% cost-only baseline.
+1. **Learned routing as classification**: Frame model selection as (prompt → model_class) classification. Fine-tune ModernBERT on 224 examples across 3 free model classes (gpt-oss-120b, hermes-3-405b, lfm-2.5-1.2b). 80.0% test accuracy (36/45), 80.0% held-out accuracy (24/30) vs 36.7% cost-only baseline.
 
 2. **Distillation from evolution**: The training labels come from CMA-ES evolutionary search (Sakana Fugu's approach) run offline on diverse workloads. The learned router distills thousands of evolutionary evaluations into one forward pass.
 
 3. **Two-tier architecture**: Tier 1 (learned router + 3 baselines + confidence escalation) → Tier 2 (multi-agent orchestration with planner/specialist/synthesizer agents).
 
-4. **Federated learning with DP**: Clients run local CMA-ES, submit Gaussian-noised gradients (σ=0.1). Server runs FedAvg with sample-weighted aggregation. 85% accuracy with 3 clients, privacy preserved.
+4. **Federated learning with DP**: Clients run local CMA-ES, submit Gaussian-noised gradients (σ=0.1). Server runs FedAvg with sample-weighted aggregation. 85% accuracy with 3 clients (preliminary: 20 hand-curated prompts), privacy preserved.
 
 5. **Full transparency**: Every routing decision includes human-readable explanation, confidence, latency, and alternative scores.
 
@@ -368,7 +367,7 @@ Benchmark details:
 
 ### 4.4 REDDIT r/LOCALLLAMA (Day 1, 10am PT)
 
-**Title**: Run a smart LLM router locally in 83ms — free models only (`pip install fugusashi`)
+**Title**: Run a smart LLM router locally in 22ms — free models only (`pip install fugusashi`)
 
 **Body**:
 ```
@@ -381,7 +380,7 @@ fugusashi serve
 ```
 
 **What you get:**
-- ModernBERT classifier (149M) runs on CPU in ~83ms
+- ModernBERT classifier (149M) runs on CPU in ~22ms median
 - Routes to: gpt-oss-120b (reasoning/code), hermes-3-405b (creative), lfm-2.5-1.2b (fast/factual)
 - 83% accuracy on benchmark — beats always-using-cheapest (37%) and random (33%)
 - Tier 2 orchestration for complex prompts (planner → specialists → synthesizer)
@@ -412,8 +411,8 @@ Three months ago, our team asked: *Can a single transformer forward pass replace
 Today, we're releasing Fugusashi v1.3.0 — the open answer.
 
 **The Results:**
-🎯 83.3% routing accuracy (vs 36.7% for "always use cheapest")
-⚡ 83ms CPU latency — one ModernBERT-base forward pass
+🎯 80.0% held-out routing accuracy (vs 36.7% for "always use cheapest")
+⚡ 22ms CPU latency — one ModernBERT-base forward pass
 🔒 Federated learning: your router improves from others' workloads without sharing data
 🧠 Two-tier: fast learned router → multi-agent orchestration for complex tasks
 📝 Every decision explained in human language
@@ -448,9 +447,9 @@ We're hiring engineers who want to build the routing layer for the AI economy. D
 
 [3-8s] DEMO: Terminal recording. `pip install fugusashi`. `fugusashi serve`. Curl request: "Write a Python async retry decorator". Response streams. Overlay: "Routed to gpt-oss-120b (87% confidence)"
 
-[8-15s] EXPLAIN: "One ModernBERT forward pass. 149M params. 83ms. Decides which FREE model handles your prompt best."
+[8-15s] EXPLAIN: "One ModernBERT forward pass. 149M params. 22ms. Decides which FREE model handles your prompt best."
 
-[15-25s] PROOF: Benchmark chart animation. Bars rise: Random 33% → Cost-only 37% → CMA-ES 70% → ModernBERT 80% → Federated 85%. Text: "2.3x better than picking cheapest."
+[15-25s] PROOF: Benchmark chart animation. Bars rise: Random 33% → Cost-only 37% → ModernBERT 80% → Federated 85% (labeled "preliminary"). Text: "2.2x better than picking cheapest."
 
 [25-35s] FEDERATED: Animation of 3 laptops → encrypted arrows → server → global model. "Your router learns from everyone. No one sees your data."
 
@@ -467,7 +466,7 @@ POV: You just replaced a $30M router with 149M parameters 🤯
 
 Fugusashi v1.3.0 — open source LLM routing that learns which FREE model to use for each prompt.
 
-83% accuracy. 83ms CPU. Zero API costs. MIT licensed.
+80% accuracy. 22ms CPU. Zero API costs. MIT licensed.
 
 GitHub: github.com/eulogik/fugusashi
 Live demo: huggingface.co/spaces/eulogik/fugusashi-router
@@ -504,7 +503,7 @@ Learn to build a production-grade LLM router from scratch — free alternative t
 In this tutorial, we'll:
 ✅ Install Fugusashi v1.3.0 (`pip install fugusashi`)
 ✅ Configure free OpenRouter models
-✅ Run the ModernBERT learned router (83ms CPU)
+✅ Run the ModernBERT learned router (22ms CPU)
 ✅ See Tier 2 multi-agent orchestration in action
 ✅ Set up federated learning across machines
 ✅ Read the routing explanations (human-readable!)
@@ -552,14 +551,14 @@ Paper: https://github.com/eulogik/fugusashi/blob/main/paper/main.pdf
 
 ### 4.9 PRODUCT HUNT (Day 7)
 
-**Tagline**: "Free, open-source LLM router that learns which model to use — 83% accuracy, 83ms CPU"
+**Tagline**: "Free, open-source LLM router that learns which model to use — 80% accuracy, 22ms CPU"
 
 **Description**:
 ```
 Fugusashi is the open-source alternative to Sakana AI's Fugu — an intelligent router that automatically selects the best FREE LLM for each prompt.
 
-🎯 83.3% routing accuracy (vs 36.7% cost-only baseline)
-⚡ 83ms CPU latency — one ModernBERT-base forward pass
+🎯 80.0% held-out routing accuracy (24/30, vs 36.7% cost-only baseline)
+⚡ 22ms CPU latency — one ModernBERT-base forward pass
 🔒 Federated learning: improves from community workloads without sharing data
 🧠 Two-tier: fast learned router → multi-agent orchestration for complex tasks
 📝 Every decision explained in plain English
@@ -580,7 +579,7 @@ We built Fugusashi because model routing shouldn't require a $30M raise.
 
 The insight: CMA-ES evolution (what Fugu uses) is brilliant but slow — thousands of evaluations per decision. We asked: what if we distill that evolutionary wisdom into a single transformer forward pass?
 
-ModernBERT-base (149M params) fine-tuned on 224 CMA-ES-labeled examples achieves 80% test accuracy. On our 100-prompt benchmark: 83.3% vs 36.7% for "always cheapest."
+ModernBERT-base (149M params) fine-tuned on 224 CMA-ES-labeled examples achieves 80.0% test accuracy (36/45) and 80.0% on 30 held-out prompts vs 36.7% for "always cheapest."
 
 The federated layer is the multiplier — your router evolves overnight on your workload, then shares DP-noised gradients with the network. Everyone's router gets smarter. No prompts leave your machine.
 
@@ -621,7 +620,7 @@ done
 Professional tech announcement graphic for "Fugusashi v1.3.0" — open source LLM router. 
 Clean dark theme (bg #0d1117), accent cyan (#00d4ff) and magenta (#ff006e). 
 Center: "Fugusashi" in modern geometric sans-serif, subtitle "Like Sakana Fugu. But Free." 
-Below: 3 key metrics in pill cards: "83.3% Accuracy" "83ms CPU" "$0 Cost" with icons (target, cpu, dollar-slash). 
+Below: 3 key metrics in pill cards: "80.0% Accuracy" "22ms CPU" "$0 Cost" with icons (target, cpu, dollar-slash). 
 Bottom: "ModernBERT • Federated • CMA-ES • MIT" as tech tags. 
 Style: GitHub/technical blog aesthetic, high contrast, crisp. 1200x675.
 ```
@@ -638,7 +637,7 @@ Horizontal bars, descending:
 - Cost-only (cheapest): 36.7% — muted gray
 - Random: 33.3% — muted gray
 X-axis: 0-100%. Dark background (#0d1117), white gridlines, cyan/magenta accent bars. 
-Annotation: "2.3× lift over cost-only" with arrow from 36.7% to 83.3%. 
+Annotation: "2.2× lift over cost-only" with arrow from 36.7% to 80.0%. 
 Professional, publication-ready. 1200x800.
 ```
 
@@ -668,7 +667,7 @@ Style: Clean motion graphics, dark theme, cyan/magenta accents. 1080x1920 each.
 ```
 Split comparison graphic for "Sakana Fugu vs Fugusashi".
 Left column (Sakana Fugu): 🏢 "$30M raised" • ⏱ "CMA-ES: seconds per decision" • 🔒 Closed source • ☁️ Cloud only
-Right column (Fugusashi): 🆓 "$0 / MIT licensed" • ⚡ "ModernBERT: 83ms CPU" • 📖 Open source • 💻 Runs locally
+Right column (Fugusashi): 🆓 "$0 / MIT licensed" • ⚡ "ModernBERT: 22ms CPU" • 📖 Open source • 💻 Runs locally
 Center: "Same goal: Route each prompt to the right model" with arrow connecting both.
 Dark theme, professional. 1200x675.
 ```
@@ -691,7 +690,7 @@ Accent line: Cyan (#00d4ff) left border. 1200x630.
 YouTube thumbnail: "Build Your Own Fugu in 15 Minutes"
 Split design: Left — "Sakana Fugu $30M" in red, struck through. Right — "Fugusashi $0" in green, bold.
 Center: Terminal window showing `fugusashi serve` with routing output.
-Bottom: "83% Accuracy • 83ms • MIT License" in small pills.
+Bottom: "80% Accuracy • 22ms • MIT License" in small pills.
 High contrast, readable at 150px width. 1280x720.
 ```
 
@@ -728,13 +727,13 @@ High contrast, readable at 150px width. 1280x720.
 
 ### AEO (Answer Engine Optimization) — Target Snippets
 **Question**: "What is the best free LLM router?"
-**Answer**: Fugusashi v1.3.0 achieves 83.3% routing accuracy using a ModernBERT-base classifier in 83ms CPU, routing to free OpenRouter models (gpt-oss-120b, hermes-3-405b, lfm-2.5-1.2b). MIT licensed.
+**Answer**: Fugusashi v1.3.0 achieves 80.0% held-out routing accuracy using a ModernBERT-base classifier in 22ms CPU, routing to free OpenRouter models (gpt-oss-120b, hermes-3-405b, lfm-2.5-1.2b). MIT licensed.
 
 **Question**: "How does Sakana Fugu routing work?"
 **Answer**: Sakana Fugu uses CMA-ES evolutionary search to optimize routing policies. Fugusashi distills this into a single ModernBERT forward pass (80% test accuracy) with federated learning for continuous improvement.
 
 **Question**: "Can I run an LLM router locally?"
-**Answer**: Yes. `pip install fugusashi && fugusashi serve` runs a ModernBERT router on CPU (83ms) that routes to free OpenRouter models. No GPU required for routing.
+**Answer**: Yes. `pip install fugusashi && fugusashi serve` runs a ModernBERT router on CPU (22ms median) that routes to free OpenRouter models. No GPU required for routing.
 
 ---
 
@@ -746,7 +745,7 @@ High contrast, readable at 150px width. 1280x720.
 | Simon Willison | Blog/Twitter | "Datasette + Fugusashi = smart model routing for your tools" | Twitter DM |
 | Jeremy Howard (fast.ai) | Twitter | "ModernBERT distillation from CMA-ES — fast.ai style" | Twitter DM |
 | Sebastian Raschka | Twitter/LinkedIn | "Your readers build routers — here's a learned one" | LinkedIn |
-| Andrej Karpathy | Twitter | "83ms router distillation from evolution" | Twitter reply |
+| Andrej Karpathy | Twitter | "22ms router distillation from evolution" | Twitter reply |
 | Hugging Face (official) | Twitter | "New on HF: fugusashi-v1.3 ModernBERT router" | Tag @huggingface |
 | OpenRouter | Twitter | "Native integration: fugusashi routes your free tier" | Tag @OpenRouter |
 | LangChain | Discord/Twitter | "Router component for LangChain: fugusashi" | Discord #showcase |

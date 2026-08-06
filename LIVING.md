@@ -407,7 +407,7 @@ Custom routing strategies. The interface is already defined (`BaseRouter`). Next
 
 Fugu uses a trained 7B coordinator LLM (TRINITY/Conductor, ICLR 2026) to classify prompts and route them to the optimal model. This works well but requires running a 7B model for every routing decision — expensive and slow (~1-2s per call).
 
-Our bet: a fine-tuned ModernBERT-base (149M params) can match or exceed Fugu's routing accuracy at a fraction of the cost. One forward pass → softmax → best model. No cross-encoder. No LLM overhead. ~83ms on CPU.
+Our bet: a fine-tuned ModernBERT-base (149M params) can match or exceed Fugu's routing accuracy at a fraction of the cost. One forward pass → softmax → best model. No cross-encoder. No LLM overhead. ~22ms median on CPU.
 
 ### Architecture
 
@@ -441,12 +441,12 @@ Three model classes trained from seed data:
 
 | Strategy | Accuracy | Avg Latency |
 |----------|----------|-------------|
-| **Learned Router** | **83.3%** | **83.5ms** |
+| **Learned Router** | **80.0%** (24/30) | **22ms median** |
 | Cost-only baseline | 36.7% | 0.01ms |
 
-By category with learned router: code 100%, factual 100%, creative 100%, explanation 50%, general 100%.
+By category with learned router: code 100%, creative 100%, factual 100%, general 100%, explanation 80%, mathematical 40%.
 
-The 50% on explanation is an inherent ambiguity — gpt-oss-120b and hermes-3-405b are both capable explainers, and prompt text alone doesn't always distinguish "medium" from "complex" explanations. The confidence-based fallback handles this gracefully.
+The 80% on explanation is an inherent ambiguity — gpt-oss-120b and hermes-3-405b are both capable explainers, and prompt text alone doesn't always distinguish "medium" from "complex" explanations. The confidence-based fallback handles this gracefully.
 
 ### Comparison to Fugu
 
@@ -454,7 +454,7 @@ The 50% on explanation is an inherent ambiguity — gpt-oss-120b and hermes-3-40
 |-----------|------------------|-----------|
 | Routing mechanism | 7B coordinator LLM | ModernBERT classifier (149M) |
 | Training data | Community preference data | Seed dataset + feedback loop |
-| Latency per route | ~1-2s (LLM inference) | ~83ms (one forward pass) |
+| Latency per route | ~1-2s (LLM inference) | ~22ms median (one forward pass) |
 | Cost per route | $0.001+ (7B LLM) | Free (CPU inference) |
 | Multi-agent orchestration | Via Conductor | GRPO-trained orchestrator |
 | Federated learning | No | Yes (built-in) |
@@ -470,7 +470,7 @@ The 50% on explanation is an inherent ambiguity — gpt-oss-120b and hermes-3-40
   - `training.py` — fine-tuning pipeline, expand_dataset, weighted cross-entropy, cosine scheduler
   - `router/learned.py` — one-forward-pass inference, confidence-based fallback
   - `router/ensemble.py` — includes LearnedRouter as first strategy
-  - 83.3% routing accuracy (vs 36.7% cost-only baseline)
+  - 80.0% held-out routing accuracy (24/30, vs 36.7% cost-only baseline)
   - Training API endpoints (POST /v1/router/train, /v1/router/train_and_update)
   - CLI commands (expand-data, train)
   - Feedback loop wired to training pipeline

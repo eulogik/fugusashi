@@ -146,8 +146,13 @@ class SimilarityRouter(BaseRouter):
         if self._index is None or len(self._index_data) == 0:
             return CostRouter().route(prompt, messages, available_models, threshold)
 
+        if not prompt or not prompt.strip():
+            return CostRouter().route(prompt, messages, available_models, threshold)
+
         query_emb = self.model.encode([prompt], normalize_embeddings=True, show_progress_bar=False)[0]
-        scores = self._index @ query_emb
+        if not np.all(np.isfinite(query_emb)) or float(np.linalg.norm(query_emb)) == 0.0:
+            return CostRouter().route(prompt, messages, available_models, threshold)
+        scores = np.nan_to_num(self._index @ query_emb, nan=0.0, posinf=0.0, neginf=0.0)
         top_k = min(5, len(scores))
         top_indices = np.argsort(scores)[-top_k:][::-1]
 

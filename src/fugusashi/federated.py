@@ -35,7 +35,8 @@ class FederatedRouter:
         self,
         n_models: int = 5,
         embed_dim: int = 384,
-        noise_multiplier: float = 0.1,
+        noise_multiplier: float = 6.2,
+        clip_norm: float = 1.0,
         min_clients: int = 3,
         data_dir: str = ".fugusashi_data",
     ):
@@ -43,6 +44,7 @@ class FederatedRouter:
         self.embed_dim = embed_dim
         self.n_params = embed_dim + 1
         self.noise_multiplier = noise_multiplier
+        self.clip_norm = clip_norm
         self.min_clients = min_clients
         self.data_dir = data_dir
 
@@ -81,8 +83,13 @@ class FederatedRouter:
 
         gradient = local_weights - self.global_weights
 
+        # Client-level DP-SGD (McMahan et al., 2018): clip the update to
+        # L2 norm S, then add Gaussian noise with scale sigma * S.
+        norm = float(np.linalg.norm(gradient))
+        scale = min(1.0, self.clip_norm / (norm + 1e-8))
+        gradient = gradient * scale
         noisy_gradient = gradient + np.random.normal(
-            0, self.noise_multiplier * np.std(gradient) + 1e-8, size=gradient.shape
+            0, self.noise_multiplier * self.clip_norm, size=gradient.shape
         )
 
         update = LocalUpdate(
